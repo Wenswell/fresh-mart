@@ -1,0 +1,21 @@
+/* 统一设置常用字体格式 */
+
+.bigTxt {
+  font-size: 1.15em;
+  font-weight: bold;
+}
+.bigTitle {
+  font-size: 1.35em;
+  font-weight: bold;
+}
+
+.smallTxt {
+  font-size: 0.85em;
+  color: #b3b3b3;
+}
+
+.white-blod {
+  color: white;
+  font-size: 1.15em;
+  font-weight: bold;
+}

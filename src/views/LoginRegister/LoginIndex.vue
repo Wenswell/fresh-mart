@@ -30,7 +30,7 @@
         label-width="15px"
       >
         <template slot="label">
-          <span class="phoneIco ico"></span>
+          <span class="phone-ico ico"></span>
         </template>
       </van-field>
     </van-cell-group>
@@ -48,17 +48,17 @@
         label-width="15px"
       >
         <template slot="label">
-          <span class="lockIco ico"></span>
+          <span class="lock-ico ico"></span>
         </template>
         <template #right-icon>
-          <span class="eyeIco ico" @click="changeType"></span>
+          <span class="eye-ico ico" @click="changeType"></span>
         </template>
       </van-field>
     </van-cell-group>
 
     <!-- 底部登录按钮 -->
     <div style="text-align: center">
-      <van-button class="submitBtn" round type="primary" color="#46E1FF" to="home"
+      <van-button class="submitBtn" round type="primary" color="#46E1FF" to="layout"
         >登录</van-button
       >
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>this is home page</p>
+    <p>This is src\views\category\CategoryIndex.vue</p>
   </div>
 </template>
 
