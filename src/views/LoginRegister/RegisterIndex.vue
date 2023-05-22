@@ -1,18 +1,18 @@
 <template>
   <div>
     <!-- 顶部图片 -->
-    <van-image width="100%" :src="require('@/assets/images/banner-login.jpg')" />
+    <van-image width="100%" :src="require('@/assets/images/banner-register.jpg')" />
 
     <!-- 注册/登录选项 -->
     <van-row type="flex" justify="center" align="bottom">
-      <van-col span="9" @click="goToRegister">
+      <van-col span="9">
         <van-image
           width="100%"
-          :src="require('@/assets/images/register.png')"
+          :src="require('@/assets/images/registerfill.png')"
         />
       </van-col>
-      <van-col span="9">
-        <van-image width="100%" :src="require('@/assets/images/loginfill.png')" />
+      <van-col span="9" @click="goToLogin">
+        <van-image width="100%" :src="require('@/assets/images/login.png')" />
       </van-col>
     </van-row>
 
@@ -35,27 +35,36 @@
       </van-field>
     </van-cell-group>
 
-    <!-- 密码输入框 -->
+    <!-- 验证码输入框 -->
     <van-cell-group inset :border="false">
       <van-field
-        v-model="passWd"
-        :type="fieldType"
+        v-model="verifyNum"
+        type="text"
         maxlength="6"
-        name="密码"
-        label="密码"
-        placeholder="请输入密码"
+        name="验证码"
+        label="验证码"
+        placeholder="请输入验证码"
         label-align="right"
         label-width="15px"
       >
         <template slot="label">
-          <span class="lockIco ico"></span>
+          <span class="safeIco ico"></span>
         </template>
-        <template #right-icon>
-          <span class="eyeIco ico" @click="changeType"></span>
+        <template #button>
+          <van-button
+            round
+            type="primary"
+            size="mini"
+            color="#46E1FF"
+            plain
+            @click="getVerifyCode"
+            :text="btnText"
+            :disabled="btnDisable"
+          ></van-button>
         </template>
       </van-field>
     </van-cell-group>
-
+    
     <!-- 底部登录按钮 -->
     <div style="text-align: center">
       <van-button class="submitBtn" round type="primary" color="#46E1FF" to="home"
@@ -77,7 +86,6 @@ export default {
       passWd: "",
       btnText: "获取验证码",
       btnDisable: false,
-      fieldType: 'password',
     };
   },
   methods: {
@@ -85,18 +93,14 @@ export default {
       this.btnDisable = true;
       this.verifyNum = 26433;
     },
-    goToRegister() {
-      this.$router.push({ name: 'register' })
-    },
-    changeType() {
-      this.fieldType = this.fieldType === 'password' ? 'text' : 'password'
+    goToLogin() {
+      this.$router.push({ name: 'login' })
     }
   },
 };
 </script>
 
 <style scoped>
-
 /* 注册信息加外边距 */
 .van-cell {
   padding: 10px 50px;
