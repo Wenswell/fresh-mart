@@ -58,7 +58,7 @@
 
     <!-- 底部登录按钮 -->
     <div style="text-align: center">
-      <van-button class="submitBtn" round type="primary" color="#46E1FF" to="home"
+      <van-button class="submitBtn" round type="primary" color="#46E1FF" to="layout"
         >登录</van-button
       >
     </div>

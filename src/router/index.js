@@ -3,7 +3,10 @@ import VueRouter from 'vue-router'
 
 import LoginPage from '@/views/LoginRegister/LoginIndex'
 import RegisterPage from '@/views/LoginRegister/RegisterIndex'
-import HomePage from '@/views/home/HomeIndex'
+
+
+import Layout from '@/views/Layout/LayoutIndex'
+import HomePage from '@/views/home/HomePage'
 import CategoryPage from '@/views/category/CategoryIndex'
 
 Vue.use(VueRouter)
@@ -24,14 +27,19 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: '/home',
-    name: 'home',
-    component: HomePage,
-  },
-  {
-    path: '/category',
-    name: 'category',
-    component: CategoryPage,
+    path: '/layout',
+    redirect: '/layout/home',
+    component: Layout,
+    children: [
+      {
+        path: 'home',
+        component: HomePage,
+      },
+      {
+        path: 'category',
+        component: CategoryPage,
+      },
+    ]
   },
 ]
 
