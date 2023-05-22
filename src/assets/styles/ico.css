@@ -1,0 +1,29 @@
+.ico {
+  background: url(@/assets/images/icoAll.png) no-repeat;
+  display: inline-block;
+  width: 17px;
+  height: 20px;
+  background-size: 100px;
+  vertical-align: middle;
+}
+
+.phoneIco {
+  background-position-y: -90px;
+  background-position-x: -16px;
+}
+
+.safeIco {
+  background-position-y: -88px;
+  background-position-x: -33px;
+}
+
+.lockIco {
+  background-position-y: -88px;
+  background-position-x: 1px;
+}
+
+.eyeIco {
+  background-position-y: -88px;
+  background-position-x: -50px;
+  width: 20px;
+}
