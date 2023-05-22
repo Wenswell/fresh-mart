@@ -1,3 +1,11 @@
+/* 使用精灵图统一设置小图标 */
+
+/* 先去除img无路径时出现的边框 */
+img[src=""],img:not([src]){
+  /* opacity:0; */
+  border:none;
+}
+
 .ico {
   background: url(@/assets/images/icoAll.png) no-repeat;
   display: inline-block;
@@ -7,22 +15,55 @@
   vertical-align: middle;
 }
 
-.phoneIco {
+.ico-footer {
+  background: url(@/assets/images/icoAll.png) no-repeat;
+  display: inline-block;
+  width: 24px;
+  /* height: 25px; */
+  background-size: 125px;
+  vertical-align: middle;
+  background-position-y: -41px;
+}
+
+.home-ico {
+  background-position-x: -1px;
+}
+
+.category-ico {
+  background-position-x: -25px;
+}
+
+.my-ico {
+  background-position-x: -83px;
+}
+
+.cart-ico {
+  background-position-x: -49px;
+  width: 34px;
+  background-position-y: -40.5px;
+}
+
+/* fill放在最后 */
+.fill {
+  background-position-y: 1px;
+}
+
+.phone-ico {
   background-position-y: -90px;
   background-position-x: -16px;
 }
 
-.safeIco {
+.safe-ico {
   background-position-y: -88px;
   background-position-x: -33px;
 }
 
-.lockIco {
+.lock-ico {
   background-position-y: -88px;
   background-position-x: 1px;
 }
 
-.eyeIco {
+.eye-ico {
   background-position-y: -88px;
   background-position-x: -50px;
   width: 20px;

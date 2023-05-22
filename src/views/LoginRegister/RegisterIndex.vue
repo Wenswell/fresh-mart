@@ -30,7 +30,7 @@
         label-width="15px"
       >
         <template slot="label">
-          <span class="phoneIco ico"></span>
+          <span class="phone-ico ico"></span>
         </template>
       </van-field>
     </van-cell-group>
@@ -48,7 +48,7 @@
         label-width="15px"
       >
         <template slot="label">
-          <span class="safeIco ico"></span>
+          <span class="safe-ico ico"></span>
         </template>
         <template #button>
           <van-button

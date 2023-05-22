@@ -4,18 +4,14 @@ import VueRouter from 'vue-router'
 import LoginPage from '@/views/LoginRegister/LoginIndex'
 import RegisterPage from '@/views/LoginRegister/RegisterIndex'
 import HomePage from '@/views/home/HomeIndex'
+import CategoryPage from '@/views/category/CategoryIndex'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: '/login',
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginPage,
+    redirect: '/register',
   },
   {
     path: '/register',
@@ -23,9 +19,19 @@ const routes = [
     component: RegisterPage,
   },
   {
+    path: '/login',
+    name: 'login',
+    component: LoginPage,
+  },
+  {
     path: '/home',
     name: 'home',
     component: HomePage,
+  },
+  {
+    path: '/category',
+    name: 'category',
+    component: CategoryPage,
   },
 ]
 
