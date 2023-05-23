@@ -14,6 +14,7 @@ import { Popup } from 'vant';
 import { CountDown } from 'vant';
 import { Sticky } from 'vant';
 import { Tabbar, TabbarItem } from 'vant';
+import { NavBar } from 'vant';
 
 
 
@@ -41,3 +42,5 @@ Vue.use(Sticky);
 
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
+Vue.use(NavBar);
+
