@@ -11,7 +11,7 @@
       >
         <template #action>
           <div class="location">
-            <van-icon name="location" color="#DAF8FF" size="1.15rem" />
+            <van-icon name="location" color="#DAF8FF" size="16px" />
             <span class="white-blod">{{ locationStr }}</span>
           </div>
         </template>
@@ -81,31 +81,23 @@
     </div>
 
     <!-- 团购/秒杀入口 -->
+
     <van-grid :border="false" :column-num="2" class="bottomContainer">
       <van-grid-item>
         <div class="container">
-          <div class="text">
-            <div class="text-title bigTitle">拼团购</div>
-            <div class="text-content smallTxt">先到先得数量有限</div>   
-          </div>  
-          <div class="imageDiv">
-            <img class="image" src="@/assets/images/pingtuanAd.png" alt="">
-          </div>
+          <div class="text-title bigTitle">拼团购</div>
+          <div class="text-content smallTxt">先到先得数量有限</div>
+          <img src="@/assets/images/pingtuanAd.png" alt="" class="image" />
         </div>
       </van-grid-item>
       <van-grid-item>
         <div class="container">
-          <div class="text">
-            <div class="text-title bigTitle">抢秒杀</div>
-            <div class="text-content smallTxt">精选精选精选精</div>   
-          </div>  
-          <div class="imageDiv">
-            <img class="image" src="@/assets/images/miaoshaAd.png" alt="">
-          </div>
+          <div class="text-title bigTitle">抢秒杀</div>
+          <div class="text-content smallTxt">精选精选精选精</div>
+          <img src="@/assets/images/miaoshaAd.png" alt="" class="image" />
         </div>
       </van-grid-item>
     </van-grid>
-
   </div>
 </template>
 
@@ -152,11 +144,10 @@ export default {
       this.popupCont = value;
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 /* 定位 */
 .location {
   padding-top: 5px;
@@ -165,13 +156,15 @@ export default {
 .top-grid {
   background: url(@/assets/images/topGrid.png) no-repeat;
   background-size: 100%;
-  margin: -1em 0 -1.5em;
-  padding: 35px 10px;
+  width: 370px;
+  height: 190px;
+  margin: -20px auto -15px;
+  padding: 27.5px 10px;
 }
 
 /* 倒计时 */
 .blackBold {
-  margin: auto 0.75em;
+  margin: auto 14px auto 17px;
   font-size: large;
   font-weight: bold;
   vertical-align: bottom;
@@ -189,18 +182,21 @@ export default {
   color: #62e7ff;
   background-color: #363636;
 }
-
+body::-webkit-scrollbar {
+  display: none;
+}
 /* 横向展示优惠折扣商品 */
 ::-webkit-scrollbar {
   display: none;
 }
 .discountDiv {
   overflow: scroll;
+  margin-top: 15px;
 }
 .discountImg {
   /* outline: solid; */
-  width: 100px;
-  height: 110px;
+  width: 90px;
+  height: 85px;
   background: url(@/assets/images/discount80p.png) no-repeat;
   background-size: 100%;
   display: flex;
@@ -217,50 +213,38 @@ export default {
 /* 价格样式 */
 .nowPrice::before,
 .oldPrice::before {
-  content: "\00a0¥ ";
-  margin-right: -2px;
+  content: "¥";
+  margin-right: 1px;
+  margin-left: 3px;
 }
 .oldPrice::after {
   content: "";
   display: block;
   width: 115%;
   border-bottom: 1px solid;
-  transform: translate(0px, -0.6em);
+  transform: translate(0px, -8px);
 }
 
 /* 团购/秒杀入口 */
 .bottomContainer {
-  margin: 0 10px 50px;
+  margin: 20px 7px 70px;
 }
+
 .container {
   display: flex;
-  width: 100%;
-  height: 75px;
-  padding-top: 5px;
-  box-shadow: 0px 5px 9px #3335;
-}
-
-.text {
-  flex: 2;
-  display: flex;  
   flex-direction: column;
-  justify-content: space-between; 
-  margin: 5px 0 15px 10px;
-
-}
-
-.imageDiv {
-  flex: 1;
-  margin-left: -30%;
-  margin-top: 5px;
+  justify-content: space-evenly;
+  width: 166px;
+  height: 80px;
+  padding: 5px 0 5px 7.5px;
+  box-shadow: 0px 5px 9px #6665;
 }
 
 .image {
-  width: 120%;
-  /* height: 100%; */
-  margin-left: -30%;
-
+  position: absolute;
+  top: 10px;
+  left: 40%;
+  width: 50%;
+  height: auto;
 }
-
-
 </style>

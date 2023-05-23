@@ -33,10 +33,12 @@ const routes = [
     children: [
       {
         path: 'home',
+        name: 'home',
         component: () => import('@/views/home/HomePage'),
       },
       {
         path: 'category',
+        name: 'category',
         component: () => import('@/views/category/CategoryIndex'),
       },
     ],
