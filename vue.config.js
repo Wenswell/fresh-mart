@@ -1,4 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
+
+const path = require("path");
+const myTheme = path.resolve(__dirname, "./src/assets/styles/vantconfig.less");
+
 module.exports = defineConfig({
   transpileDependencies: true,
   css: {
@@ -8,11 +12,10 @@ module.exports = defineConfig({
         lessOptions: {
           modifyVars: {
             // 直接覆盖变量
-            'text-color': '#111',
-            'border-color': '#eee',
-            '@grid-item-content-background-color': '#fff0',
+            // 'text-color': '#111',
+            // 'border-color': '#eee',
             // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
-            // hack: `true; @import "your-less-file-path.less";`,
+            'hack': `true; @import "${myTheme}";`
           },
         },
       },
