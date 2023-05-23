@@ -1,15 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Auth from '@/views/Auth/AuthForm' 
-
-import LoginPage from '@/views/LoginRegister/LoginIndex'
-import RegisterPage from '@/views/LoginRegister/RegisterIndex'
-
-import Layout from '@/views/Layout/LayoutIndex'
-import HomePage from '@/views/home/HomePage'
-import CategoryPage from '@/views/category/CategoryIndex'
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,32 +12,32 @@ const routes = [
     path: '/auth',
     redirect: '/auth/register',
     name: 'Auth',
-    component: Auth,
+    component: () => import('@/views/Auth/AuthForm'),
     children: [
       {
         path: 'register',
         name: 'register',
-        component: RegisterPage,
+        component: () => import('@/views/LoginRegister/RegisterIndex'),
       },
       {
         path: 'login',
         name: 'login',
-        component: LoginPage,
+        component: () => import('@/views/LoginRegister/LoginIndex'),
       },
     ],
   },
   {
     path: '/layout',
     redirect: '/layout/home',
-    component: Layout,
+    component: () => import('@/views/Layout/LayoutIndex'),
     children: [
       {
         path: 'home',
-        component: HomePage,
+        component: () => import('@/views/home/HomePage'),
       },
       {
         path: 'category',
-        component: CategoryPage,
+        component: () => import('@/views/category/CategoryIndex'),
       },
     ],
   },
