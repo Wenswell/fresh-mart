@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Auth from '@/views/Auth/AuthForm' 
+// import AuthPage from '@/views/Auth/AuthForm.vue' 
 
-import LoginPage from '@/views/LoginRegister/LoginIndex'
-import RegisterPage from '@/views/LoginRegister/RegisterIndex'
+// import LoginPage from '@/views/LoginRegister/LoginIndex'
+// import RegisterPage from '@/views/LoginRegister/RegisterIndex'
 
+// import Test from '@/views/Layout/testView'
+import TestSub from '@/views/Layout/TestSub'
 import Layout from '@/views/Layout/LayoutIndex'
 import HomePage from '@/views/home/HomePage'
 import CategoryPage from '@/views/category/CategoryIndex'
@@ -15,23 +17,20 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/auth',
+    redirect: '/testsub',
   },
   {
-    path: '/auth',
-    redirect: '/auth/register',
-    name: 'Auth',
-    component: Auth,
+    path: '/testsub',
+    redirect: '/testsub/home',
+    component: TestSub,
     children: [
       {
-        path: 'register',
-        name: 'register',
-        component: RegisterPage,
+        path: 'home',
+        component: HomePage,
       },
       {
-        path: 'login',
-        name: 'login',
-        component: LoginPage,
+        path: 'category',
+        component: CategoryPage,
       },
     ],
   },

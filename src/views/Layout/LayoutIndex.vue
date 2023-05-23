@@ -6,14 +6,14 @@
 <!-- 底栏 -->
 
 <van-tabbar v-model="active">
-  <van-tabbar-item name="home" replace to="/home">
+  <van-tabbar-item name="home" replace to="/layout/home">
     <!-- <span>首页</span> -->
     <template #icon="props">
       <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
       <img :class="['ico-footer home-ico', { 'fill': props.active }]" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" >
     </template>
   </van-tabbar-item>
-  <van-tabbar-item name="category" replace to="/category">
+  <van-tabbar-item name="category" replace to="/layout/category">
     <!-- <span>分类</span> -->
     <template #icon="props">
       <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
@@ -58,7 +58,7 @@ export default {
 }
 
 /* 底栏图标框增大 */
-.van-tabbar-item__icon img{
+img{
   height: 42px;
   /* margin: 5px auto; */
   margin-top: 5px;

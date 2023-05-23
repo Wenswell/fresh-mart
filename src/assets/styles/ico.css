@@ -1,10 +1,10 @@
 /* 使用精灵图统一设置小图标 */
 
-/* 先去除img无路径时出现的边框 */
+/* 先去除img无路径时出现的边框
 img[src=""],img:not([src]){
-  /* opacity:0; */
-  border:none;
-}
+  opacity:0;
+  border: none;
+} */
 
 .ico {
   background: url(@/assets/images/icoAll.png) no-repeat;
