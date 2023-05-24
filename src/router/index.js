@@ -34,13 +34,13 @@ const routes = [
       {
         path: 'home',
         name: 'home',
-        component: () => import('@/views/home/HomePage'),
+        component: () => import('@/views/Layout/HomePage'),
       },
       {
         path: 'category',
         name: 'category',
         redirect: '/layout/category/featured',
-        component: () => import('@/views/category/CategoryIndex'),
+        component: () => import('@/views/Layout/CategoryPage'),
         children: [
           {
             path: 'featured',
@@ -102,7 +102,7 @@ const routes = [
       {
         path: 'cart',
         name: 'cart',
-        // component: () => import('@/views/home/HomePage'),
+        component: () => import('@/views/Layout/CartPage'),
       },
       {
         path: 'my',

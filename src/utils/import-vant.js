@@ -15,6 +15,12 @@ import { CountDown } from 'vant';
 import { Sticky } from 'vant';
 import { Tabbar, TabbarItem } from 'vant';
 import { NavBar } from 'vant';
+import { Card } from 'vant';
+import { Stepper } from 'vant';
+import { SwipeCell } from 'vant';
+import { Checkbox, CheckboxGroup } from 'vant';
+import { SubmitBar } from 'vant';
+import { Dialog } from 'vant';
 
 
 
@@ -44,3 +50,11 @@ Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
 
+
+Vue.use(Card);
+Vue.use(Stepper);
+Vue.use(SwipeCell);
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+Vue.use(SubmitBar);
+Vue.use(Dialog);
