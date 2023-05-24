@@ -80,7 +80,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 // 注册/登录选项
 .container {
   width: 278px;
@@ -120,19 +120,6 @@ export default {
   }
 }
 
-// 输入框
-.fieldCont {
-  margin: 0 auto;
-  width: 270px;
-  padding: 0;
-  height: 47px;
-  border-bottom: 1px solid @light-grey;
-}
-
-// 获取验证码按钮
-.get-verify {
-  vertical-align: middle;
-}
 
 /* 登录按钮调整大小、阴影 */
 .submitBtn {

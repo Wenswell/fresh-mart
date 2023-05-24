@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <!-- 手机号输入框 -->
     <van-field
       autofocus
@@ -21,36 +21,26 @@
       </template>
     </van-field>
 
-    <!-- 验证码输入框 -->
+    <!-- 密码输入框 -->
     <van-field
-      v-model="verifyNum"
-      type="text"
-      maxlength="6"
-      name="验证码"
-      label="验证码"
-      placeholder="请输入验证码"
+      v-model="passWd"
+      :type="fieldType"
+      maxlength="16"
+      name="密码"
+      label="密码"
+      placeholder="请输入密码"
       class="fieldCont"
       :center="true"
       :border="false"
       label-align="right"
       label-width="20px"
     >
-      <template slot="label">
-        <span class="safe-ico ico"></span>
-      </template>
-      <template #button>
-        <van-button
-          round
-          class="get-verify"
-          type="primary"
-          size="mini"
-          color="#5AD4EA"
-          plain
-          @click="getVerifyCode"
-          :text="btnText"
-          :disabled="btnDisable"
-        ></van-button>
-      </template>
+    <template slot="label">
+          <span class="lock-ico ico"></span>
+        </template>
+        <template #right-icon>
+          <span class="eye-ico ico" @click="changeType"></span>
+        </template>
     </van-field>
 
   </div>
@@ -60,7 +50,6 @@
 
 <script>
 export default {
-  // name: 'RegisterIndex',
   data() {
     return {
       active: 0,
@@ -69,6 +58,7 @@ export default {
       passWd: "",
       btnText: "获取验证码",
       btnDisable: false,
+      fieldType: 'password',
     };
   },
   methods: {
@@ -76,10 +66,24 @@ export default {
       this.btnDisable = true;
       this.verifyNum = 26433;
     },
+    goToRegister() {
+      this.$router.push({ name: 'register' })
+    },
+    changeType() {
+      this.fieldType = this.fieldType === 'password' ? 'text' : 'password'
+    }
   },
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+// 输入框
+.fieldCont {
+  margin: 0 auto;
+  width: 280px;
+  padding: 0;
+  height: 47px;
+  border-bottom: 1px solid @light-grey;
+}
 
 </style>

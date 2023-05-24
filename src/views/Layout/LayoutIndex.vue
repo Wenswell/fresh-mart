@@ -20,14 +20,14 @@
       <img :class="['ico-footer category-ico', { 'fill': props.active }]" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" >
     </template>
   </van-tabbar-item>
-  <van-tabbar-item name="cart">
+  <van-tabbar-item name="cart" replace to="/layout/cart">
     <!-- <span>购物车</span> -->
     <template #icon="props">
       <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
       <img :class="['ico-footer cart-ico', { 'fill': props.active }]" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" >
     </template>
   </van-tabbar-item>
-  <van-tabbar-item name="my">
+  <van-tabbar-item name="my" replace to="/layout/my">
     <!-- <span>我的</span> -->
     <template #icon="props">
       <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
