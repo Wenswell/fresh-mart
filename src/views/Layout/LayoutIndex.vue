@@ -1,6 +1,6 @@
 <template>
   <div :class="active">
-    <!-- 顶部搜索框 -->
+    
     <router-view />
 
     <!-- 底栏 -->

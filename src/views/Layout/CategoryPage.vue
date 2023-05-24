@@ -124,7 +124,8 @@ export default {
 // 主要内容区域
 .container {
   display: flex;
-  height: calc(100vh - 70px);
+  // svh: 手机浏览器地址栏会占据位置
+  height: calc(100svh - 70px);
   background: white;
   margin-top: 20px;
 }
@@ -202,6 +203,8 @@ export default {
   }
 }
 
+
+
 .right-top-image {
   position: relative;
   margin-top: -55px;
@@ -216,6 +219,7 @@ export default {
   background-color: #e5f4f7;
   padding: 0 20px;
 }
+
 // 间隔子项调换文字与图片的顺序
 .right-row:nth-child(2n) .right-middle{
   flex-direction: row-reverse;
@@ -250,5 +254,7 @@ export default {
   width: auto;
   position: relative;
   margin-top: -10px;
+  height: 100%;
 }
+
 </style>
