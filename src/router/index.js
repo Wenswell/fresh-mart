@@ -108,6 +108,9 @@ const routes = [
         path: 'my',
         name: 'my',
         // component: () => import('@/views/category/CategoryIndex'),
+        meta: {
+          background: 'url(@/assets/images/homeBack.jpg) no-repeat 0 0 / 100%'
+        },
       },
     ],
   },

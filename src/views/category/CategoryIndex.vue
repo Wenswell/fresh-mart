@@ -7,7 +7,7 @@
     </van-nav-bar>
 
     <div class="container">
-      <div class="left">
+      <div class="container-left">
         <van-grid :column-num="1" :border="false">
           <van-grid-item
             v-for="value in categoryList"
@@ -15,7 +15,7 @@
             :text="value.name"
           >
             <div
-              class="category"
+              class="category-button"
               :class="{ active: isThis(value.route) }"
               @click="goTo(value.route)"
             >
@@ -24,54 +24,43 @@
           </van-grid-item>
         </van-grid>
       </div>
-      <div class="divider"></div>
-      <div class="right">
-        <van-grid :border="false" :column-num="3">
-          <van-grid-item>
-            <div class="right-container">
-              <div class="text-title num one">1</div>
-              <div class="text-title">龙虾</div>
-              <img src="@/assets/images/rank1.png" alt="" class="image" />
-            </div>
-          </van-grid-item>
-          <van-grid-item>
-            <div class="right-container">
-              <div class="text-title num two">2</div>
-              <div class="text-title">鲫鱼</div>
-              <img src="@/assets/images/rank2.png" alt="" class="image" />
-            </div>
-          </van-grid-item>
-          <van-grid-item>
-            <div class="right-container">
-              <div class="text-title num three">3</div>
-              <div class="text-title">大米</div>
-              <img src="@/assets/images/rank3.png" alt="" class="image" />
+      <div class="container-divider"></div>
+      <div class="container-right">
+        <van-grid
+          :border="false"
+          :column-num="3"
+          :gutter="12"
+          class="right-row"
+        >
+          <van-grid-item
+          v-for="(item, index) in rankListTopThree" :key="index"
+         >
+            <div class="right-top">
+              <div class="text-title num" :class="item.img">{{ index+1 }}</div>
+              <div class="text-title">{{ item.title }}</div>
+              <!-- 图片大小已统一。若不统一需要再包div用于定位？ -->
+              <img :src="require('@/assets/images/' + item.img + '.png')" class="right-top-image" />
             </div>
           </van-grid-item>
         </van-grid>
-        
+
         <van-grid :border="false" :column-num="1">
-          <van-grid-item>
-            <div class="right-four-container">
-              <div class="four-left">
-                <div class="four-title">标题</div>
-                <div class="four-text">这里是文字</div>
+          <van-grid-item class="right-row"
+          v-for="(item, index) in rankListFromFour" :key="index">
+            <div class="right-middle">
+              <div class="right-middle-left">
+                <div class="middle-title">{{ item.title }}</div>
+                <div class="middle-text">{{ item.detail }}</div>
               </div>
-              <div class="four-right">
-                <img src="@/assets/images/discountItem1.png" alt="" class="four-image" />
+              <div class="right-middle-right">
+                <img
+                  :src="require('@/assets/images/' + item.img + '.png')"
+                  class="middle-image"
+                />
               </div>
             </div>
           </van-grid-item>
 
-          <van-grid-item>
-            <van-image src="https://img01.yzcdn.cn/vant/apple-1.jpg" />
-          </van-grid-item>
-          <van-grid-item>
-            <van-image src="https://img01.yzcdn.cn/vant/apple-2.jpg" />
-          </van-grid-item>
-          <van-grid-item>
-            <van-image src="https://img01.yzcdn.cn/vant/apple-3.jpg" />
-          </van-grid-item>
         </van-grid>
       </div>
     </div>
@@ -95,6 +84,15 @@ export default {
         { route: "delicacies", name: "美食" },
         { route: "skincare", name: "护肤品" },
       ],
+      rankList: [
+        { img: "rank1", title: "龙虾", detail: "" },
+        { img: "rank2", title: "鲫鱼", detail: "" },
+        { img: "rank3", title: "大米", detail: "" },
+        { img: "rank4", title: "百年酿", detail: "bǎi nián niàng" },
+        { img: "rank5", title: "手工包", detail: "shǒu gōng bāo" },
+        { img: "rank6", title: "特价橙", detail: "tè jià chéng" },
+        { img: "rank7", title: "绿色蔬", detail: "lǜ sè shū" },
+      ],
     };
   },
   methods: {
@@ -111,53 +109,63 @@ export default {
       return currentPath == page;
     },
   },
+  computed: {
+    rankListTopThree() {
+      return this.rankList.slice(0,3)
+    },
+    rankListFromFour() {
+      return this.rankList.slice(3)
+    },
+  }
 };
 </script>
 
 <style lang="less" scoped>
+// 主要内容区域
 .container {
   display: flex;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 70px);
   background: white;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
-.left {
+.container-left {
   flex: 4 15; /* width: 1/4 */
 }
 
-.right {
+.container-right {
   flex: 11; /* width: 11/15 */
 }
 
-.divider {
+.container-divider {
   width: 1px; /* 竖线宽度 */
-  background: @grey;
+  background: #DADCDC;
 }
 
 // 左侧按钮样式
-.category {
+.category-button {
   font-size: 14px;
   // outline: solid;
   width: 80px;
   height: 28px;
   line-height: 28px;
   text-align: center;
-  margin-top: 14px;
+  margin-bottom: 14px;
+  &.active {
+    font-weight: bold;
+    color: white;
+    // background-color: @blue;
+    background-color: #45e2ff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px #45e2ff;
+  }
 }
-.category.active {
-  font-weight: bold;
-  color: white;
-  // background-color: @blue;
-  background-color: #45e2ff;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px 0px #45e2ff;
+// 右侧内容区域
+.right-row {
+  margin-bottom: 14px;
 }
 
-.right {
-  padding: 5px 10px;
-}
-.right-container {
+.right-top {
   margin: 2px;
   display: flex;
   flex-direction: column;
@@ -168,6 +176,7 @@ export default {
   border-radius: 5px;
   overflow: hidden;
 }
+
 .text-title {
   z-index: 2;
   width: 1em;
@@ -181,56 +190,65 @@ export default {
     font-size: 14px;
     font-style: italic;
     margin-bottom: 5px;
-    &.one {
+    &.rank1 {
       color: #ff4646;
     }
-    &.two {
+    &.rank2 {
       color: #ff8346;
     }
-    &.three {
+    &.rank3 {
       color: #ffd146;
     }
   }
 }
 
-.image {
+.right-top-image {
   position: relative;
   margin-top: -55px;
   width: auto;
   height: auto;
 }
 
-
-.right-four-container {
+.right-middle {
   width: 245px;
+  height: 80px;
   display: flex;
-  justify-content: space-between;
-  flex: 0 1;
+  background-color: #e5f4f7;
+  padding: 0 20px;
+}
+// 间隔子项调换文字与图片的顺序
+.right-row:nth-child(2n) .right-middle{
+  flex-direction: row-reverse;
 }
 
-.four-left {
+.right-middle-left {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.four-title {
-  font-size: 24px;
+.right-middle-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.middle-title {
+  font-size: 15px;
   font-weight: bold;
 }
 
-.four-text {
-  margin-top: 10px;
+.middle-text {
+  // margin-top: 10px;
+  font-size: 12px;
+  color: #999999;
 }
 
-.four-right {
-  width: 300px;
-  height: 300px;
+.middle-image {
+  width: auto;
+  position: relative;
+  margin-top: -10px;
 }
-
-.four-image {
-  width: 100%;
-  height: 100%;
-}
-
 </style>
