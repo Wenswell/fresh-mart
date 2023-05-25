@@ -102,36 +102,18 @@
 </template>
 
 <script>
+import tdata from '@/assets/test-data.json'
+
 export default {
   data() {
     return {
       searchStr: "",
       locationStr: "天河区",
-      gridItemList: [
-        "水果",
-        "饮品",
-        "面包",
-        "日用",
-        "化妆",
-        "油粮",
-        "蔬菜",
-        "海鲜",
-        "母婴",
-        "VIP",
-      ],
       popupShow: false,
       popupCont: "",
       time: 2 * 60 * 60 * 1000,
-      discountItemList: [
-        { oldP: "550.00", newP: "300.00", name: "discountItem1" },
-        { oldP: "550.00", newP: "200.00", name: "discountItem2" },
-        { oldP: "400.00", newP: "350.00", name: "discountItem3" },
-        { oldP: "400.00", newP: "250.00", name: "discountItem4" },
-        { oldP: "550.00", newP: "300.00", name: "discountItem1" },
-        { oldP: "550.00", newP: "200.00", name: "discountItem2" },
-        { oldP: "400.00", newP: "350.00", name: "discountItem3" },
-        { oldP: "400.00", newP: "250.00", name: "discountItem4" },
-      ],
+      gridItemList: tdata.gridItemList,
+      discountItemList: tdata.discountItemList,
     };
   },
 
