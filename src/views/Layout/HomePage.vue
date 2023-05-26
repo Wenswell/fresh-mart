@@ -83,14 +83,14 @@
     <!-- 团购/秒杀入口 -->
 
     <van-grid :border="false" :column-num="2" class="bottomContainer">
-      <van-grid-item>
+        <van-grid-item to="/shop/seckill">
         <div class="container">
           <div class="text-title bigTitle">拼团购</div>
           <div class="text-content smallTxt">先到先得数量有限</div>
           <img src="@/assets/images/pingtuanAd.png" alt="" class="image" />
         </div>
       </van-grid-item>
-      <van-grid-item>
+      <van-grid-item to="/shop/seckill">
         <div class="container">
           <div class="text-title bigTitle">抢秒杀</div>
           <div class="text-content smallTxt">精选精选精选精</div>

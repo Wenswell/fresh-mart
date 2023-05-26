@@ -519,6 +519,7 @@ div.goods-card {
   margin-left: 3px;
 }
 
+// 商品图片
 .goods-img-div {
   height: 80px;
   background-color: #e9f2f4;
