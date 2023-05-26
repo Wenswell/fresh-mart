@@ -6,12 +6,24 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/auth',
+    redirect: '/shop',
+  },
+  {
+    path: '/shop',
+    redirect: '/shop/seckill',
+    component: () => import('@/views/Shop/ShopContainer'),
+    children: [
+      {
+        path: 'seckill',
+        name: 'seckill',
+        component: () => import('@/views/Shop/SecKill'),
+      },
+    ],
   },
   {
     path: '/auth',
     redirect: '/auth/register',
-    name: 'Auth',
+    // name: 'Auth',
     component: () => import('@/views/Auth/AuthPage'),
     children: [
       {
@@ -107,7 +119,7 @@ const routes = [
       {
         path: 'my',
         name: 'my',
-        // component: () => import('@/views/category/CategoryIndex'),
+        component: () => import('@/views/Layout/MyPage'),
         meta: {
           background: 'url(@/assets/images/homeBack.jpg) no-repeat 0 0 / 100%'
         },

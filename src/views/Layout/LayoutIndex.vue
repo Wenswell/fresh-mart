@@ -65,7 +65,9 @@ export default {
 /* 为 主页/我的 添加背景图 */
 .home,.my {
   background: url(@/assets/images/homeBack.jpg) no-repeat 0 0 / 100%;
-}
+    position: absolute;
+    width: 100vw;
+  }
 
 /* 底栏图标框增大 */
 img {
