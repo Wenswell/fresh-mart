@@ -21,6 +21,15 @@ const routes = [
     ],
   },
   {
+    path: '/shop/products',
+    redirect: '/shop/products/1'
+  },
+  {
+    path: '/shop/products/:id', 
+    // redirect: '/shop/products/1',
+    component: () => import('@/views/Shop/ProductDetail')
+  },
+  {
     path: '/auth',
     redirect: '/auth/register',
     // name: 'Auth',
