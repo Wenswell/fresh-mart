@@ -3,7 +3,7 @@ import App from './App.vue'
 
 import "@/assets/styles/reset.css"
 import "@/assets/styles/ico.css"
-import "@/assets/styles/fonts.css"
+import "@/assets/styles/custome.less"
 
 import "@/utils/import-vant"
 import "@/utils/flexible"

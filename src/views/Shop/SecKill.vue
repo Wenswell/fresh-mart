@@ -6,7 +6,8 @@
       </li>
     </ul> -->
 
-    <van-nav-bar title="秒杀专场" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="秒杀专场" left-arrow @click-left="onClickLeft" 
+    :border="false"/>
 
 
     <!-- console.log(this.nowTime>this.secKillTimeInfo[1].time.slice(0, 2)) -->

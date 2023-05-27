@@ -1,0 +1,76 @@
+/* 统一设置常用字体格式 */
+
+.bigTxt {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.bigTitle {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.smallTxt {
+  font-size: 12px;
+  color: #b3b3b3;
+}
+
+.white-blod {
+  color: white;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+
+
+
+
+/* 白底 圆角 盒子 */
+
+/* 固定盒子大小 */
+div.cell-group {
+  /* outline: solid; */
+  box-shadow: 0px 2px 8px rgba(133, 172, 216, 0.32);
+  width: 343px;
+  height: 140px;
+  margin: 0 auto;
+  /* margin-left: auto!important;
+  margin-right: auto!important; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+}
+
+
+
+// 盒子 234 顶部 我的订单 我的工具 猜你喜欢 & 查看全部
+.cell {
+  display: flex;
+  align-items: center;
+
+  &.header {
+    height: 40px;
+    display: flex;
+
+    &.h-left {
+      // outline: solid;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 15px;
+    }
+
+    &.h-right {
+      margin-right: 10px;
+    }
+
+    &.h-ico {
+      margin: 0 3px;
+    }
+
+  }
+
+  &.items {
+    flex: 1;
+    margin: 0 5px;
+  }
+}

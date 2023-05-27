@@ -10,7 +10,8 @@ const routes = [
   },
   {
     path: '/shop',
-    redirect: '/shop/seckill',
+    // redirect: '/shop/seckill',
+    redirect: '/shop/products',
     component: () => import('@/views/Shop/ShopContainer'),
     children: [
       {
@@ -19,6 +20,15 @@ const routes = [
         component: () => import('@/views/Shop/SecKill'),
       },
     ],
+  },
+  {
+    path: '/shop/products',
+    redirect: '/shop/products/1'
+  },
+  {
+    path: '/shop/products/:id', 
+    // redirect: '/shop/products/1',
+    component: () => import('@/views/Shop/ProductDetail')
   },
   {
     path: '/auth',

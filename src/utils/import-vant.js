@@ -21,6 +21,7 @@ import { SwipeCell } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { SubmitBar } from 'vant';
 import { Dialog } from 'vant';
+import { Tag } from 'vant';
 
 
 
@@ -58,3 +59,6 @@ Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
 Vue.use(SubmitBar);
 Vue.use(Dialog);
+
+
+Vue.use(Tag);
