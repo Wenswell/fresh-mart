@@ -697,6 +697,48 @@
       "num": 2
     }
   ],
+  "homeCatalog": [
+    {
+    "route": "freshfruits",
+    "name": "水果"
+    },
+    {
+    "route": "drinks",
+    "name": "饮品"
+    },
+    {
+    "route": "bakery",
+    "name": "面包"
+    },
+    {
+    "route": "daily",
+    "name": "日用"
+    },
+    {
+    "route": "cosmetics",
+    "name": "化妆"
+    },
+    {
+    "route": "oilandgrains",
+    "name": "油粮"
+    },
+    {
+    "route": "veggies",
+    "name": "蔬菜"
+    },
+    {
+    "route": "seafoods",
+    "name": "海鲜"
+    },
+    {
+    "route": "babycare",
+    "name": "母婴"
+    },
+    {
+    "route": "vipsection",
+    "name": "VIP"
+    }
+    ],
   "categoryList": [
     {
       "route": "featured",
@@ -779,18 +821,6 @@
       "title": "绿色蔬",
       "detail": "lǜ sè shū"
     }
-  ],
-  "gridItemList": [
-    "水果",
-    "饮品",
-    "面包",
-    "日用",
-    "化妆",
-    "油粮",
-    "蔬菜",
-    "海鲜",
-    "母婴",
-    "VIP"
   ],
   "discountItemList": [
     {

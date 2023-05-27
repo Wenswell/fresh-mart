@@ -239,7 +239,7 @@ export default {
 
   &.order {
     .item-ico {
-      background-position-y: -149px;
+      // background-position-y: -149px;
       background-size: 110px;
       width: 22px;
       height: 21px;
