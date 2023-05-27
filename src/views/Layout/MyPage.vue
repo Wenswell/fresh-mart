@@ -132,14 +132,14 @@ export default {
 
 // 固定盒子大小
 .cell-group {
-  /* outline: solid; */
-  box-shadow: 0px 2px 8px rgba(133, 172, 216, 0.32);
-  width: 343px;
-  height: 140px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  // /* outline: solid; */
+  // box-shadow: 0px 2px 8px rgba(133, 172, 216, 0.32);
+  // width: 343px;
+  // height: 140px;
+  // margin: 0 auto;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
   overflow: hidden;
   // margin: 10px auto;
   margin-bottom: 15px;
@@ -151,7 +151,7 @@ export default {
   
   // 整体偏移 底部 防止底栏遮挡
   &:last-child {
-    margin-bottom: 55px;
+    margin-bottom: 60px;
   }
 }
 
@@ -164,31 +164,6 @@ export default {
   align-items: center;
   /* 垂直居中 */
 
-}
-
-.my-data {
-  height: 65px;
-  vertical-align: bottom;
-}
-
-.my-data-item {
-  padding: 10px 0;
-}
-
-.my-data-div {
-  flex: 1;
-  display: flex;
-  align-items: center;
-
-  /* 垂直居中 */
-  &.up {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  &.down {
-    font-size: 12px;
-  }
 }
 
 .my-info-left {
@@ -223,6 +198,31 @@ export default {
   margin-left: 2px;
 }
 
+
+.my-data {
+  height: 65px;
+  vertical-align: bottom;
+}
+
+.my-data-item {
+  padding: 10px 0;
+}
+
+.my-data-div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+
+  /* 垂直居中 */
+  &.up {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  &.down {
+    font-size: 12px;
+  }
+}
 
 // 盒子 234 顶部 我的订单 我的工具 猜你喜欢 & 查看全部
 .cell {

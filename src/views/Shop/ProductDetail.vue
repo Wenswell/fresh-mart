@@ -40,6 +40,95 @@
       <swiper-slide class="swiper-slide" v-for="item in images" :key="item"><img :src="item" /></swiper-slide>
     </swiper-container>
 
+    <van-cell-group class="cell-group product-info" inset>
+      <van-cell class="cell-div title" :border="false">
+        <template #title>
+          <div class="cell-title content">鲜果优精选水果盒子 500g
+          </div>
+        </template>
+      </van-cell>
+      <van-cell class="cell-div price" :border="false">
+        <template #title>
+          <div class="cell-price content">
+            <span class="cell-price-content nowPrice">589.0</span>
+            <span class="cell-price-content oldPrice">888.0</span>
+          </div>
+        </template>
+      </van-cell>
+      <van-cell class="cell-div info" :border="false">
+        <template #title>
+          <div class="cell-info content">
+            <span class="cell-info-content post">包邮</span>
+            <span class="cell-info-content sold">4328</span>
+            <span class="cell-info-content rate">97%</span>
+          </div>
+        </template>
+      </van-cell>
+    </van-cell-group>
+
+    <van-cell-group class="cell-group small-group" inset>
+      <van-cell class="cell-div selected" :border="false">
+        <template #title>
+          <span class="cell-selected info">葡萄+火龙果+杨桃+枇杷</span>
+          <!-- <div class="cell-title content">鲜果优精选水果盒子 500g
+          </div> -->
+        </template>
+      </van-cell>
+    </van-cell-group>
+
+    <van-cell-group class="cell-group middle-group" inset>
+      <van-cell class="cell-div more" :border="false">
+        <van-grid class="cell items" :border="false" :column-num="3">
+        <van-grid-item class="item more">
+          <span class="item item-ico"></span>
+          <div class="item text">客服</div>
+        </van-grid-item>
+        <van-grid-item class="item more">
+          <span class="item item-ico"></span>
+          <div class="item text">分享</div>
+        </van-grid-item>
+        <van-grid-item class="item more">
+          <span class="item item-ico"></span>
+          <div class="item text">收藏</div>
+        </van-grid-item>
+      </van-grid>
+      </van-cell>
+    </van-cell-group>
+
+
+    <van-cell-group class="cell-group" inset>
+      <van-cell class="cell header" :border="false">
+
+        <template #title>
+          <span class="cell header h-left">商品评价</span>
+        </template>
+
+        <template #right-icon>
+          <span class="cell header h-right">全部评价
+            <van-icon class="header h-ico" name="arrow" />
+          </span>
+        </template>
+
+      </van-cell>
+      <van-grid direction="horizontal" class="cell items" :border="false" :column-num="2">
+        <van-grid-item class="like">
+          <!-- <van-image 
+            width="100"
+            height="100" src="https://img01.yzcdn.cn/vant/apple-1.jpg" /> -->
+          <!-- <div class="like"> -->
+
+          <!-- <img :src="require('@/assets/images/rank4.png')" height="200" width="200"> -->
+
+          <span>百年陈酿 囯窖茅台 小黑瓶 11111111111111150ml</span>
+          <!-- </div> -->
+        </van-grid-item>
+
+        <!-- <van-grid-item class="item group" v-for="item in myToolInfo" :key="item.page" @click="toPage(item.page)">
+          <span class="item item-ico"></span>
+          <div class="item text">{{ item.detail }}</div>
+        </van-grid-item> -->
+      </van-grid>
+    </van-cell-group>
 
 
   </div>
@@ -117,8 +206,7 @@ export default {
   background: url(@/assets/images/itemdetailback.png) no-repeat 0 0 / 100%;
   position: absolute;
   width: 100vw;
-  height: 100%;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .top-nav-bar {
@@ -126,9 +214,7 @@ export default {
 }
 
 .swiper-container {
-  // outline: solid;
-  margin: 10px 0;
-  overflow: visible;
+  --swiper-pagination-bottom: 30px;
 }
 
 
@@ -143,9 +229,11 @@ export default {
   box-shadow: 0px 4px 10px #122e7447;
   background-color: white;
   border-radius: 5px;
-
+  margin: 20px 0;
+  
   & img {
     height: 100%;
+    border-radius: 5px;
     // 可能会裁剪图片 ( 设备宽度 != 375px ) 
     object-fit: cover;
     flex: 1;
@@ -158,8 +246,222 @@ export default {
   transform: scale(1);
 }
 
-.swiper-pagination{
-  margin-bottom: 10px;
-  outline: solid;
+.cell {
+  display: flex;
+  align-items: center;
+
+  &.header {
+    height: 40px;
+
+    &.h-left {
+      // outline: solid;
+      font-size: 16px;
+      font-weight: bold;
+      // margin-left: 15px;
+    }
+
+    &.h-right {
+      // margin-right: 10px;
+    }
+
+    &.h-ico {
+      // margin: 0 3px;
+    }
+
+  }
+
+  &.items {
+    flex: 1;
+    margin: 0 5px;
+  }
 }
+
+// 盒子 4 猜你喜欢 内容
+.like {
+  flex: 1;
+  padding-bottom: 10px;
+
+  img {
+    display: inline-block;
+    // outline: solid;
+    width: 50px;
+    height: 77px;
+    object-fit: cover;
+    // margin-left: 20px;
+    margin-right: 30px;
+  }
+
+  span {
+    font-size: 15px;
+    width: 210px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    // color: #4d4d4d;
+  }
+}
+
+// 固定盒子大小
+.cell-group {
+  /* outline: solid; */
+  // box-shadow: 0px 2px 8px rgba(133, 172, 216, 0.32);
+  // width: 343px;
+  // height: 140px;
+  // margin: 0 auto;
+  // display: flex;
+  // flex-direction: column;
+  justify-content: space-around;
+  // overflow: hidden;
+  // margin-bottom: 15px;
+  margin-bottom: 15px;
+  padding: 0 10px;
+
+  &.product-info {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+
+  // // 整体偏移 顶部
+  &:first-child {
+    // margin-top: 47px;
+  }
+
+  // 整体偏移 底部 防止底栏遮挡
+  &:last-child {
+    margin-bottom: 20px;
+  }
+
+  &.small-group {
+    // outline: solid;
+    height: 41px;
+  }
+  &.middle-group {
+    // outline: solid;
+    height: 77px;
+  }
+}
+
+
+.cell-div {
+  &.title {
+    font-size: 16px;
+  }
+
+  &.price {
+    // outline: solid;
+
+    span::before {
+      content: "¥";
+      margin-right: 1px;
+      margin-left: 3px;
+    }
+
+    .nowPrice {
+      font-size: 21px;
+      color: red;
+      font-weight: bold;
+    }
+
+    .oldPrice {
+      font-size: 12px;
+      color: grey;
+      text-decoration: line-through
+    }
+  }
+
+  &.info {
+    span {
+      margin-right: 20px;
+    }
+
+    .cell-info-content {
+      // outline: solid;
+      font-size: 14px;
+      font-weight: bold;
+
+      &.post,
+      &::after {
+        margin-left: 2px;
+        font-weight: normal;
+        font-size: 13px;
+        color: #7c7c7c;
+      }
+
+      &.sold::after {
+        content: "已购";
+      }
+
+      &.rate::after {
+        content: "好评";
+      }
+    }
+  }
+
+  &.selected {
+    font-size: 14px;
+    font-weight: bold;
+
+    &::before {
+      content: "已选";
+      margin-right: 25px;
+      font-weight: normal;
+      font-size: 13px;
+      color: #7c7c7c;
+    }
+  }
+}
+
+
+
+
+.item {
+  margin: 2px 0;
+
+  .text {
+    font-size: 12px;
+  }
+
+  .item-ico {
+    background: url(@/assets/images/icoAll.png) no-repeat;
+    display: inline-block;
+  }
+
+  &.more {
+    .item-ico {
+      background-position-y: -73px;
+      background-size: 110px;
+      width: 20.5px;
+      height: 21px;
+    }
+
+    &:nth-child(1) .item-ico {
+      background-position-x: -26.5px;
+    }
+
+    &:nth-child(2) .item-ico {
+      background-position-x: -47px;
+    }
+
+    &:nth-child(3) .item-ico {
+      background-position-x: -67px;
+    }
+
+  }
+}
+
+
+// .my-info-left {
+//   margin-left: 20px;
+//   margin-top: 20px;
+//   display: flex;
+//   align-items: center;
+
+//   /* 垂直居中 */
+//   >span {
+//     //  outline: solid;
+//     margin-left: 10px;
+//     font-size: 16px;
+//   }
+// }
 </style>

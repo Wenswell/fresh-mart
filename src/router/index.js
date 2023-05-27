@@ -10,7 +10,8 @@ const routes = [
   },
   {
     path: '/shop',
-    redirect: '/shop/seckill',
+    // redirect: '/shop/seckill',
+    redirect: '/shop/products',
     component: () => import('@/views/Shop/ShopContainer'),
     children: [
       {
