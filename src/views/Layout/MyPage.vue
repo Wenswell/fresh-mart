@@ -224,37 +224,6 @@ export default {
   }
 }
 
-// 盒子 234 顶部 我的订单 我的工具 猜你喜欢 & 查看全部
-.cell {
-  display: flex;
-  align-items: center;
-
-  &.header {
-    height: 40px;
-
-    &.h-left {
-      // outline: solid;
-      font-size: 16px;
-      font-weight: bold;
-      margin-left: 15px;
-    }
-
-    &.h-right {
-      margin-right: 10px;
-    }
-
-    &.h-ico {
-      margin: 0 3px;
-    }
-
-  }
-
-  &.items {
-    flex: 1;
-    margin: 0 5px;
-  }
-}
-
 // 盒子 23 我的工具 我的订单 图标 + 文本
 .item {
   margin: 5px 0;

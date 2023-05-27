@@ -1,6 +1,560 @@
 {
   "code": 200,
   "msg": "ok",
+  "productDetail": [
+    {
+      "item": {
+        "itemId": "628019986408",
+        "title": "无印良品 MUJI 共聚酯便携杯954005 Tritan塑料水杯杯子 随行杯",
+        "subtitle": "瓶身采用健康安全的Tritan材质。",
+        "images": [
+          "//img.alicdn.com/imgextra/i1/2038648986/O1CN015RhM4o2GFdsjDYsar_!!0-item_pic.jpg",
+          "//img.alicdn.com/imgextra/i3/2038648986/O1CN01XV8axq2GFdsdVDjQH_!!2038648986-0-lubanu-s.jpg",
+          "//img.alicdn.com/imgextra/i1/2038648986/O1CN01oWLLgD2GFdso1HyMR_!!2038648986-0-lubanu-s.jpg",
+          "//img.alicdn.com/imgextra/i4/2038648986/O1CN01w4Wi9f2GFdsi4Be9s_!!2038648986-0-lubanu-s.jpg",
+          "//img.alicdn.com/imgextra/i3/2038648986/O1CN01uN5EY32GFdso1Kr7S_!!2038648986-0-lubanu-s.jpg"
+        ],
+        "categoryId": "50006897",
+        "rootCategoryId": "122952001",
+        "brandValueId": "3346593",
+        "skuText": "请选择颜色分类 ",
+        "countMultiple": [],
+        "exParams": {},
+        "commentCount": "10756",
+        "favcount": "60864",
+        "taobaoDescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=628019986408&descVersion=7.0&type=0&f=desc/icoss34988331724d6b6333e7f2791a&sellerType=B",
+        "tmallDescUrl": "//mdetail.tmall.com/templates/pages/desc?id=628019986408",
+        "taobaoPcDescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=628019986408&descVersion=6.0&type=1&f=icoss!0628019986408!12701466372&sellerType=B",
+        "pcADescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=628019986408&descVersion=7.0&type=1&f=icoss!0628019986408!12701466372&sellerType=B",
+        "moduleDescUrl": "//hws.m.taobao.com/d/modulet/v5/WItemMouldDesc.do?id=628019986408&f=icoss34988331724d6b6333e7f2791a",
+        "openDecoration": false,
+        "moduleDescParams": {
+          "f": "desc/icoss34988331724d6b6333e7f2791a",
+          "id": "628019986408"
+        },
+        "h5moduleDescUrl": "//mdetail.tmall.com/templates/pages/itemDesc?id=628019986408",
+        "cartUrl": "https://h5.m.taobao.com/awp/base/cart.htm",
+        "h5ItemUrl": "https://new.m.taobao.com/detail.htm?id=628019986408&hybrid=true"
+      },
+      "props": {
+        "groupProps": [
+          {
+            "基本信息": [
+              {
+                "品牌": "MUJI/无印良品"
+              },
+              {
+                "材质": "其他"
+              },
+              {
+                "容量": "301mL(含)-400mL(含)"
+              },
+              {
+                "风格": "中式"
+              },
+              {
+                "产地": "中国大陆"
+              },
+              {
+                "颜色分类": "透明 350ml 便携水杯 透明350ml 便携吸管杯 透明 410ml 便携随行杯 透明 550ml 便携水杯 透明 800ml 便携水杯"
+              },
+              {
+                "货号": "ZD0S002"
+              },
+              {
+                "杯子样式": "其他"
+              }
+            ]
+          }
+        ]
+      },
+      "mockData": {
+        "delivery": {},
+        "trade": {
+          "buyEnable": true,
+          "cartEnable": true
+        },
+        "feature": {
+          "hasSku": true,
+          "showSku": true
+        },
+        "price": {
+          "price": {
+            "priceText": "58.00"
+          }
+        },
+        "skuCore": {
+          "sku2info": {
+            "0": {
+              "price": {
+                "priceMoney": 5800,
+                "priceText": "58.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 500
+            },
+            "4943353985857": {
+              "price": {
+                "priceMoney": 5800,
+                "priceText": "58.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "4943353985856": {
+              "price": {
+                "priceMoney": 4800,
+                "priceText": "48.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "4943353985858": {
+              "price": {
+                "priceMoney": 6800,
+                "priceText": "68.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "4943353985855": {
+              "price": {
+                "priceMoney": 6500,
+                "priceText": "65.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "4943353985854": {
+              "price": {
+                "priceMoney": 4800,
+                "priceText": "48.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            }
+          },
+          "skuItem": {
+            "hideQuantity": true
+          }
+        }
+      },
+      "rate": {
+        "totalCount": "1万+",
+        "invite": {
+          "showInvite": "false",
+          "inviteText": ""
+        },
+        "keywords": [
+          {
+            "attribute": "80031007-11",
+            "word": "很简约",
+            "count": "59",
+            "type": "1"
+          },
+          {
+            "attribute": "80101006-11",
+            "word": "用起特别好用",
+            "count": "110",
+            "type": "1"
+          },
+          {
+            "attribute": "80011024-11",
+            "word": "质量很好",
+            "count": "130",
+            "type": "1"
+          },
+          {
+            "attribute": "80121000-11",
+            "word": "活动价划算",
+            "count": "63",
+            "type": "1"
+          },
+          {
+            "attribute": "80041008-11",
+            "word": "看去很好",
+            "count": "433",
+            "type": "1"
+          },
+          {
+            "attribute": "80131003-13",
+            "word": "客服的态度差",
+            "count": "54",
+            "type": "-1"
+          }
+        ],
+        "rateList": [
+          {
+            "content": "容量蛮大的，跑一满杯醇黑显得也没那么苦了。很喜欢这个杯子！！！",
+            "userName": "来**乐",
+            "headPic": "//sns.m.taobao.com/avatar/sns/user/flag/sns_logo?type=taobao&kn=wwc_tb_11&bizCode=taobao_avatar&userFlag=RAzN84GK7wS8eNrWuR2rc2C7BZWDzN8ts3pUxiNZ58UhjMChrFHDkQko7h7vq7pmAJScC9KYTSBG6gJz8MhFGCs4CiCUTuXMbKQk3zT7QZB6zfoMyRsRG7eN4rXf5BzDx6MzEwkqeh1bPzh2XoDM3WurKn29nwbmahjzVah",
+            "memberLevel": "3",
+            "dateTime": "2023-05-18",
+            "createTimeInterval": "9天前",
+            "skuInfo": "颜色分类:透明 550ml 便携水杯",
+            "tmallMemberLevel": "0",
+            "isVip": "true",
+            "feedId": "1208608799222"
+          },
+          {
+            "content": "无印良品的小胖杯真的有被狠狠可爱到 (≧∀≦)ゞ！透明简约设✂计，容量很合适，杯子装水不漏、无异味。买塑料的水💦杯一定要买tritan材质的更安全！现在每天都会泡一杯花茶带上 ʕ๑•ɷ•๑ʔ❀。很喜欢无印良品，无论是质量还是细节做的都很好💯！  ",
+            "userName": "匿**家",
+            "headPic": "//gtms03.alicdn.com/tps/i3/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_80x80.jpg",
+            "memberLevel": "6",
+            "dateTime": "2023-04-08",
+            "createTimeInterval": "1个月前",
+            "skuInfo": "颜色分类:透明 550ml 便携水杯",
+            "tmallMemberLevel": "0",
+            "isVip": "false",
+            "feedId": "1205126055356"
+          }
+        ],
+        "utFeedId": "1208608799222_1205126055356"
+      },
+      "skuBase": {
+        "skus": [
+          {
+            "skuId": "4943353985854",
+            "propPath": "1627207:23420168671"
+          },
+          {
+            "skuId": "4943353985855",
+            "propPath": "1627207:23420168672"
+          },
+          {
+            "skuId": "4943353985856",
+            "propPath": "1627207:23420168673"
+          },
+          {
+            "skuId": "4943353985857",
+            "propPath": "1627207:23420168674"
+          },
+          {
+            "skuId": "4943353985858",
+            "propPath": "1627207:23420168675"
+          }
+        ],
+        "props": [
+          {
+            "pid": "1627207",
+            "name": "颜色分类",
+            "values": [
+              {
+                "vid": "23420168671",
+                "name": "透明 350ml 便携水杯",
+                "image": "//img.alicdn.com/imgextra/i3/2038648986/O1CN01vqDX3R2GFdr2pqo8v_!!2038648986.jpg"
+              },
+              {
+                "vid": "23420168672",
+                "name": "透明350ml 便携吸管杯",
+                "image": "//img.alicdn.com/imgextra/i3/2038648986/O1CN01oYrqZI2GFdqyCuRWi_!!2038648986.jpg"
+              },
+              {
+                "vid": "23420168673",
+                "name": "透明 410ml 便携随行杯",
+                "image": "//img.alicdn.com/imgextra/i1/2038648986/O1CN01D0LTOg2GFdqymc8Tg_!!2038648986.jpg"
+              },
+              {
+                "vid": "23420168674",
+                "name": "透明 550ml 便携水杯",
+                "image": "//img.alicdn.com/imgextra/i2/2038648986/O1CN01O9uZSx2GFdqzlMiTS_!!2038648986.jpg"
+              },
+              {
+                "vid": "23420168675",
+                "name": "透明 800ml 便携水杯",
+                "image": "//img.alicdn.com/imgextra/i4/2038648986/O1CN01Y8pxcK2GFdr098eYp_!!2038648986.jpg"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "item": {
+        "itemId": "685251255232",
+        "title": "【自营】日本花王原装进口蒸汽眼罩 热敷睡眠舒缓眼部黑眼圈12片",
+        "subtitle": "新旧包装，随机发货",
+        "images": [
+          "//img.alicdn.com/imgextra/i2/2213272865599/O1CN01x1Pcb91rEOO6DdVuN_!!2213272865599-0-tmgimage.jpg",
+          "//img.alicdn.com/imgextra/i4/2213272865599/O1CN01drA0ou1rEOM8nCKTa_!!2213272865599.jpg",
+          "//img.alicdn.com/imgextra/i1/2213272865599/O1CN015wimoe1rEOM3ypy5J_!!2213272865599.jpg",
+          "//img.alicdn.com/imgextra/i2/2213272865599/O1CN01mO6ln61rEOM7XsOX8_!!2213272865599.jpg",
+          "//img.alicdn.com/imgextra/i2/2213272865599/O1CN01Cqe27Y1rEOLw0sRZn_!!2213272865599.jpg"
+        ],
+        "categoryId": "201549810",
+        "rootCategoryId": "21",
+        "brandValueId": "32638",
+        "skuText": "请选择颜色分类 ",
+        "countMultiple": [],
+        "exParams": {},
+        "commentCount": "121",
+        "favcount": "242",
+        "taobaoDescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=685251255232&descVersion=6.0&type=1&f=icoss!0685251255232!11582049353&sellerType=B",
+        "tmallDescUrl": "//mdetail.tmall.com/templates/pages/desc?id=685251255232",
+        "taobaoPcDescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=685251255232&descVersion=6.0&type=1&f=icoss!0685251255232!11582049353&sellerType=B",
+        "pcADescUrl": "//market.m.taobao.com/app/detail-project/desc/index.html?id=685251255232&descVersion=7.0&type=1&f=icoss!0685251255232!11582049353&sellerType=B",
+        "openDecoration": false,
+        "cartUrl": "https://h5.m.taobao.com/awp/base/cart.htm",
+        "h5ItemUrl": "https://new.m.taobao.com/detail.htm?id=685251255232&hybrid=true"
+      },
+      "props": {
+        "groupProps": [
+          {
+            "基本信息": [
+              {
+                "品牌": "KAO/花王"
+              },
+              {
+                "型号": "无"
+              },
+              {
+                "产地": "日本"
+              },
+              {
+                "颜色分类": "无香 薰衣草 洋甘菊 玫瑰 柚子 薄荷味 男士无香 森林浴香 褐色"
+              },
+              {
+                "眼罩类型": "蒸汽眼罩"
+              },
+              {
+                "货号": "4901301348029"
+              }
+            ]
+          }
+        ]
+      },
+      "rate": {
+        "totalCount": "100+",
+        "invite": {
+          "showInvite": "false",
+          "inviteText": ""
+        },
+        "rateList": [
+          {
+            "content": "第一次买森林香 有点治愈",
+            "userName": "匿**家",
+            "headPic": "//gtms03.alicdn.com/tps/i3/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_80x80.jpg",
+            "memberLevel": "9",
+            "dateTime": "2023-05-22",
+            "createTimeInterval": "5天前",
+            "skuInfo": "颜色分类:森林浴香",
+            "tmallMemberLevel": "3",
+            "blackCardUserUrl": "//img.alicdn.com/tfs/TB1wrG1elv0gK0jSZKbXXbK2FXa-225-96.png",
+            "isVip": "false",
+            "feedId": "1208060808628"
+          },
+          {
+            "content": "一直都用这款，感觉很好用",
+            "userName": "匿**家",
+            "headPic": "//gtms03.alicdn.com/tps/i3/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_80x80.jpg",
+            "memberLevel": "4",
+            "dateTime": "2023-05-21",
+            "createTimeInterval": "6天前",
+            "skuInfo": "颜色分类:柚子",
+            "tmallMemberLevel": "0",
+            "blackCardUserUrl": "//img.alicdn.com/tfs/TB1wrG1elv0gK0jSZKbXXbK2FXa-225-96.png",
+            "isVip": "true",
+            "feedId": "1208628214874"
+          }
+        ],
+        "utFeedId": "1208060808628_1208628214874"
+      },
+      "skuBase": {
+        "skus": [
+          {
+            "skuId": "5068233823778",
+            "propPath": "1627207:3232483"
+          },
+          {
+            "skuId": "5068233823779",
+            "propPath": "1627207:3232484"
+          },
+          {
+            "skuId": "5068233823780",
+            "propPath": "1627207:3232481"
+          },
+          {
+            "skuId": "5068233823781",
+            "propPath": "1627207:90554"
+          },
+          {
+            "skuId": "5068233823782",
+            "propPath": "1627207:28332"
+          },
+          {
+            "skuId": "5068233823783",
+            "propPath": "1627207:30156"
+          },
+          {
+            "skuId": "5068233823784",
+            "propPath": "1627207:60092"
+          },
+          {
+            "skuId": "5068233823785",
+            "propPath": "1627207:28335"
+          },
+          {
+            "skuId": "5068233823786",
+            "propPath": "1627207:132069"
+          }
+        ],
+        "props": [
+          {
+            "pid": "1627207",
+            "name": "颜色分类",
+            "values": [
+              {
+                "vid": "3232483",
+                "name": "无香",
+                "image": "//img.alicdn.com/imgextra/i4/2213272865599/O1CN01f70qOb1rEOMC8VPID_!!2213272865599.jpg"
+              },
+              {
+                "vid": "3232484",
+                "name": "薰衣草",
+                "image": "//img.alicdn.com/imgextra/i2/2213272865599/O1CN01Y9ySkT1rEOM3oXQyJ_!!2213272865599.jpg"
+              },
+              {
+                "vid": "3232481",
+                "name": "洋甘菊",
+                "image": "//img.alicdn.com/imgextra/i1/2213272865599/O1CN01hHSfcC1rEOM1aMx0k_!!2213272865599.jpg"
+              },
+              {
+                "vid": "90554",
+                "name": "玫瑰",
+                "image": "//img.alicdn.com/imgextra/i4/2213272865599/O1CN01zN3mwL1rEOM4b5kQh_!!2213272865599.jpg"
+              },
+              {
+                "vid": "28332",
+                "name": "柚子",
+                "image": "//img.alicdn.com/imgextra/i4/2213272865599/O1CN01pTKPJ41rEOPeQ66PG_!!2213272865599.jpg"
+              },
+              {
+                "vid": "30156",
+                "name": "薄荷味",
+                "image": "//img.alicdn.com/imgextra/i3/2213272865599/O1CN01bNhd4O1rEOM64VqCY_!!2213272865599.jpg"
+              },
+              {
+                "vid": "60092",
+                "name": "男士无香"
+              },
+              {
+                "vid": "28335",
+                "name": "森林浴香",
+                "image": "//img.alicdn.com/imgextra/i4/2213272865599/O1CN01MZKAIL1rEOPnPwsgU_!!2213272865599.jpg"
+              },
+              {
+                "vid": "132069",
+                "name": "褐色"
+              }
+            ]
+          }
+        ]
+      },
+      "mockData": {
+        "delivery": {},
+        "trade": {
+          "buyEnable": true,
+          "cartEnable": true
+        },
+        "feature": {
+          "hasSku": true,
+          "showSku": true
+        },
+        "price": {
+          "price": {
+            "priceText": "98.00"
+          }
+        },
+        "skuCore": {
+          "sku2info": {
+            "5068233823786": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "0": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 900
+            },
+            "5068233823784": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823785": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823778": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823779": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823782": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823783": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823780": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            },
+            "5068233823781": {
+              "price": {
+                "priceMoney": 9800,
+                "priceText": "98.00",
+                "priceTitle": "价格"
+              },
+              "quantity": 100
+            }
+          },
+          "skuItem": {
+            "hideQuantity": true
+          }
+        }
+      }
+    }
+  ],
   "secKillProductList": [
     {
       "id": "a",
