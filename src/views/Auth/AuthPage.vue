@@ -1,47 +1,43 @@
 <template>
-  <div>
-    <!-- 顶部图片 -->
-    <van-image
-      width="100%"
-      :src="require('@/assets/images/banner-register.jpg')"
-      v-show="$route.name === 'register'"
-    />
-    <van-image
-      width="100%"
-      :src="require('@/assets/images/banner-login.jpg')"
-      v-show="$route.name === 'login'"
-    />
+  <div :class="$route.name" class="background">
+    <!--———— 1. 顶部↑ ——————-->
+    
+    <!--———— 2. 中间 ——————-->
 
-    <!-- 注册/登录选项 -->
+    <!-- 注册/登录选项容器 -->
     <van-grid class="container" :border="false" :column-num="2" :gutter="0">
-      <van-grid-item @click="goTo('register')">
-        <p class="auth-title" :class="getActiveClass('register')">注册</p>
-        <div
-          class="triangle-border"
-          :class="{ active: $route.name == 'register' }"
-        ></div>
+      
+      <!-- 注册/登录选项 -->
+      <van-grid-item 
+        v-for="([key, value]) in Object.entries(options)" :key="key" 
+        :class="{ active: $route.name == key }"
+        @click="goTo(key)"
+      >
+        <p class="auth-title">{{ value }}</p>
+        <div class="triangle-border"></div>
       </van-grid-item>
-      <van-grid-item @click="goTo('login')">
-        <p class="auth-title" :class="getActiveClass('login')">登录</p>
-        <div
-          class="triangle-border"
-          :class="{ active: $route.name == 'login' }"
-        ></div>
+    <!-- 
+      <van-grid-item @click="goTo('register')" :class="{ active: $route.name == 'register' }">
+        <p class="auth-title">注册</p>
+        <div class="triangle-border"></div>
       </van-grid-item>
-    </van-grid>
-
-<router-view></router-view>
+      <van-grid-item @click="goTo('login')" :class="{ active: $route.name == 'login' }">
+        <p class="auth-title">登录</p>
+        <div class="triangle-border"></div>
+      </van-grid-item>
+    -->
+    
+  </van-grid>
+    
+      <!-- 注册/登录 验证表单 -->
+      <router-view></router-view>
+    
+    <!--———— 3. 底部 ——————-->
 
     <!-- 底部登录按钮 -->
     <div style="text-align: center">
-      <van-button
-        class="submitBtn"
-        round
-        type="primary"
-        color="#46E1FF"
-        to="/layout"
-        >登录</van-button
-      >
+      <van-button class="submit-btn" round color="#46E1FF" to="/layout">{{ $route.name == "register" ? "注册" : "登录"
+      }}</van-button>
     </div>
 
   </div>
@@ -56,6 +52,10 @@ export default {
       verifyNum: "",
       btnText: "获取验证码",
       btnDisable: false,
+      options: {
+        "register": "注册",
+        "login": "登录",
+      }
     };
   },
   methods: {
@@ -69,60 +69,80 @@ export default {
       this.$router.push({ name: page });
     },
   },
-  computed: {
-    // 计算属性，返回一个包含 'active' 类名的对象或空对象
-    getActiveClass() {
-      return function (page) {
-        return { active: this.$route.name === page };
-      };
-    },
-  },
 };
 </script>
 
 <style lang="less" scoped>
+
+/***** 1. 顶部 *****/
+
+// 顶部图片 注册页面
+.register {
+  background-image: url(@/assets/images/banner-register.jpg);
+}
+
+// 顶部图片 登录页面
+.login {
+  background-image: url(@/assets/images/banner-login.jpg);
+  
+}
+
+/***** 2. 中间 *****/
+
 // 注册/登录选项
 .container {
   width: 278px;
-  margin: -20px auto 56-47px;
-  align-items: flex-end;
-}
+  margin: 280px auto 56-47px;
 
-// 字体样式
-.auth-title {
-  color: @grey;
-  font-size: 18px;
-
-  &.active {
-    color: @blue;
-    font-weight: bold;
+  // 注册/登录 默认字体样式
+  .auth-title {
+    color: @grey;
+    font-size: 18px;
   }
-}
+  
+  // 注册/登录 默认下框线
+  .triangle-border {
+    width: 100%;
+    height: 1.5px;
+    background-color: @grey;
+    position: relative;
+    // 与 注册/登录 文字的间距
+    margin-top: 10px;
+  }
+  
+  // 注册/登录 激活后的样式
+  .active {
 
-// 下框线 & 三角形
-.triangle-border {
-  width: 100%;
-  height: 1.5px; /* 线条高度 */
-  background-color: @grey;
-  position: relative;
-  margin-top: 10px; /* 与注册文字间距 */
-  &.active {
-    background-color: @blue;
-    &::after {
-      content: "";
-      position: absolute;
-      top: -5px; /* 调整三角形位置 */
-      left: calc(50% - 5px); /* 置中 */
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-bottom: 6px solid @blue;
+    // 注册/登录 激活后的字体
+    .auth-title {
+      color: @blue;
+      font-weight: bold;
+    }
+    
+    // 注册/登录 激活后的下框线
+    .triangle-border {
+      background-color: @blue;
+      
+      // 注册/登录 激活后的下框线正中添加三角形
+      &::after {
+        content: "";
+        position: absolute;
+        /* 调整三角形位置 */
+        top: -5px;
+        /* 置中 */
+        left: calc(50% - 5px);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 6px solid @blue;
+      }
     }
   }
 }
 
+/***** 3. 底部 *****/
 
-/* 登录按钮调整大小、阴影 */
-.submitBtn {
+// 登录按钮调整大小、阴影
+.submit-btn {
   box-shadow: 0px 7px 12px 0px #5ad4eaaa;
   width: 222px;
   height: 40px;

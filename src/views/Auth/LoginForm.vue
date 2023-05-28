@@ -10,7 +10,7 @@
       name="手机"
       label="手机"
       placeholder="请输入手机号"
-      class="fieldCont"
+      class="verify-field"
       :center="true"
       :border="false"
       label-align="right"
@@ -29,7 +29,7 @@
       name="密码"
       label="密码"
       placeholder="请输入密码"
-      class="fieldCont"
+      class="verify-field"
       :center="true"
       :border="false"
       label-align="right"
@@ -78,7 +78,8 @@ export default {
 
 <style lang="less" scoped>
 // 输入框
-.fieldCont {
+.verify-field {
+  font-size: 14px;
   margin: 0 auto;
   width: 280px;
   padding: 0;
