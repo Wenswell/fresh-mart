@@ -16,16 +16,32 @@
     </van-sticky>
 
     <!-- 顶部轮播 -->
-    <swiper :options="swiperOptions">
+    <!-- <swiper :options="swiperOptions">
       <swiper-slide v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></swiper-slide>
       <div class="swiper-pagination home-page-swiper" slot="pagination"></div>
-    </swiper>
+    </swiper> -->
 
     <!-- 顶部轮播 -->
     <!-- <van-swipe class="my-swipe" :autoplay="10000" indicator-color="white">
       <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
       <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
     </van-swipe> -->
+
+    <!-- 顶部轮播 -->
+    <!-- Slider main container -->
+    <div ref="swiper" class="swiper">
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide" v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></div>
+      </div>
+
+      <!-- Navigation arrows -->
+      <!-- <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div> -->
+
+      <div class="swiper-pagination"></div>
+    </div>
+
 
     <!-- 上方分类导航 -->
     <van-cell-group class="cell-group product-info" inset>
@@ -114,20 +130,6 @@ export default {
       bannerImgList: tdata.bannerImgList,
       homeCatalog: tdata.homeCatalog,
       discountItemList: tdata.discountItemList,
-      swiperOptions: {
-        slidesPerView: 1,
-        grabCursor: true,
-        centeredSlides: true,
-        autoplay: {
-          delay: 1000,
-          disableOnInteraction: false,
-        },
-        loop: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        },
-      },
     };
   },
 
@@ -140,6 +142,37 @@ export default {
       this.$toast(value);
     },
   },
+  mounted() {
+    const SECOND = 1000 // milliseconds
+
+    new this.$swiper(this.$refs.swiper, {
+
+      // 已全局注册
+      // modules: [Navigation, Pagination, Autoplay],
+
+      loop: true,
+      autoplay: {
+        delay: 1 * SECOND,
+        disableOnInteraction: false,
+      },
+      speed: 2 * SECOND,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      // navigation: {
+      //   nextEl: '.swiper-button-next',
+      //   prevEl: '.swiper-button-prev',
+      // },
+
+      // on: {
+      //   slideChange: (swiper) => {
+      //     this.activeIndex = swiper.realIndex
+      //   },
+      // },
+    })
+  },
+
 };
 </script>
 
@@ -164,22 +197,29 @@ export default {
 }
 
 // 上方轮播图
-.swiper-container {
-  height: 110px;
-
-  .swiper-img {
+.swiper {
+  // max-width: 600px;
+  height: 100px;
+// .swiper-slide {
+//    display: flex;
+//    justify-content: center;
+//    align-items: center;
+// }
+img {
     /* 图片居中填充 */
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
-
-  .home-page-swiper {
+  /deep/ .swiper-pagination {
     text-align: end;
-    padding-right: 25px;
-
-    /deep/.swiper-pagination-bullet {
+    right: 25px;
+    left: auto;
+    // outline: solid;
+    width: max-content;
+    // outline: solid;
+    .swiper-pagination-bullet {
       background-color: #000;
       width: 10px;
       height: 10px;
@@ -187,12 +227,43 @@ export default {
       opacity: 0.35;
     }
 
-    /deep/ .swiper-pagination-bullet-active {
+    .swiper-pagination-bullet-active {
       background-color: #fff;
       opacity: 1;
     }
   }
 }
+
+
+// .swiper-container {
+//   height: 110px;
+
+//   .swiper-img {
+//     /* 图片居中填充 */
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//     object-position: center;
+//   }
+
+//   .home-page-swiper {
+//     text-align: end;
+//     padding-right: 25px;
+
+//     /deep/.swiper-pagination-bullet {
+//       background-color: #000;
+//       width: 10px;
+//       height: 10px;
+//       margin-right: 2px;
+//       opacity: 0.35;
+//     }
+
+//     /deep/ .swiper-pagination-bullet-active {
+//       background-color: #fff;
+//       opacity: 1;
+//     }
+//   }
+// }
 
 /* 中间分类 */
 .cell-group {

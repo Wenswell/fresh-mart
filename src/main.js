@@ -9,12 +9,13 @@ import "@/assets/styles/custome.less"
 
 // 专门导入vant
 import "@/utils/import-vant"
+import "@/utils/swiper"
 
 // 导入swiper
-import { Swiper, SwiperSlide } from "@/utils/swiper"
+// import { Swiper, SwiperSlide } from "@/utils/swiper"
 // eslint-disable-next-line vue/multi-word-component-names
-Vue.component("Swiper", Swiper);
-Vue.component("SwiperSlide", SwiperSlide);
+// Vue.component("Swiper", Swiper);
+// Vue.component("SwiperSlide", SwiperSlide);
 
 // 淘宝团队产品，未测试效果
 import "@/utils/flexible"
