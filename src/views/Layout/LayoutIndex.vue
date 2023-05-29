@@ -1,52 +1,24 @@
 <template>
-  <div :class="active">
-    
+  <div :class="active" class="background">
+
+    <!-- 二级路由 -->
     <router-view />
 
+    
     <!-- 底栏 -->
-
     <van-tabbar v-model="active">
-      <van-tabbar-item name="home" replace to="/layout/home">
-        <!-- <span>首页</span> -->
+      <van-tabbar-item v-for="(item, index) in navs" :key="index" :name="item.name" :replace="true"
+      :to="'/layout/' + item.name">
+      
+      <!-- 底栏图标 -->
         <template #icon="props">
-          <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
-          <img
-            :class="['ico-footer home-ico', { fill: props.active }]"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-          />
+          <div class="ico-footer" :class="[item.name + '-ico', props.active ? 'fill' : '']"></div>
         </template>
-      </van-tabbar-item>
-      <van-tabbar-item name="category" replace to="/layout/category">
-        <!-- <span>分类</span> -->
-        <template #icon="props">
-          <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
-          <img
-            :class="['ico-footer category-ico', { fill: props.active }]"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-          />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item name="cart" replace to="/layout/cart">
-        <!-- <span>购物车</span> -->
-        <template #icon="props">
-          <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
-          <img
-            :class="['ico-footer cart-ico', { fill: props.active }]"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-          />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item name="my" replace to="/layout/my">
-        <!-- <span>我的</span> -->
-        <template #icon="props">
-          <!-- img标签无src或加载失败时浏览器会默认添加边框，无法去除 -->
-          <img
-            :class="['ico-footer my-ico', { fill: props.active }]"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-          />
-        </template>
+
       </van-tabbar-item>
     </van-tabbar>
+
+
   </div>
 </template>
 
@@ -56,6 +28,12 @@ export default {
     return {
       // 定位二级路由名称
       active: this.$route.matched[1].name,
+      navs: [
+        { name: 'home', title: '首页' },
+        { name: 'category', title: '分类' },
+        { name: 'cart', title: '购物车' },
+        { name: 'my', title: '我的' }
+      ],
     };
   },
 };
@@ -63,16 +41,8 @@ export default {
 
 <style scoped>
 /* 为 主页/我的 添加背景图 */
-.home,.my {
-  background: url(@/assets/images/homeBack.jpg) fixed no-repeat 0 0 / 100% auto;
-    position: absolute;
-    width: 100vw;
-  }
-
-/* 底栏图标框增大 */
-img {
-  height: 42px;
-  /* margin: 5px auto; */
-  margin-top: 5px;
+.home, .my {
+  background-image: url(@/assets/images/homeBack.jpg);
 }
+
 </style>

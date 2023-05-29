@@ -35,11 +35,25 @@
      :modules="modules"
       class="my-swiper-two"> -->
 
-    <swiper-container :grab-cursor="true" :slides-per-view="1.5" :centered-slides="true" :space-between="0"
+    <!-- <swiper-container :grab-cursor="true" :slides-per-view="1.5" :centered-slides="true" :space-between="0"
       :pagination="true" class="swiper-container">
       <swiper-slide class="swiper-slide" v-for="item in product.item.images" :key="item"><img
           :src="item" /></swiper-slide>
-    </swiper-container>
+    </swiper-container> -->
+
+    <div ref="swiper" class="swiper">
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide" v-for="item in product.item.images" :key="item"><img :src="item" class="swiper-img" />
+        </div>
+      </div>
+
+      <!-- Navigation arrows -->
+      <!-- <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div> -->
+
+      <div class="swiper-pagination"></div>
+    </div>
 
     <van-cell-group class="cell-group product-info" inset>
       <van-cell class="cell-div title" :border="false">
@@ -149,10 +163,10 @@
 
 <script>
 import tdata from '@/assets/test-data.json'
-import { register } from 'swiper/element/bundle';
+// import { register } from 'swiper/element/bundle';
 
 
-register();
+// register();
 
 
 export default {
@@ -227,7 +241,39 @@ export default {
   },
   computed: {
   },
+  mounted() {
+    const SECOND = 1000 // milliseconds
 
+    new this.$swiper(this.$refs.swiper, {
+
+      // 已全局注册
+      // modules: [Navigation, Pagination, Autoplay],
+      slidesPerView: 1.5,
+      spaceBetween: 10,
+
+      centeredSlides: true,
+      loop: true,
+      autoplay: {
+        delay: 13 * SECOND,
+        disableOnInteraction: false,
+      },
+      // speed: 2 * SECOND,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      // navigation: {
+      //   nextEl: '.swiper-button-next',
+      //   prevEl: '.swiper-button-prev',
+      // },
+
+      // on: {
+      //   slideChange: (swiper) => {
+      //     this.activeIndex = swiper.realIndex
+      //   },
+      // },
+    })
+  },
 
 }
 </script>
@@ -261,49 +307,116 @@ export default {
   background: url(@/assets/images/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
   position: absolute;
   width: 100vw;
-  // overflow: hidden;
+  overflow: hidden;
 }
 
 .top-nav-bar {
   background: transparent;
   z-index: 10;
-  .top-bar-opt{
+
+  .top-bar-opt {
     text-shadow: 1px 1px 5px #000;
   }
 }
 
-.swiper-container {
-  --swiper-pagination-bottom: 30px;
-}
 
+.swiper {
+  // transition: 300ms;
+  // // align-items: center;
+  // // display: flex;
+  // // justify-content: center;
+  // transform: scale(0.8);
+  // // height: 375px;
+  // height: 100vw;
+  // border-radius: 5px;
+  // // margin: 50px 0 20px;
+  // margin-top: 10px;
 
-
-.swiper-slide {
-  transition: 300ms;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  transform: scale(0.8);
-  height: 250px;
-  box-shadow: 0px 4px 10px #122e7447;
-  background-color: white;
-  border-radius: 5px;
-  margin: 50px 0 20px;
-
-  & img {
-    height: 100%;
+  // overflow: visible;
+  // max-width: 600px;
+  .swiper-slide {
+    transition: 300ms;
+    // align-items: center;
+    display: flex;
+    // justify-content: center;
+    transform: scale(0.85);
+    // height: 250px;
+    // width: 250px;
+    box-shadow: 0px 4px 10px #122e7447;
+    background-color: white;
     border-radius: 5px;
-    // 可能会裁剪图片 ( 设备宽度 != 375px ) 
-    object-fit: cover;
-    flex: 1;
+    margin-top: 70px;
   }
 
+  .swiper-slide-active {
+    transform: scale(1);
+    margin: 50px 0 20px;
+  }
+
+  img {
+    /* 图片居中填充 */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 5px;
+  }
+
+  /deep/ .swiper-pagination {
+    width: max-content;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+
+
+    // outline: solid;
+    .swiper-pagination-bullet {
+      background-color: #000;
+      width: 10px;
+      height: 10px;
+      margin-right: 2px;
+      opacity: 0.35;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: #fff;
+      opacity: 1;
+    }
+  }
 }
 
-// 当前图片恢复大小
-.swiper-slide-active {
-  transform: scale(1);
-}
+// .swiper-container {
+//   --swiper-pagination-bottom: 30px;
+// }
+
+
+
+// .swiper-slide {
+//   transition: 300ms;
+//   align-items: center;
+//   display: flex;
+//   justify-content: center;
+//   transform: scale(0.8);
+//   height: 250px;
+//   box-shadow: 0px 4px 10px #122e7447;
+//   background-color: white;
+//   border-radius: 5px;
+//   margin: 50px 0 20px;
+
+//   & img {
+//     height: 100%;
+//     border-radius: 5px;
+//     // 可能会裁剪图片 ( 设备宽度 != 375px ) 
+//     object-fit: cover;
+//     flex: 1;
+//   }
+
+// }
+
+// // 当前图片恢复大小
+// .swiper-slide-active {
+//   transform: scale(1);
+// }
 
 
 
@@ -545,4 +658,5 @@ export default {
 //     margin-left: 10px;
 //     font-size: 16px;
 //   }
-// }</style>
+// }
+</style>

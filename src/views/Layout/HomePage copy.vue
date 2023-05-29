@@ -16,34 +16,25 @@
     </van-sticky>
 
     <!-- 顶部轮播 -->
-    <!-- <swiper :options="swiperOptions">
-      <swiper-slide v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></swiper-slide>
-      <div class="swiper-pagination home-page-swiper" slot="pagination"></div>
-    </swiper> -->
-
-    <!-- 顶部轮播 -->
-    <!-- <van-swipe class="my-swipe" :autoplay="10000" indicator-color="white">
+    <van-swipe class="my-swipe" :autoplay="10000" indicator-color="white">
       <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
       <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
-    </van-swipe> -->
+    </van-swipe>
 
-    <!-- 顶部轮播 -->
-    <!-- Slider main container -->
-    <div ref="swiper" class="swiper">
-      <div class="swiper-wrapper">
-        <!-- Slides -->
-        <div class="swiper-slide" v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></div>
-      </div>
-
-      <!-- Navigation arrows -->
-      <!-- <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div> -->
-
-      <div class="swiper-pagination"></div>
-    </div>
+    <swiper-container 
+    :grab-cursor="true" 
+    :height="100"
+    :centered-slides="true" 
+    :space-between="0"
+    :pagination="true"
+    :loop="true"
+    
+    class="swiper-container">
+      <swiper-slide class="swiper-slide" v-for="item in bannerImgList" :key="item"><img
+          :src="item" class="swiper-img"/></swiper-slide>
+    </swiper-container>
 
 
-    <!-- 上方分类导航 -->
     <van-cell-group class="cell-group product-info" inset>
       <van-grid :column-num="5" :border="false">
         <van-grid-item class="top-category" v-for="item in homeCatalog" :key="item.route" @click="toThisPage(item.route)">
@@ -51,6 +42,7 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
+
 
     <!-- 上方分类导航 -->
     <!-- <div class="top-grid">
@@ -67,7 +59,10 @@
     <!-- <van-popup v-model="popupShow">{{ popupCont }}</van-popup> -->
 
     <!-- 中部胶囊广告 -->
-    <van-image width="100%" :src="require('@/assets/images/capsuleAd.png')" @click="toThisPage('新用户注册')" />
+    <van-image width="100%" 
+      :src="require('@/assets/images/capsuleAd.png')" 
+      @click="toThisPage('新用户注册')"
+    />
 
     <!-- 限时折扣标题 + 倒计时 -->
     <div>
@@ -98,6 +93,7 @@
     </div>
 
     <!-- 团购/秒杀入口 -->
+
     <van-grid :border="false" :column-num="2" class="bottomContainer">
       <van-grid-item to="/shop/seckill">
         <div class="container">
@@ -142,44 +138,28 @@ export default {
       this.$toast(value);
     },
   },
-  mounted() {
-    const SECOND = 1000 // milliseconds
-
-    new this.$swiper(this.$refs.swiper, {
-
-      // 已全局注册
-      // modules: [Navigation, Pagination, Autoplay],
-
-      loop: true,
-      autoplay: {
-        delay: 1 * SECOND,
-        disableOnInteraction: false,
-      },
-      speed: 2 * SECOND,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      // navigation: {
-      //   nextEl: '.swiper-button-next',
-      //   prevEl: '.swiper-button-prev',
-      // },
-
-      // on: {
-      //   slideChange: (swiper) => {
-      //     this.activeIndex = swiper.realIndex
-      //   },
-      // },
-    })
-  },
-
 };
 </script>
 
 <style lang="less" scoped>
+
+.swiper-container{
+  height: 100px;
+  
+// --swiper-pagination-right: 81px;
+--swiper-pagination-bottom: 18px;
+  .swiper-img{
+      width: 100%;       
+  height: 100%;     
+  object-fit: cover;
+  object-position: center;  /* 图片居中显示 */
+  }
+}
+
+
 // 顶部搜索栏
 .top-search {
-  margin: 10px 10px 5px 10px;
+  margin: 10px 10px 0 10px;
 
   .search-ico {
     margin-left: 10px;
@@ -196,78 +176,8 @@ export default {
   }
 }
 
-// 上方轮播图
-.swiper {
-  // max-width: 600px;
-  height: 100px;
-// .swiper-slide {
-//    display: flex;
-//    justify-content: center;
-//    align-items: center;
-// }
-img {
-    /* 图片居中填充 */
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-  /deep/ .swiper-pagination {
-    text-align: end;
-    right: 25px;
-    left: auto;
-    // outline: solid;
-    width: max-content;
-    // outline: solid;
-    .swiper-pagination-bullet {
-      background-color: #000;
-      width: 10px;
-      height: 10px;
-      margin-right: 2px;
-      opacity: 0.35;
-    }
-
-    .swiper-pagination-bullet-active {
-      background-color: #fff;
-      opacity: 1;
-    }
-  }
-}
-
-
-// .swiper-container {
-//   height: 110px;
-
-//   .swiper-img {
-//     /* 图片居中填充 */
-//     width: 100%;
-//     height: 100%;
-//     object-fit: cover;
-//     object-position: center;
-//   }
-
-//   .home-page-swiper {
-//     text-align: end;
-//     padding-right: 25px;
-
-//     /deep/.swiper-pagination-bullet {
-//       background-color: #000;
-//       width: 10px;
-//       height: 10px;
-//       margin-right: 2px;
-//       opacity: 0.35;
-//     }
-
-//     /deep/ .swiper-pagination-bullet-active {
-//       background-color: #fff;
-//       opacity: 1;
-//     }
-//   }
-// }
-
 /* 中间分类 */
 .cell-group {
-  margin-top: 5px;
   height: 180px;
   flex-direction: row;
 
@@ -287,10 +197,10 @@ img {
       background-position-y: -@icoDia; // 6-10是第二行图标
     }
 
-    .loop(@start, @end) when (0 <=@end) {
+    .loop(@start, @end) when (0 <= @end) {
       // 取余数，1-5和6-10都是从0开始偏移
       // 修正，增加偏移量，使 5 的倍数结果是 5 而不是 0
-      @n: mod(@start - 1, 5);
+      @n: mod(@start - 1, 5) ; 
 
       &:nth-child(@{start}) .top-category-ico {
         background-position-x: (-@icoDia * (@n));

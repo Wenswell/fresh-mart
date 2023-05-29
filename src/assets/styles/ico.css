@@ -1,10 +1,5 @@
 /* 使用精灵图统一设置小图标 */
 
-/* 先去除img无路径时出现的边框
-img[src=""],img:not([src]){
-  opacity:0;
-  border: none;
-} */
 
 .ico {
   background: url(@/assets/images/icoAll.png) no-repeat;
@@ -16,13 +11,16 @@ img[src=""],img:not([src]){
 }
 
 .ico-footer {
-  background: url(@/assets/images/icoAll.png) no-repeat;
   display: inline-block;
-  width: 24px;
-  /* height: 25px; */
+  background: url(@/assets/images/icoAll.png) no-repeat;
   background-size: 125px;
   vertical-align: middle;
   background-position-y: -41px;
+  width: 24px;
+  /* height: 25px; */
+  /* 底栏图标框增大 */
+  height: 42px;
+  margin-top: 5px;
 }
 
 .home-ico {
