@@ -43,31 +43,47 @@
         </template>
     </van-field>
 
-  </div>
+<div style="text-align: center">
+  <van-button @click="sendLoginMsg" class="submit-btn" round color="#46E1FF">{{ $route.name == "register" ? "注册" :
+    "登录"
+  }}</van-button>
+</div>
+
+</div>
 </template>
-
-
-
 <script>
+import { mapMutations } from 'vuex'
+
+import { loginByPasswordApi } from "@/api/user";
 export default {
   data() {
     return {
       active: 0,
-      phoneNum: "",
+      phoneNum: "13888888888",
       verifyNum: "",
-      passWd: "",
+      passWd: "123456",
       btnText: "获取验证码",
       btnDisable: false,
       fieldType: 'password',
     };
   },
   methods: {
-    getVerifyCode() {
-      this.btnDisable = true;
-      this.verifyNum = 26433;
-    },
-    goToRegister() {
-      this.$router.push({ name: 'register' })
+    ...mapMutations(['setUser']),
+    ...mapMutations(['setUser']),
+    async sendLoginMsg() {
+      if(!this.passWd){
+        this.$toast("未输入密码")
+        return
+      }
+      const res = await loginByPasswordApi(this.phoneNum, this.passWd)
+      if(!res) {
+        this.$toast("登录失败！\n控制台查看报错")
+        return
+      }
+      console.log(res.result.account)
+      this.$toast("登录成功！\n"+res.result.account)
+      this.setUser(res.result)
+      this.$router.push('/layout/home')
     },
     changeType() {
       this.fieldType = this.fieldType === 'password' ? 'text' : 'password'
@@ -87,4 +103,11 @@ export default {
   border-bottom: 1px solid @light-grey;
 }
 
+// 登录按钮调整大小、阴影
+.submit-btn {
+  box-shadow: 0px 7px 12px 0px #5ad4eaaa;
+  width: 222px;
+  height: 40px;
+  margin-top: 50px;
+}
 </style>

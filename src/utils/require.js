@@ -18,6 +18,7 @@ instance.interceptors.request.use(config => {
   // 从store中读取token,并添加到请求头
   const token = store.state.profile.token
   if (token) {
+    console.log(token)
     config.headers.Authorization = `Bearer ${token}`
   }
 

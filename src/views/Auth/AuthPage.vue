@@ -35,10 +35,10 @@
     <!--———— 3. 底部 ——————-->
 
     <!-- 底部登录按钮 -->
-    <div style="text-align: center">
+    <!-- <div style="text-align: center">
       <van-button class="submit-btn" round color="#46E1FF" to="/layout">{{ $route.name == "register" ? "注册" : "登录"
       }}</van-button>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -141,11 +141,11 @@ export default {
 
 /***** 3. 底部 *****/
 
-// 登录按钮调整大小、阴影
-.submit-btn {
-  box-shadow: 0px 7px 12px 0px #5ad4eaaa;
-  width: 222px;
-  height: 40px;
-  margin-top: 50px;
-}
+// // 登录按钮调整大小、阴影
+// .submit-btn {
+//   box-shadow: 0px 7px 12px 0px #5ad4eaaa;
+//   width: 222px;
+//   height: 40px;
+//   margin-top: 50px;
+// }
 </style>
