@@ -1,6 +1,18 @@
 {
   "code": 200,
   "msg": "ok",
+  "bannerImgList": [
+    "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+    "//gdp.alicdn.com/imgextra/i4/2064892827/O1CN01EREOu21WkoWTDOIV2_!!2064892827.png",
+    "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+    "//gdp.alicdn.com/imgextra/i2/2064892827/O1CN01J0aq2R1WkoWNPyh3C_!!2064892827.png",
+    "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+    "//gdp.alicdn.com/imgextra/i3/2064892827/O1CN01lO08yJ1WkoWQ6mkuS_!!2064892827.png",
+    "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+    "//gdp.alicdn.com/imgextra/i1/2064892827/O1CN01d0dPjT1WkoWPnzIiz_!!2064892827.png",
+    "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+    "//gdp.alicdn.com/imgextra/i3/2064892827/O1CN01RCAwHB1WkoWM1XD7C_!!2064892827.png"
+  ],
   "productDetail": [
     {
       "item": {
@@ -699,46 +711,46 @@
   ],
   "homeCatalog": [
     {
-    "route": "freshfruits",
-    "name": "水果"
+      "route": "freshfruits",
+      "name": "水果"
     },
     {
-    "route": "drinks",
-    "name": "饮品"
+      "route": "drinks",
+      "name": "饮品"
     },
     {
-    "route": "bakery",
-    "name": "面包"
+      "route": "bakery",
+      "name": "面包"
     },
     {
-    "route": "daily",
-    "name": "日用"
+      "route": "daily",
+      "name": "日用"
     },
     {
-    "route": "cosmetics",
-    "name": "化妆"
+      "route": "cosmetics",
+      "name": "化妆"
     },
     {
-    "route": "oilandgrains",
-    "name": "油粮"
+      "route": "oilandgrains",
+      "name": "油粮"
     },
     {
-    "route": "veggies",
-    "name": "蔬菜"
+      "route": "veggies",
+      "name": "蔬菜"
     },
     {
-    "route": "seafoods",
-    "name": "海鲜"
+      "route": "seafoods",
+      "name": "海鲜"
     },
     {
-    "route": "babycare",
-    "name": "母婴"
+      "route": "babycare",
+      "name": "母婴"
     },
     {
-    "route": "vipsection",
-    "name": "VIP"
+      "route": "vipsection",
+      "name": "VIP"
     }
-    ],
+  ],
   "categoryList": [
     {
       "route": "featured",

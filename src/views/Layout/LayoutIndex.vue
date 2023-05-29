@@ -1,5 +1,5 @@
 <template>
-  <div :class="routeName" class="background">
+  <div :class="active" class="background">
 
     <!-- 二级路由 -->
     <router-view />
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       // 定位二级路由名称
-      routeName: this.$route.matched[1].name,
+      active: this.$route.matched[1].name,
       navs: [
         { name: 'home', title: '首页' },
         { name: 'category', title: '分类' },

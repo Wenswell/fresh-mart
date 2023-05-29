@@ -149,10 +149,10 @@
 
 <script>
 import tdata from '@/assets/test-data.json'
-import { register } from 'swiper/element/bundle';
+// import { register } from 'swiper/element/bundle';
 
 
-register();
+// register();
 
 
 export default {
