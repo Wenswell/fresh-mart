@@ -1,44 +1,24 @@
 // store/index.js
 import Vue from 'vue';
 import Vuex from 'vuex';
-import persistedState from "vuex-persistedstate"
+import createPersistedState  from "vuex-persistedstate"
 
 Vue.use(Vuex);
 
-const state = {
-  // 用户信息
-  profile: {
-    id: '',
-    avatar: '',
-    nickname: '',
-    account: '',
-    mobile: '',
-    token: ''
-  },
-  // 登录后回跳路径
-  redirectUrl: '/'
-}
 
-const mutations = {
-  setUser (state, payload) {
-    state.profile = payload
-  },
-}
+import user from './modules/user'
+import cart from './modules/cart' 
 
-const actions = {}
 
 export default new Vuex.Store({
-  state,
-  mutations,
-  actions,
-  // 配置 vuex-persistedstate
+  modules: {
+    user,
+    cart,
+  }, 
   plugins: [
-    // 默认存储在localStorage
-    persistedState({
-      // 本地存储名字
-      key: 'fresh-mart-local-store',
-      // 指定需要存储的模块
-      paths: ['profile'] 
+    createPersistedState ({
+      key: 'my-app-store',  
+      paths: ['user.profile', 'cart'] 
     })
   ]
 })

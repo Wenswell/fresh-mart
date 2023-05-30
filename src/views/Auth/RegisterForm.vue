@@ -33,9 +33,9 @@
 
 
 <script>
-import { mapMutations } from 'vuex'
+import store from '@/store'
 
-import { getVerifyCodeApi,loginByVerifyNumberApi } from "@/api/user";
+import { getVerifyCodeApi, loginByVerifyNumberApi } from "@/api/user";
 export default {
   // name: 'RegisterIndex',
   data() {
@@ -49,20 +49,24 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setUser']),
     async sendLoginMsg() {
-      if(!this.btnDisable){
+      if (!this.btnDisable) {
         this.$toast("未获取验证码")
         return
       }
       const res = await loginByVerifyNumberApi(this.phoneNum, this.verifyNum)
-      if(!res) {
+      if (!res) {
         this.$toast("登录失败！\n控制台查看报错")
         return
       }
       console.log(res.result.account)
-      this.$toast("登录成功！\n"+res.result.account)
-      this.setUser(res.result)
+      this.$toast("登录成功！\n" + res.result.account)
+
+      // 将返回的user数据（包括token）存放到 Vuex 的 Store 中
+      store.commit('user/setUser', res.result)
+
+      // 进入主页
+      this.$router.push('/layout/home')
     },
     async getVerifyCode() {
       console.log("getVerifyCode")
@@ -70,7 +74,7 @@ export default {
       const res = await getVerifyCodeApi(this.phoneNum, type)
       this.btnDisable = true;
       console.log(res)
-      this.$toast(res.msg)
+      // this.$toast(res.msg)
       this.verifyNum = 123456;
     },
   },

@@ -14,12 +14,17 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(config => {
   // 发送请求前执行
-
+  console.log("发送请求前执行")
+  
   // 从store中读取token,并添加到请求头
-  const token = store.state.profile.token
+  const token = store?.state?.user?.profile?.token ?? 'Real-token-is-unreachable-This-is-a-test-token';
+  // console.log(store)
+  // console.log(store.state)
+  console.log("token: "+token)
+  
   if (token) {
-    console.log(token)
     config.headers.Authorization = `Bearer ${token}`
+    // console.log("config.headers.Authorization: "+config.headers.Authorization)
   }
 
   return config
@@ -39,7 +44,8 @@ instance.interceptors.response.use(
     // 1. 清空无效用户信息
     // 2. 跳转到登录页
     // 3. 跳转需要传参（当前路由地址）给登录页码
-    store.commit('setUser', {})
+    console.log("清空无效用户信息")
+    store.commit('user/setUser', {})
     // 当前路由地址
     // 组件里头：`/user?a=10` $route.path === /user  $route.fullPath === /user?a=10
     const fullPath = encodeURIComponent(router.currentRoute.fullPath)
