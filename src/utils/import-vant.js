@@ -10,7 +10,7 @@ import { Col, Row } from 'vant';
 import { Grid, GridItem } from 'vant';
 import { Search } from 'vant';
 import { Swipe, SwipeItem } from 'vant';
-import { Popup } from 'vant';
+import { Toast } from 'vant';
 import { CountDown } from 'vant';
 import { Sticky } from 'vant';
 import { Tabbar, TabbarItem } from 'vant';
@@ -43,7 +43,7 @@ Vue.use(GridItem);
 Vue.use(Search);
 Vue.use(Swipe);
 Vue.use(SwipeItem);
-Vue.use(Popup);
+Vue.use(Toast);
 Vue.use(CountDown);
 Vue.use(Sticky);
 
