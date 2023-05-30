@@ -3,282 +3,113 @@
     <!-- 顶栏 -->
     <van-nav-bar :fixed="true" title="购物车" right-text="管理" @click-right="onClickRight" />
 
-    <!-- 购物车 主体 循环 -->
-    <van-checkbox-group v-model="shopCheckResult" direction="horizontal" v-for="item1 in taobaoList" :key="item1.id">
+    <!-- 购物车 商品列表 子循环 每个店铺的商品 -->
+    <div v-for="item in list" :key="item.skuId">
+      <!-- <van-checkbox-group v-for="item in list" v-model="checkResult" :key="item.skuId"> -->
 
-      <!-- 店铺选框 + 名称 + 领券 -->
-      <van-cell v-if="item1.bundles[0].orders.length" center class="shop-title">
-        <!-- 店铺选框 + 名称-->
-        <template #title>
-          <div class="shop-title-left">
+      <!-- 右滑删除容器 -->
+      <van-swipe-cell :before-close="beforeClose" class="goods-box" :right-width="45" :name="item.skuId">
 
-            <!-- 店铺 左侧选框-->
-            <!-- 店铺选择 向taobaoList添加checked属性值且默认为FALSE -->
-            <van-checkbox @click="checkShopSelect(item1.shopId)" :name="item1.shopId"
-              class="inline checkbox"></van-checkbox>
+        <!-- 该店铺的商品 左侧选框-->
+        <van-checkbox @click="updateItem(item)" v-model="item.selected" class="checkbox"></van-checkbox>
 
-            <!-- 店铺 名称-->
-            <van-icon class="inline" name="shop-o" size="16" />
-            <p class="inline shop-name">{{ item1.title }}</p>
-          </div>
-        </template>
-        <!-- 店铺 领券 -->
-        <template #default>
-          <span class=" inline to-coupon">领券</span>
-        </template>
-      </van-cell>
-
-      <!-- 购物车 商品列表 子循环 每个店铺的商品 -->
-      <van-checkbox-group v-for="item2 in item1.bundles[0].orders" v-model="checkResult[item2.shopId]" :key="item2.itemId">
-
-        <!-- 右滑删除容器 -->
-        <van-swipe-cell :before-close="beforeClose" class="goods-box" :right-width="45" :name="item2.itemId">
-
-          <!-- 该店铺的商品 左侧选框-->
-          <!-- 该店铺的商品 绑定taobaoList中该商品的checked属性 -->
-          <van-checkbox :name="item2.itemId" class="checkbox"></van-checkbox>
-
-          <!-- 该店铺的商品 商品卡片 -->
-          <van-card num="2" class="goods-card">
-            <!-- 该店铺的商品 商品卡片 商品名称 -->
-            <template #title>
-              <p class="goods-title right-txt">{{ item2.title }}</p>
-            </template>
-            <!-- 该店铺的商品 商品卡片 详情（尺寸规格，只传入了第一组） -->
-            <template #desc>
-              <div class="goods-desc right-txt" v-if="item2.skus" v-text="firstSku(item2.skus)"></div>
-            </template>
-            <!-- 该店铺的商品 商品卡片 价格 -->
-            <template #price>
-              <!-- 该店铺的商品 商品卡片 价格 现在价格 -->
-              <span class="goods-price now right-txt">
-                {{ item2.price.now.toString().slice(0, -2) }}<span class="goods-price now deci">.{{
-                  item2.price.now.toString().slice(-2) }}</span>
-              </span>
-              <!-- 该店铺的商品 商品卡片 价格 原价 > 现价时显示 -->
-              <span v-if="item2.price.now - item2.price.origin < 0" class="goods-price old right-txt">
-                {{ item2.price.origin.toString().slice(0, -2) }}<span class="goods-price old deci">.{{
-                  item2.price.origin.toString().slice(-2) }}</span>
-              </span>
-            </template>
-            <!-- 该店铺的商品 商品卡片 图片 -->
-            <template #thumb>
-              <div class="goods-img-div">
-                <img class="goods-img" :src="require('@/assets/images/' + 'rank1.png')" />
-              </div>
-            </template>
-            <!-- 该店铺的商品 商品卡片 计数器 -->
-            <template #num>
-              <!-- 
-                "amount": {
-                  "demand": 0,
-                  "max": 20,
-                  ......
-                },
-              -->
-              <!-- 该店铺的商品 商品卡片 计数器 暂时用数组中的空值（demand）接收 -->
-              <!-- <van-stepper v-model="checkResult[item2.itemId]" :min="1" :max="item2.amount.max" integer input-width="38px" -->
-              <van-stepper @change="sumPrice" v-model="item2.amount.demand" :min="1" :max="item2.amount.max" integer
-                input-width="38px" button-size="26px" class="stepper" />
-            </template>
-          </van-card>
-          <template #right>
-            <!-- 该店铺的商品 商品卡片 左滑显示删除按钮 -->
-            <van-button type="danger" round text="删除" class="delete-button" />
+        <!-- 该店铺的商品 商品卡片 -->
+        <van-card num="2" class="goods-card">
+          <!-- 该店铺的商品 商品卡片 商品名称 -->
+          <template #title>
+            <p class="goods-title right-txt">{{ item.name }}</p>
           </template>
-        </van-swipe-cell>
-      </van-checkbox-group>
-    </van-checkbox-group>
-
+          <!-- 该店铺的商品 商品卡片 详情（尺寸规格，只传入了第一组） -->
+          <template #desc>
+            <div class="goods-desc right-txt" v-if="item.attrsText" v-text="item.attrsText"></div>
+            <!-- <div class="goods-desc right-txt" v-if="item.skus" v-text="firstSku(item.skus)"></div> -->
+          </template>
+          <!-- 该店铺的商品 商品卡片 价格 -->
+          <template #price>
+            <!-- 该店铺的商品 商品卡片 价格 现在价格 -->
+            <span class="goods-price now right-txt">
+              {{ item.nowPrice.toString().slice(0, -2) }}<span class="goods-price now deci">{{
+                item.nowPrice.toString().slice(-2) }}</span>
+              <!-- {{ item.price.now.toString().slice(0, -2) }}<span class="goods-price now deci">.{{item.price.now.toString().slice(-2) }}</span> -->
+            </span>
+            <!-- 该店铺的商品 商品卡片 价格 原价 > 现价时显示 -->
+            <span v-if="item.nowPrice - item.nowOriginalPrice <= 0" class="goods-price old right-txt">
+              {{ item.nowOriginalPrice.toString().slice(0, -2) }}<span class="goods-price old deci">.{{
+                item.nowOriginalPrice.toString().slice(-2) }}</span>
+            </span>
+          </template>
+          <!-- 该店铺的商品 商品卡片 图片 -->
+          <template #thumb>
+            <div class="goods-img-div">
+              <img class="goods-img" :src="item.picture" />
+            </div>
+          </template>
+          <!-- 该店铺的商品 商品卡片 计数器 -->
+          <template #num>
+            <!-- <van-stepper @change="sumPrice" v-model="checkResult[item.itemId]" :min="1" :max="item.amount.max" integer input-width="38px" -->
+            <van-stepper @change="updateItem(item)" v-model="item.count" :disabled="!item.isEffective" :min="1"
+              :max="item.stock" integer input-width="38px" button-size="26px" class="stepper" />
+          </template>
+        </van-card>
+        <template #right>
+          <!-- 该店铺的商品 商品卡片 左滑显示删除按钮 -->
+          <van-button type="danger" round text="删除" class="delete-button" />
+        </template>
+      </van-swipe-cell>
+    </div>
+    <!-- <p>{{ list }}</p> -->
     <!-- 底部 提交订单栏 -->
-    <van-submit-bar class="submit-bar" :price="totalPrice" button-text="结算" @submit="onSubmit" suffix-label="(不含运费)"
-      button-color="#5AD4EA">
-      <van-checkbox @click="checkSelectAll" v-model="sumChecked">全选</van-checkbox>
+    <van-submit-bar class="submit-bar" :price="getTotalPrice * 100" button-text="结算" @submit="onSubmit"
+      suffix-label="(不含运费)" button-color="#5AD4EA">
+      <van-checkbox v-model="checkedAll">全选</van-checkbox>
     </van-submit-bar>
 
   </div>
 </template>
 
 <script>
-import tdata from '@/assets/test-data.json'
+// import store from '@/store'
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      cartList: tdata.cartList,
-      taobaoList: tdata.taobaoList,
-      // value: 1,
-      totalPrice: 1,
+      cartListFromApi: '',
       sumChecked: false,
-      shopSelect: false,
-      checkResult: {},
-      shopCheckResult: [],
     };
   },
   methods: {
+
+    updateItem(item) {
+      console.log("updateItem")
+      // console.log(skuId)
+      // console.log(payload)
+
+      this.$store.dispatch('cart/updateCart', {
+        skuId: item.skuId,
+        payload: {
+          "selected": item.selected,
+          "count": +item.count
+        }
+      }).then(() => {
+        console.log('Cart updated successfully.');
+      }).catch((error) => {
+        console.error('Failed to update cart:', error);
+      });
+    },
     onClickRight() {
       console.log("right")
+    this.$store.dispatch('cart/selectAllItem', true)
+      
     },
     onSubmit() {
       console.log("点击结算 " + this.totalPrice)
     },
-    checkShopSelect(shopId) {
-      // console.log(shopId)
-      // console.log(this.checkResult[shopId])
-      // 点击时
-      console.log(this.shopCheckResult.includes(shopId)) // true表示选中，FALSE表示取消选择
-      // 1. 已经全选后点击 全部取消
-      // 2. 未全选中时点击 全部选中
-      if (this.shopCheckResult.includes(shopId)) {
-        // console.log("选中")
-        // console.log(this.checkResult[shopId])
-        this.selectShopAllItems(shopId)
-      } else {
-        // console.log("取消")
-        this.checkResult[shopId] = []
-      }
-    },
-    selectShopAllItems(shopId) {
-      // console.log("selectShopAllItems: " + shopId)
-      // this.checkResult.aa = "123"
-      // console.log(this.checkResult)
-      this.taobaoList.forEach(item1 => {
-        if (shopId == item1.shopId) {
-          // console.log(shopId)
-          this.checkResult[shopId] = item1.bundles[0].orders.map(item2 => {
-            return item2.itemId
-          })
-          // console.dir("this.checkResult: ")
-          // console.dir(this.checkResult)
-          // item1.bundles[0].orders.forEach(item2 => {
-          //   console.log(item2.itemId)
-          // })
-
-        }
-
-      })
-
-      // console.log("cancelAll")
-      // if (this.sumChecked) {
-      //   this.checkResult = this.cartList.map(item => item.id);
-      // } else {
-      //   this.checkResult = []
-      // }
-    },
-    allShopItem() {
-      console.log('allShopItem Check')
-    },
-
-    // 计算总价格
-    sumPrice() {
-      console.log("sumPrice")
-      // console.log(this.taobaoList[3].bundles[0].orders.length)
-      // let ress = 0;
-      // console.log(this.taobaoList[0].bundles[0].orders[0].price.origin)
-      // console.log(this.taobaoList[0].bundles[0].orders[0].price.now)
-      // console.log(this.taobaoList[0].bundles[0].orders[0].amount)
-      // console.log(this.taobaoList[0].bundles[0].orders[0].title)
-      // console.log(this.taobaoList[0].title)
-      // console.log(this.taobaoList[0].checked)
-      let res = 0;
-      const selectedItemId = Object.values(this.checkResult).flat();
-      // console.log(selectedItemId)
-      this.taobaoList.forEach(item1 => {
-        // console.log("item1: "+ item1)
-        // console.log(item1.bundles[0].orders)
-        item1.bundles[0].orders.forEach(item2 => {
-          // console.log("item2.itemId: "+ item2.itemId)
-
-          if (selectedItemId.indexOf(item2.itemId) !== -1) {
-            // console.log("yes")
-            // console.log(item2.price.now)
-            // console.log(this.totalPrice)
-            res += item2.price.now * item2.amount.demand
-          }
-          // console.log(item2.itemId)
-          // console.log(item2.price.now)
-          // console.log(this.totalPrice)
-          //   item2.orders.forEach()
-        })
-      })
-      this.totalPrice = res;
-    },
 
     checkSelectAll() {
-      const that = this;
-      if (this.sumChecked) {
-        // 选中 全部选择
-        // console.log("this.sumChecked为真： "+ this.sumChecked)
-        Object.keys(this.checkResult).forEach(shopId => {
-          // console.log(shopId)
-          that.selectShopAllItems(shopId)
-        })
-      } else {
-        // 取消全选 全不选
-        // console.log("this.sumChecked为FALSE： "+ this.sumChecked)
-        this.cancelAllSelected()
-      }
-    },
-
-    cancelAllSelected() {
-      this.checkResult = this.taobaoList.reduce((obj, item) => {
-        obj[item.shopId] = [];
-        return obj;
-      }, {});
-    },
-
-    // 购物车删除商品时 1.从商品列表中移除； 2. 从选择列表中移除
-    deleteItem(cartId) {
-      this.taobaoList.forEach(parent => {
-        parent.bundles.forEach(bundle => {
-          bundle.orders = bundle.orders.filter(order => {
-            // console.log("order.cartId: "+order.itemId)
-            // console.log("cartId: "+cartId)
-            return order.itemId !== cartId
-          })
-        })
-      })
-      this.sumPrice();
-      let obj = this.checkResult;
-
-      for (const key in obj) {
-        if (obj[key].includes(cartId)) {
-          const index = obj[key].indexOf(cartId);
-          obj[key].splice(index, 1);
-        }
-      }
-
-      // for (const key in obj) {
-      //   if (Object.hasOwnProperty.call(obj, key)) {
-      //     let element = obj[key];
-      //     console.log("element111");
-      //     console.dir(element);
-      //     element = element.filter(ele => {
-      //       console.log("cartId");
-      //       console.dir(cartId);
-      //       console.dir(ele);
-      //       console.log("ele@@@@@@@@@@");
-      //       return ele != cartId
-      //     })
-      //     console.log("element222222");
-      //     console.dir(element);
-          
-      //   }
-      // }
-      // 遍历对象
-      // for (const key in obj) {
-      //   console.log("key"+ key);
-      //   console.log("obj[key]"+obj[key]);
-      //   console.log(obj[key]);
-      //   if (obj[key].includes(cartId)) {
-      //     console.log("sdfsfdfsdaaaaaaaa");
-      //     console.log("obj[key]"+obj[key]);
-      //     const index = obj[key].indexOf(+cartId);
-      //     obj[key].splice(index, 1);
-      //   }
-      // }
-      // console.log("obj");
-      // console.dir(obj);
+      console.log("左下全选⭕ checkSelectAll")
+    this.$store.dispatch('cart/selectAllItem', this.sumChecked)
+    console.log(this.sumChecked)
 
     },
 
@@ -288,148 +119,45 @@ export default {
           instance.close();
           break;
         case 'right':
-          // console.log("name: ")
-          // console.log(name)
-          // console.log("position: ")
-          // console.log(position)
-          // console.log("instance: ")
-          // console.log(instance)
           this.$dialog.confirm({
             message: '确定删除吗？',
           }).then(() => {
+            console.log("deleteItem: " + name);
             console.log("close");
-            this.deleteItem(name);
             instance.close();
           }).catch(err => console.log(err));
           break;
       }
     },
-    firstSku(skus) {
-      const entries = Object.entries(skus);
-      const [key, value] = entries[0];
-      return `${key}: ${value}`;
-    },
+
   },
   computed: {
+    ...mapState('cart', {
+      list: state => state.list
+    }),
+    getTotalPrice() {
+      let res = this.$store.getters['cart/updateTotalPrice']
+      // this.totalPrice = res
+      console.log("getTotalPrice", res)
+      return res
+    },
+
+    checkedAll: {
+    get() {
+      console.log("this.$store.getters['cart/hasUnchecked']", this.$store.getters['cart/hasUnchecked'])
+      return this.$store.getters['cart/hasUnchecked']
+    },
+    set(value) {
+      this.$store.dispatch('cart/selectAllItem', value)      
+    }
+  },
   },
   watch: {
-    checkResult: {
-      deep: true,
-      handler(newRes) {
-        this.sumPrice()
-        // console.log("checkResult Changed")
-        for (let [key, value] of Object.entries(newRes)) {
-          // 店铺数量
-          // console.log(this.taobaoList.length)
-          if (this.shopCheckResult.length == this.taobaoList.length) this.sumChecked = true
-          this.taobaoList.forEach(item => {
-            // 针对该商店
-            if (item.shopId == key) {
-              // 判断选中商品数量与购物车中商品数量是否相等
-              if (value.length === item.bundles[0].orders.length) {
-                // console.log('全选')
-                // console.log(value.length)
-                // console.log(item.bundles[0].orders.length)
-                if (this.shopCheckResult.indexOf(+key) === -1) {
-                  this.shopCheckResult.push(+key);
-                }
-              } else {
-                // console.log("取消全选")
-                this.sumChecked = false
-                this.shopCheckResult = this.shopCheckResult.filter(item => item !== +key);
-              }
-            }
-          })
-        }
-      }
-    },
-    shopCheckResult() {
-      // 追加判断
-      if (this.shopCheckResult.length == this.taobaoList.length) this.sumChecked = true
 
-      //     handler(newVal, oldVal) {
-      //       this.sumPrice()
-      //       setTimeout(() => {
-      //         const added = newVal.filter(x => !oldVal.includes(x));
-      //         const removed = oldVal.filter(x => !newVal.includes(x)); 
-
-      //         console.log("added: " + added)
-      //         console.log("removed: " + removed)
-
-      //       },0)
-      //        // 使用 added 和 removed 数组       
-      //     },  
-      //     deep: true
-    }
-
-    // taobaoList: {
-    //   deep: true,
-    //   handler() {
-    //     console.log('taobaoListChanged')
-
-    //     // 1. 判断店铺、全选 是否要勾选
-    //   // console.log(this.taobaoList[0].bundles[0].orders[0].price.origin)
-    //   // console.log(this.taobaoList[0].bundles[0].orders[0].price.now)
-    //   // console.log(this.taobaoList[0].bundles[0].orders[0].amount)
-    //   // console.log(this.taobaoList[0].bundles[0].orders[0].title)
-    //   // console.log(this.taobaoList[0].title)
-    //   console.log(this.taobaoList[0].checked)
-
-    //     // 2. 计算总价
-
-
-    //   }
-    // },
-    // checkResult() {
-    //   this.sumPrice()
-    //   // 根据数组长度判断是否全选
-    //   // 并且排除空数组
-    //   // console.log("1"+ this.sumChecked)
-    //   // this.sumChecked = false;
-    //   this.sumChecked = this.checkResult.length === this.cartList.length && this.cartList.length > 0;
-    //   console.log("2" + this.sumChecked)
-    //   console.log("3checkResult:" + this.checkResult)
-    // },
   },
   mounted() {
-    this.cancelAllSelected()
-
-
-
-    // 引入订单id 
-    // let orderId = "4937588929466";  
-
-    // // 过滤数组,移除对应订单的整个对象
-    // let newBundles = this.taobaoList[0].bundles[0].orders.filter(item  => {
-    //   console.log("orderId: ")
-    //   console.log(orderId)
-    //   console.log("item: ")
-    //   console.log(item)
-    //   console.log(item)
-    // });
-    // console.log("newBundles")
-    // console.log(newBundles)
-
-    // this.bundles = newBundles;
-
-    //   this.taobaoList.forEach(item => {
-    //     // console.log("item")
-    //     // console.log(item)
-    //     item.bundles.forEach(item => {
-    //     // console.log("bundles")
-    //     // console.log(item)
-    //     item.orders.forEach(item => {
-    //     console.log("orders")
-    //     console.log(item.title)
-    //     })
-    //     })
-    //   })
-    //   console.log(this.taobaoList[0].bundles[0].orders[0].price.origin)
-    // console.log(this.taobaoList[0].bundles[0].orders[0].price.now)
-    // console.log(this.taobaoList[0].bundles[0].orders[0].amount)
-    //   console.log(this.taobaoList[0].bundles[0].orders[0].title)
-    //   console.log(this.taobaoList[0].title)
-    //   console.log(this.taobaoList[0])
+    console.log("store.dispatch('cart/mergeCart")
+    this.$store.dispatch('cart/mergeCart')
   }
 }
 </script>
@@ -465,7 +193,9 @@ export default {
   }
 }
 
-
+/deep/ .stepper {
+  outline: solid;
+}
 
 
 // 添加下边距 防止顶栏底栏结算框遮挡商品
@@ -533,7 +263,7 @@ div.goods-card {
 }
 
 .goods-img {
-  height: 75%;
+  height: 100%;
   // width: 80%;
   object-position: center;
   /* 水平和垂直居中 */
