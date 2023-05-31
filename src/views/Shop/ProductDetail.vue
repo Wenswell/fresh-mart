@@ -1,6 +1,8 @@
 <template>
   <div class="product-div">
 
+    <!--———— 1. 顶栏 ——————-->
+    <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
     <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="toBack" @click-right="toCart">
       <template #left>
         <van-icon size="20" name="arrow-left" />
@@ -17,56 +19,31 @@
       </template>
     </van-nav-bar>
 
-
-    <!-- <swiper-container 
-    :grab-cursor="true"
-    :slides-per-view="1.3"
-    :centered-slides="true" 
-    :space-between="30"
-    effect="coverflow"
-    :coverflow-effect-scale ="1"
-    :coverflow-effect-depth="1000"
-    :coverflow-effect-rotate="0"
-    :coverflow-effect-stretch="3"
-    :coverflow-effect-modifier="1"
-    :coverflow-effect-slideShadows="false"
-
-    :pagination="false"
-     :modules="modules"
-      class="my-swiper-two"> -->
-
-    <!-- <swiper-container :grab-cursor="true" :slides-per-view="1.5" :centered-slides="true" :space-between="0"
-      :pagination="true" class="swiper-container">
-      <swiper-slide class="swiper-slide" v-for="item in product.item.images" :key="item"><img
-          :src="item" /></swiper-slide>
-    </swiper-container> -->
-
+    <!--———— 2.1 主体 ——————-->
+    <!-- 轮播图 商品图片 -->
     <div ref="swiper" class="swiper">
       <div class="swiper-wrapper">
         <!-- Slides -->
-        <div class="swiper-slide" v-for="item in product.item.images" :key="item"><img :src="item" class="swiper-img" />
+        <div class="swiper-slide" v-for="item in result.mainPictures" :key="item"><img :src="item" class="swiper-img" />
         </div>
       </div>
-
-      <!-- Navigation arrows -->
-      <!-- <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div> -->
-
       <div class="swiper-pagination"></div>
     </div>
 
+    <!--———— 2.2 主体 ——————-->
+    <!-- 商品详情 商品标题 价格 包邮 已购 好评 -->
     <van-cell-group class="cell-group product-info" inset>
       <van-cell class="cell-div title" :border="false">
         <template #title>
-          <div class="cell-title content">{{ product.item.title }}
+          <div class="cell-title content">{{ result.name }}
           </div>
         </template>
       </van-cell>
       <van-cell class="cell-div price" :border="false">
         <template #title>
           <div class="cell-price content">
-            <span class="cell-price-content nowPrice">{{ product.mockData.price.price.priceText }}</span>
-            <!-- <span class="cell-price-content oldPrice">888.0</span> -->
+            <span class="cell-price-content nowPrice">{{ result.price }}</span>
+            <span class="cell-price-content oldPrice">{{ result.oldPrice }}</span>
           </div>
         </template>
       </van-cell>
@@ -74,23 +51,25 @@
         <template #title>
           <div class="cell-info content">
             <span class="cell-info-content post">包邮</span>
-            <span class="cell-info-content sold">{{ product.item.favcount }}</span>
-            <span class="cell-info-content rate">{{ product.item.commentCount }}</span>
+            <span class="cell-info-content sold">{{ evaluate.salesCount }}</span>
+            <span class="cell-info-content rate">{{ evaluate.praisePercent }}%</span>
           </div>
         </template>
       </van-cell>
     </van-cell-group>
 
+    <!--———— 2.3 主体 ——————-->
+    <!-- 商品SKU 已选 -->
     <van-cell-group class="cell-group small-group" inset>
       <van-cell class="cell-div selected" :border="false">
         <template #title>
-          <span class="cell-selected info">{{ product.skuBase.props[0].values[0].name }}</span>
-          <!-- <div class="cell-title content">鲜果优精选水果盒子 500g
-          </div> -->
+          <span class="cell-selected info">已选规格</span>
         </template>
       </van-cell>
     </van-cell-group>
 
+    <!--———— 2.4 主体 ——————-->
+    <!-- 更多选项 客服 分享 收藏 -->
     <van-cell-group class="cell-group middle-group" inset>
       <van-cell class="cell-div more" :border="false">
         <van-grid class="cell items" :border="false" :column-num="3">
@@ -111,9 +90,9 @@
     </van-cell-group>
 
 
-    <!-- <van-cell-group class="cell-group" inset> -->
+    <!--———— 2.5 主体 ——————-->
+    <!-- 商品评价 评价数量 查看全部 预览评价 -->
     <van-cell-group class="cell-group large-group" inset>
-
       <van-cell class="cell header" :border="false">
 
         <template #title>
@@ -153,9 +132,22 @@
 
       </van-cell>
 
-
-
     </van-cell-group>
+
+    <!--———— 3. 底部 ——————-->
+    <!-- 按钮 加入购物车 购买 -->
+    <van-goods-action class="purchase-tab">
+      <van-goods-action-button @click="skuShow = true" class="purchase-button" color="#5BD3E9" type="warning"
+        text="加入购物车" />
+      <van-goods-action-button @click="skuShow = true" class="purchase-button" color="#F14242" type="danger" text="立即购买" />
+    </van-goods-action>
+
+
+    <!--———— 4. 弹窗 ——————-->
+    <!-- 商品详情 sku -->
+    <van-sku v-model="skuShow" :sku="sku" :goods="goods" :goods-id="goodsId" :quota="quota" :quota-used="quotaUsed"
+      :hide-stock="sku.hide_stock" :message-config="messageConfig" @buy-clicked="onBuyClicked"
+      @add-cart="onAddCartClicked" />`
 
 
   </div>
@@ -164,7 +156,7 @@
 <script>
 import tdata from '@/assets/test-data.json'
 // import { register } from 'swiper/element/bundle';
-
+import { getProductDetailApi, getProductEvaluateApi } from '@/api/product'
 
 // register();
 
@@ -172,33 +164,33 @@ import tdata from '@/assets/test-data.json'
 export default {
   data() {
     return {
+      onBuyClicked() {
+        console.log("onBuyClicked")
+      },
+      onAddCartClicked() {
+        console.log("onAddCartClicked")
+      },
+      result: '',
+      evaluate: '',
+      props: ['productId'],
+      skuShow: false,
+      sku: {},
+      goods: {
+        // 数据结构见下方文档
+      },
+      messageConfig: {
+        // 数据结构见下方文档
+      },
+      goodsId: 123,
+      quota: 123,
+      quotaUsed: 123,
+      //以上是商品详情sku弹窗信息
+
       secKillProductList: tdata.secKillProductList,
-
       product: tdata.productDetail[0],
-
-      // product.item: this.aaa.item,
-      // product.item: tdata.productDetail[0].item,
-      // product.rate: tdata.productDetail[0].rate,
-      // pSkuBase: tdata.productDetail[0].skuBase,
-      // product.mockData: tdata.productDetail[0].mockData,
-      // productDetail: tdata.productDetail[0],
-
       productId: "",
       productIdInfo: "",
       value: 2,
-      images: [
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i1/2208161521967/O1CN01EJ689a1QOvsm0SaXE_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i3/2208161521967/O1CN01dmIrTn1QOvnsq1y9J_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i2/2208161521967/O1CN01IKwLpO1QOvsc5GY6b_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i1/2208161521967/O1CN01VUYlpN1QOvsb3A3iI_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i2/2208161521967/O1CN01dlbvB01QOvoA3yVZb_!!2208161521967.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01WRjUlw1j7xvqWdoCm_!!0-item_pic.jpg',
-        'https://img.alicdn.com/imgextra/i3/880734502/O1CN01Y4YtHS1j7xvTvcMaV_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i2/880734502/O1CN01GEh5CT1j7xur5MZvs_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01DTWe5Z1j7xt4au5G3_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01DTWe5Z1j7xt4au5G3_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01lX4tTE1j7xu5woC6r_!!880734502.jpg'
-      ],
       mySwiper: '',
 
     }
@@ -206,7 +198,12 @@ export default {
   created() {
     // 获取动态路由参数 
     this.productId = this.$route.params.id
+
     this.getProductById(this.productId)
+    
+
+    this.getProductEvaluateById(this.productId)
+    
     if (this.productId == 2) {
       this.product = tdata.productDetail[1]
     } else {
@@ -228,9 +225,73 @@ export default {
   },
   methods: {
     getProductById(id) {
-      const theProductInfo = this.secKillProductList.find(item => item.id === id);
-      console.dir(theProductInfo);
-      return theProductInfo
+
+      getProductDetailApi({ id }).then(res => {
+        console.log("------------------------------res", res)
+        let result = res.result
+        this.result = result
+        console.log("this.result", this.result)
+
+        let sku = {
+          tree: [], // 使用循环填充
+          list: [],
+          collection_id: result.id,
+          stock_num: result.inventory,
+          price: result.price,
+          none_sku: false,
+          messages: [],
+          hide_stock: false
+        }
+
+        // 填充 tree
+        for (let i = 0; i < result.specs.length; i++) {
+          const spec = result.specs[i];
+          sku.tree.push({
+            k: spec.name,
+            k_s: spec.name,
+            v: spec.values.map(value => ({
+              id: value.name,
+              name: value.name,
+              imgUrl: value.picture,
+              previewImgUrl: value.picture
+            }))
+          })
+        }
+
+        // 填充 list  
+        for (let i = 0; i < result.skus.length; i++) {
+          const skus = result.skus[i];
+          sku.list.push({
+            //... 其他属性   
+            id: skus.id,
+            // ... 使用reduce赋值规格
+            ...skus.specs.reduce((obj, spec) => {
+              obj[spec.name] = spec.valueName;
+              return obj;
+            }, {})
+          })
+        }
+
+        sku.collection_id = result.id, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
+          sku.stock_num = result.inventory, // 商品总库存
+          sku.price = result.price, // 默认价格（单位元）
+          sku.none_sku = false, // 是否无规格商品
+          sku.messages = [],
+          sku.hide_stock = false // 是否隐藏剩余库存
+
+        this.sku = sku
+        console.log("this.sku", this.sku)
+
+      })
+
+    },
+
+    getProductEvaluateById(id){
+      getProductEvaluateApi(id).then(res => {
+        console.log("getProductEvaluateApi res", res)
+        this.evaluate = res.result
+        
+      })
     },
     toBack() {
       console.log("toBack")
@@ -279,6 +340,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.purchase-tab {
+  // outline: solid;
+  margin: 0 auto 20px;
+  font-size: 18px;
+  width: 300px;
+  height: 46px;
+  background-color: transparent;
+
+  /deep/ .purchase-button {
+    font-size: 16px;
+  }
+}
+
 .labels {
   max-width: 323x;
   /* 固定最大宽度 */

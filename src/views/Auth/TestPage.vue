@@ -9,8 +9,6 @@
 <script>
 // import store from '@/store'
 import { mapMutations } from 'vuex'
-// import { mergeLocalCartApi } from '@/api/user'
-// import { mergeLocalCartApi,getCartListApi } from "@/api/user";
 export default {
   methods: {
     ...mapMutations('user', ['setUser']),

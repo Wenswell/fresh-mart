@@ -1,4 +1,4 @@
-import { getCartListApi, updateItemApi, selectAllItemApi } from "@/api/user";
+import { getCartListApi, updateItemApi, selectAllItemApi } from "@/api/cart";
 
 // 购物车模块
 

@@ -68,20 +68,20 @@
 
 
     <div>
-      <list :data="listData" />
+      <!-- <list :data="listData" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import List from './ProductList.vue';
+// import List from './ProductList.vue';
 import tdata from '@/assets/test-data.json'
 
 
 export default {
-  components: {
-    List,
-  },
+  // components: {
+  //   List,
+  // },
   data() {
     return {
       secKillTimeInfo: tdata.secKillTimeInfo,
