@@ -11,7 +11,7 @@
       <van-swipe-cell :before-close="beforeClose" class="goods-box" :right-width="45" :name="item.skuId">
 
         <!-- 该店铺的商品 左侧选框-->
-        <van-checkbox @click="updateItem(item)" v-model="item.selected" class="checkbox"></van-checkbox>
+        <van-checkbox @change="updateItem(item)" :disabled="!item.isEffective" v-model="item.selected" class="checkbox"></van-checkbox>
 
         <!-- 该店铺的商品 商品卡片 -->
         <van-card num="2" class="goods-card">
@@ -61,7 +61,7 @@
     <!-- 底部 提交订单栏 -->
     <van-submit-bar class="submit-bar" :price="getTotalPrice * 100" button-text="结算" @submit="onSubmit"
       suffix-label="(不含运费)" button-color="#5AD4EA">
-      <van-checkbox v-model="checkedAll">全选</van-checkbox>
+      <van-checkbox :disabled="isDisabled" v-model="checkedAll">全选</van-checkbox>
     </van-submit-bar>
 
   </div>
@@ -98,19 +98,10 @@ export default {
       });
     },
     onClickRight() {
-      console.log("right")
-    this.$store.dispatch('cart/selectAllItem', true)
-      
+      console.log("右上'管理'")
     },
     onSubmit() {
-      console.log("点击结算 " + this.totalPrice)
-    },
-
-    checkSelectAll() {
-      console.log("左下全选⭕ checkSelectAll")
-    this.$store.dispatch('cart/selectAllItem', this.sumChecked)
-    console.log(this.sumChecked)
-
+      console.log("点击'结算'")
     },
 
     beforeClose({ name, position, instance }) {
@@ -136,7 +127,7 @@ export default {
       list: state => state.list
     }),
     getTotalPrice() {
-      let res = this.$store.getters['cart/updateTotalPrice']
+      let res = this.$store.getters['cart/validSelectedPrice']
       // this.totalPrice = res
       console.log("getTotalPrice", res)
       return res
@@ -144,13 +135,15 @@ export default {
 
     checkedAll: {
     get() {
-      console.log("this.$store.getters['cart/hasUnchecked']", this.$store.getters['cart/hasUnchecked'])
-      return this.$store.getters['cart/hasUnchecked']
+      return this.$store.getters['cart/isCheckAll']
     },
     set(value) {
       this.$store.dispatch('cart/selectAllItem', value)      
     }
   },
+  isDisabled() {
+      return this.$store.getters['cart/hasIneffective']  
+    },
   },
   watch: {
 
@@ -227,7 +220,7 @@ export default {
   display: inline-block;
   margin: 20px 15px;
   margin: 0;
-  padding: 20px 15px;
+  padding: 30px 15px;
 }
 
 // 商品框-主体
