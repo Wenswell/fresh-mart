@@ -22,6 +22,8 @@ import { Checkbox, CheckboxGroup } from 'vant';
 import { SubmitBar } from 'vant';
 import { Dialog } from 'vant';
 import { Tag } from 'vant';
+import { GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant';
+import { Sku } from 'vant';
 
 
 
@@ -51,7 +53,6 @@ Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
 
-
 Vue.use(Card);
 Vue.use(Stepper);
 Vue.use(SwipeCell);
@@ -60,5 +61,9 @@ Vue.use(CheckboxGroup);
 Vue.use(SubmitBar);
 Vue.use(Dialog);
 
-
 Vue.use(Tag);
+
+Vue.use(GoodsAction);
+Vue.use(GoodsActionButton);
+Vue.use(GoodsActionIcon);
+Vue.use(Sku);

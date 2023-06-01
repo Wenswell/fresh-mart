@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/shop/products',
-    redirect: '/shop/products/1'
+    redirect: '/shop/products/3995846'
   },
   {
     path: '/shop/products/:id', 
