@@ -1,12 +1,15 @@
 <template>
   <div class="product-div">
 
-    <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="toBack" @click-right="toCart">
+    <!--———— 1. 顶栏 ——————-->
+    <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
+    <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="$router.back()"
+      @click-right="$router.push('/layout/cart')">
       <template #left>
         <van-icon size="20" name="arrow-left" />
       </template>
       <template #right>
-        <van-icon size="20" name="shopping-cart-o" />
+        <van-icon class="right-top-cart" size="20" name="shopping-cart-o" :badge="cartCount" />
       </template>
       <template #title>
         <van-row type="flex" justify="center" gutter="45">
@@ -17,56 +20,33 @@
       </template>
     </van-nav-bar>
 
-
-    <!-- <swiper-container 
-    :grab-cursor="true"
-    :slides-per-view="1.3"
-    :centered-slides="true" 
-    :space-between="30"
-    effect="coverflow"
-    :coverflow-effect-scale ="1"
-    :coverflow-effect-depth="1000"
-    :coverflow-effect-rotate="0"
-    :coverflow-effect-stretch="3"
-    :coverflow-effect-modifier="1"
-    :coverflow-effect-slideShadows="false"
-
-    :pagination="false"
-     :modules="modules"
-      class="my-swiper-two"> -->
-
-    <!-- <swiper-container :grab-cursor="true" :slides-per-view="1.5" :centered-slides="true" :space-between="0"
-      :pagination="true" class="swiper-container">
-      <swiper-slide class="swiper-slide" v-for="item in product.item.images" :key="item"><img
-          :src="item" /></swiper-slide>
-    </swiper-container> -->
-
+    <!--———— 2.1 主体 ——————-->
+    <!-- 轮播图 商品图片 -->
     <div ref="swiper" class="swiper">
       <div class="swiper-wrapper">
         <!-- Slides -->
-        <div class="swiper-slide" v-for="item in product.item.images" :key="item"><img :src="item" class="swiper-img" />
+        <!-- <div class="swiper-slide" v-for="(item,index) in product.item.images" :key="index"><img :src="item" class="swiper-img" /> -->
+        <div class="swiper-slide" v-for="(item, index) in result.mainPictures" :key="index"><img :src="item"
+            class="swiper-img" />
         </div>
       </div>
-
-      <!-- Navigation arrows -->
-      <!-- <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div> -->
-
       <div class="swiper-pagination"></div>
     </div>
 
+    <!--———— 2.2 主体 ——————-->
+    <!-- 商品详情 商品标题 价格 包邮 已购 好评 -->
     <van-cell-group class="cell-group product-info" inset>
       <van-cell class="cell-div title" :border="false">
         <template #title>
-          <div class="cell-title content">{{ product.item.title }}
+          <div class="cell-title content">{{ result.name }}
           </div>
         </template>
       </van-cell>
       <van-cell class="cell-div price" :border="false">
         <template #title>
           <div class="cell-price content">
-            <span class="cell-price-content nowPrice">{{ product.mockData.price.price.priceText }}</span>
-            <!-- <span class="cell-price-content oldPrice">888.0</span> -->
+            <span class="cell-price-content nowPrice">{{ result.price }}</span>
+            <span class="cell-price-content oldPrice">{{ result.oldPrice }}</span>
           </div>
         </template>
       </van-cell>
@@ -74,23 +54,26 @@
         <template #title>
           <div class="cell-info content">
             <span class="cell-info-content post">包邮</span>
-            <span class="cell-info-content sold">{{ product.item.favcount }}</span>
-            <span class="cell-info-content rate">{{ product.item.commentCount }}</span>
+            <span class="cell-info-content sold">{{ evaluate.salesCount }}</span>
+            <span class="cell-info-content rate">{{ evaluate.praisePercent }}</span>
           </div>
         </template>
       </van-cell>
     </van-cell-group>
 
-    <van-cell-group class="cell-group small-group" inset>
+    <!--———— 2.3 主体 ——————-->
+    <!-- 商品SKU 已选 -->
+    <van-cell-group class="cell-group small-group" inset @click="skuShow = true">
       <van-cell class="cell-div selected" :border="false">
         <template #title>
-          <span class="cell-selected info">{{ product.skuBase.props[0].values[0].name }}</span>
-          <!-- <div class="cell-title content">鲜果优精选水果盒子 500g
-          </div> -->
+          <div v-if="!selectSku">请选择规格</div>
+          <span class="cell-selected info">{{ selectSku }}</span>
         </template>
       </van-cell>
     </van-cell-group>
 
+    <!--———— 2.4 主体 ——————-->
+    <!-- 更多选项 客服 分享 收藏 -->
     <van-cell-group class="cell-group middle-group" inset>
       <van-cell class="cell-div more" :border="false">
         <van-grid class="cell items" :border="false" :column-num="3">
@@ -110,16 +93,17 @@
       </van-cell>
     </van-cell-group>
 
-
-    <!-- <van-cell-group class="cell-group" inset> -->
+    <!--———— 2.5 主体 ——————-->
+    <!-- 商品评价 评价数量 查看全部 预览评价 -->
     <van-cell-group class="cell-group large-group" inset>
-
       <van-cell class="cell header" :border="false">
 
+        <!-- 2.5.1. 顶部左侧 商品评价 {评价数量}  -->
         <template #title>
-          <span class="cell header h-left">商品评价({{ product.rate.totalCount }})</span>
+          <span class="cell header h-left">商品评价({{ evaluate.evaluateCount }})</span>
         </template>
 
+        <!-- 2.5.1. 顶部右侧 查看全部  -->
         <template #right-icon>
           <span class="cell header h-right">查看全部
             <van-icon class="header h-ico" name="arrow" />
@@ -128,18 +112,19 @@
 
       </van-cell>
 
+      <!-- 2.5.2. 上部 评价标签 有图 ...... -->
       <div class="labels" :border="false">
-        <span class="label-item" v-for="item in product.rate.keywords" :key="item.attribute">{{ item.word }}({{ item.count
+        <span class="label-item" v-for="item in keywords" :key="item.title">{{ item.title }}({{ item.count
         }})</span>
       </div>
 
-      <van-cell class="cell rate" :border="false" v-for="item in product.rate.rateList" :key="item.feedId">
-
+      <!-- 2.5.3. 主体 评价内容循环 -->
+      <van-cell class="cell rate" :border="false" v-for="item in evaluateContent" :key="item.id">
         <template #title>
           <div class="rate-wrapper">
-            <van-image class="rate-avatar" round width="34px" height="34px" :src="item.headPic" />
+            <van-image class="rate-avatar" round width="34px" height="34px" :src="item.avatar" />
             <div class="rate-info">
-              <span class="rate-info-id">{{ item.userName }}<van-image v-if="item.isVip == 'true'" class="vip-ico"
+              <span class="rate-info-id">{{ item.nickname }}<van-image v-if="item.isVip == 'true'" class="vip-ico"
                   height="12px" src="//img.alicdn.com/tfs/TB1wrG1elv0gK0jSZKbXXbK2FXa-225-96.png" /></span>
               <span class="rate-info-date">{{ item.createTimeInterval }}</span>
             </div>
@@ -153,156 +138,275 @@
 
       </van-cell>
 
-
-
     </van-cell-group>
+
+    <!--———— 3. 底部 ——————-->
+    <!-- 按钮 加入购物车 购买 -->
+    <van-goods-action class="purchase-tab">
+      <van-goods-action-button @click="skuShow = true" class="purchase-button" color="#5BD3E9" type="warning"
+        text="加入购物车" />
+      <van-goods-action-button @click="skuShow = true" class="purchase-button" color="#F14242" type="danger"
+        text="立即购买" />
+    </van-goods-action>
+
+
+    <!--———— 4. 弹窗 ——————-->
+    <!-- 商品详情 sku -->
+    <van-sku class="sku-div" v-model="skuShow" :sku="sku" :goods="goods" :goods-id="sku.collection_id" :quota="0"
+      :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
+      @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
+
+    </van-sku>
 
 
   </div>
 </template>
 
 <script>
-import tdata from '@/assets/test-data.json'
-// import { register } from 'swiper/element/bundle';
-
-
-// register();
-
+import { getProductDetailApi, getProductEvaluateApi, addProductToCartApi, getEvaluatePageApi } from '@/api/product'
 
 export default {
   data() {
     return {
-      secKillProductList: tdata.secKillProductList,
+      productId: "",  // 当前商品id / 动态路由地址
+      mySwiper: '',   //轮播图
 
-      product: tdata.productDetail[0],
-
-      // product.item: this.aaa.item,
-      // product.item: tdata.productDetail[0].item,
-      // product.rate: tdata.productDetail[0].rate,
-      // pSkuBase: tdata.productDetail[0].skuBase,
-      // product.mockData: tdata.productDetail[0].mockData,
-      // productDetail: tdata.productDetail[0],
-
-      productId: "",
-      productIdInfo: "",
-      value: 2,
-      images: [
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i1/2208161521967/O1CN01EJ689a1QOvsm0SaXE_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i3/2208161521967/O1CN01dmIrTn1QOvnsq1y9J_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i2/2208161521967/O1CN01IKwLpO1QOvsc5GY6b_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i1/2208161521967/O1CN01VUYlpN1QOvsb3A3iI_!!2208161521967.jpg',
-        'https://g-search3.alicdn.com/img/bao/uploaded/i4/i2/2208161521967/O1CN01dlbvB01QOvoA3yVZb_!!2208161521967.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01WRjUlw1j7xvqWdoCm_!!0-item_pic.jpg',
-        'https://img.alicdn.com/imgextra/i3/880734502/O1CN01Y4YtHS1j7xvTvcMaV_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i2/880734502/O1CN01GEh5CT1j7xur5MZvs_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01DTWe5Z1j7xt4au5G3_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01DTWe5Z1j7xt4au5G3_!!880734502.jpg',
-        'https://img.alicdn.com/imgextra/i4/880734502/O1CN01lX4tTE1j7xu5woC6r_!!880734502.jpg'
-      ],
-      mySwiper: '',
-
-    }
-  },
-  created() {
-    // 获取动态路由参数 
-    this.productId = this.$route.params.id
-    this.getProductById(this.productId)
-    if (this.productId == 2) {
-      this.product = tdata.productDetail[1]
-    } else {
-      this.product = tdata.productDetail[0]
-    }
-  },
-  watch: {
-    '$route.params.id'(newId, oldId) {
-      // 当路由参数改变时,重新获取商品详情数据
-      this.productId = newId
-      this.getProductById(this.productId)
-      console.log(`id changed from ${oldId} to 【 ${newId} 】`);
-      if (this.productId == 2) {
-        this.product = tdata.productDetail[1]
-      } else {
-        this.product = tdata.productDetail[0]
-      }
+      //以下是商品详情sku弹窗信息
+      result: '',           // 原始商品信息
+      evaluate: '',         // 评价数据
+      keywords: [],         // 评价关键词
+      evaluateContent: [],  // 评价具体内容
+      props: ['productId'], // 点击购买/加购返回信息
+      skuShow: false, // 弹窗开关 Sku 商品规格
+      sku: {},        // 主要 result过滤后 商品sku及数量
+      selectSku: '',   // 选中的sku
+      cartCount: '',  // 购物车数量
+      goods: {},      // 默认商品 sku 缩略图
     }
   },
   methods: {
+
+    // 获取购物车数量
+    async getCartCount() {
+      let count = await this.$store.getters['cart/getCartCount']
+      this.cartCount = count
+    },
+
+    // 获取选择的sku用于展示
+    changeSelectedSku(res) {
+      let result = ''
+      for (let key in res.selectedSku) {
+        let value = res.selectedSku[key] || "未选择"
+        result += `${key}：${value}；`
+      }
+      result = result.slice(0, -1) // 去除最后一个";"号
+      this.selectSku = result
+      console.log("result", result)
+    },
+
+    // 构建轮播图
+    creatNewSwiper() {
+      console.log("this.$refs.swiper", this.$refs.swiper)
+      new this.$swiper(this.$refs.swiper, {
+
+        // 已全局注册
+        // modules: [Navigation, Pagination, Autoplay],
+        slidesPerView: 1.5,
+        spaceBetween: 10,
+
+        centeredSlides: true,
+        loop: true,
+        autoplay: {
+          delay: 13 * 1000,
+          disableOnInteraction: false,
+        },
+        // speed: 2 * 1000,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+      })
+    },
+
+    // 加入购物车 - 已选sku
+    onAddCartClicked(data) {
+      // console.log("onAddCartClicked", data)
+      this.$toast('skuid:' + data.selectedSkuComb.id + '\n添加成功');
+      // 加入购物车
+      addProductToCartApi({ 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
+      // 更新购物车数量
+      this.getCartCount()
+    },
+
+    // 直接购买 - 已选sku
+    onBuyClicked(data) {
+      // console.log("onBuyClicked", JSON.stringify(data))
+      this.$toast('skuid:' + data.selectedSkuComb.id + '\n直接前往购买');
+    },
+
+    // 商品id -> API -> 商品详细内容
     getProductById(id) {
-      const theProductInfo = this.secKillProductList.find(item => item.id === id);
-      console.dir(theProductInfo);
-      return theProductInfo
+
+      getProductDetailApi({ id }).then(res => {
+        // result即结果
+        let result = res.result
+        // result 存至 data
+        this.result = result
+        this.goods = { // 默认商品 sku 缩略图
+          'picture': this.result.mainPictures[0]
+        }
+
+        // result -> 过滤成 sku (van-sku 数据格式)
+        // 大概框架
+        let sku = {
+          tree: [], // 使用循环填充
+          list: [],
+          collection_id: result.id,
+          stock_num: result.inventory,
+          price: result.price,
+          none_sku: false,
+          messages: [],
+          hide_stock: false
+        }
+
+        // 填充 tree
+        for (let i = 0; i < result.specs.length; i++) {
+          const spec = result.specs[i];
+          sku.tree.push({
+            k: spec.name,
+            k_s: spec.name,
+            v: spec.values.map(value => ({
+              id: value.name,
+              name: value.name,
+              imgUrl: value.picture,
+              previewImgUrl: value.picture
+            }))
+          })
+        }
+
+        // 填充 list  
+        for (let i = 0; i < result.skus.length; i++) {
+          const skus = result.skus[i];
+          sku.list.push({
+            //... 其他属性   
+            id: skus.id,
+            price: skus.price,
+            stock_num: skus.inventory,
+            // ... 使用reduce赋值规格
+            ...skus.specs.reduce((obj, spec) => {
+              obj[spec.name] = spec.valueName;
+              return obj;
+            }, {})
+          })
+        }
+
+        sku.collection_id = result.id, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
+          sku.stock_num = result.inventory, // 商品总库存
+          sku.price = result.price, // 默认价格（单位元）
+          sku.none_sku = false, // 是否无规格商品
+          sku.messages = [],
+          sku.hide_stock = false // 是否隐藏剩余库存
+
+        // 填充完成 存至 data.sku
+        this.sku = sku
+        // console.log("this.sku", this.sku)
+
+      }).then(() => {
+        // 有数据后创建轮播图
+        this.creatNewSwiper()
+      })
+
     },
-    toBack() {
-      console.log("toBack")
+
+    // 商品id -> 商品评价数据
+    getProductEvaluateById(id) {
+      getProductEvaluateApi(id).then(res => {
+        console.log("getProductEvaluateApi res", res)
+        let evaluate = res.result
+        this.evaluate = evaluate
+        console.log("this.evaluate", evaluate)
+
+        const keywords = [];
+
+        if (evaluate.hasPictureCount) {
+          keywords.push({
+            title: "有图",
+            count: evaluate.hasPictureCount
+          });
+        }
+
+        for (let i = 0; i < evaluate.tags.length; i++) {
+          keywords.push({
+            title: evaluate.tags[i].title,
+            count: evaluate.tags[i].tagCount
+          });
+        }
+
+        this.keywords = keywords
+        console.log(keywords);
+
+
+      })
     },
-    toCart() {
-      console.log("toCart")
+
+    // 商品id -> 商品评价具体内容
+    getEvaluatePageById(id) {
+
+      getEvaluatePageApi(id, 1, 3).then(res => {
+        const result = res.result
+        const data = [];
+
+        // 只预览 3 条评价
+        // 按格式整理结果
+        for (let i = 0; i < 3; i++) {
+          data.push({
+            id: result.items[i].id,
+            createTime: result.items[i].createTime,
+            nickname: result.items[i].member.nickname,
+            avatar: result.items[i].member.avatar,
+            content: result.items[i].content
+          });
+        }
+
+        // 结果存放至 data
+        this.evaluateContent = data
+      })
     },
+
   },
-  computed: {
+  created() {
+
+    // 获取动态路由参数 -- 商品id
+    this.productId = this.$route.params.id
+
+    // 商品id -> 商品详情
+    this.getProductById(this.productId)
+
+    // 商品id -> 商品评价信息
+    this.getProductEvaluateById(this.productId)
+
+    // 商品id -> 商品评价详细内容
+    this.getEvaluatePageById(this.productId)
+
+    // 获取购物车数量
+    this.getCartCount()
+
+
   },
-  mounted() {
-    const SECOND = 1000 // milliseconds
-
-    new this.$swiper(this.$refs.swiper, {
-
-      // 已全局注册
-      // modules: [Navigation, Pagination, Autoplay],
-      slidesPerView: 1.5,
-      spaceBetween: 10,
-
-      centeredSlides: true,
-      loop: true,
-      autoplay: {
-        delay: 13 * SECOND,
-        disableOnInteraction: false,
-      },
-      // speed: 2 * SECOND,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      // navigation: {
-      //   nextEl: '.swiper-button-next',
-      //   prevEl: '.swiper-button-prev',
-      // },
-
-      // on: {
-      //   slideChange: (swiper) => {
-      //     this.activeIndex = swiper.realIndex
-      //   },
-      // },
-    })
+  watch: {
+    // 监视路由变动/不同商品
+    '$route.params.id'(newId, oldId) {
+      this.productId = newId
+      // 当路由参数改变时,重新获取商品详情数据
+      this.getProductById(this.productId)
+      console.log(`id changed from ${oldId} to 【 ${newId} 】`);
+    }
   },
-
 }
 </script>
 
 <style lang="less" scoped>
-.labels {
-  max-width: 323x;
-  /* 固定最大宽度 */
-  overflow-x: scroll;
-  /* 水平方向显示滚动条 */
-  white-space: nowrap;
-  margin-bottom: 10px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.label-item {
-  font-size: 14px;
-  display: inline-block;
-  padding: 0 7px;
-  background-color: @light-blue;
-  height: 26px;
-  line-height: 26px;
-  border-radius: 13px;
-  margin-right: 5px;
-}
-
+// 页面容器
 .product-div {
   background: url(@/assets/images/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
   position: absolute;
@@ -310,6 +414,121 @@ export default {
   overflow: hidden;
 }
 
+// 固定盒子大小
+.cell-group {
+  margin-bottom: 15px;
+  padding: 0 10px;
+
+  &.product-info {
+    padding-top: 15px;
+    padding-bottom: 10px;
+  }
+
+  // // 整体偏移 顶部
+  &:first-child {
+    // margin-top: 47px;
+  }
+
+  // 整体偏移 底部 防止底栏遮挡
+  &:last-child {
+    margin-bottom: 20px;
+  }
+
+  &.small-group {
+    height: 41px;
+  }
+
+  &.middle-group {
+    height: 77px;
+  }
+
+  // 商品评价预览
+  &.large-group {
+    // outline: solid;
+    justify-content: flex-start;
+    height: fit-content;
+    padding: 5px 10px 10px;
+    // height: 77px;
+  }
+
+  .h-left {
+    // 覆盖引入样式
+    // 减少「商品评价」左边距
+    margin: 0;
+  }
+
+  .cell-div {
+    &.title {
+      font-size: 16px;
+    }
+
+    &.price {
+      // outline: solid;
+
+      span::before {
+        content: "¥";
+        margin-right: 1px;
+        margin-left: 3px;
+      }
+
+      .nowPrice {
+        font-size: 21px;
+        color: red;
+        font-weight: bold;
+      }
+
+      .oldPrice {
+        font-size: 12px;
+        color: grey;
+        text-decoration: line-through
+      }
+    }
+
+    &.info {
+      span {
+        margin-right: 20px;
+      }
+
+      .cell-info-content {
+        // outline: solid;
+        font-size: 14px;
+        font-weight: bold;
+
+        &.post,
+        &::after {
+          margin-left: 2px;
+          font-weight: normal;
+          font-size: 13px;
+          color: #7c7c7c;
+        }
+
+        &.sold::after {
+          content: "已购";
+        }
+
+        &.rate::after {
+          content: "好评";
+        }
+      }
+    }
+
+    &.selected {
+      font-size: 14px;
+      font-weight: bold;
+
+      &::before {
+        content: "已选";
+        margin-right: 25px;
+        font-weight: normal;
+        font-size: 13px;
+        color: #7c7c7c;
+      }
+    }
+  }
+}
+
+// <!--———— 1. 顶栏 ——————-->
+// <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
 .top-nav-bar {
   background: transparent;
   z-index: 10;
@@ -317,23 +536,18 @@ export default {
   .top-bar-opt {
     text-shadow: 1px 1px 5px #000;
   }
+
+  .right-top-cart>div {
+    border: none;
+    height: 16px;
+    line-height: 16px;
+    padding-right: 1px;
+  }
 }
 
-
+// <!--———— 2.1 主体 ——————-->
+// <!-- 轮播图 商品图片 -->
 .swiper {
-  // transition: 300ms;
-  // // align-items: center;
-  // // display: flex;
-  // // justify-content: center;
-  // transform: scale(0.8);
-  // // height: 375px;
-  // height: 100vw;
-  // border-radius: 5px;
-  // // margin: 50px 0 20px;
-  // margin-top: 10px;
-
-  // overflow: visible;
-  // max-width: 600px;
   .swiper-slide {
     transition: 300ms;
     // align-items: center;
@@ -385,184 +599,9 @@ export default {
   }
 }
 
-// .swiper-container {
-//   --swiper-pagination-bottom: 30px;
-// }
 
-
-
-// .swiper-slide {
-//   transition: 300ms;
-//   align-items: center;
-//   display: flex;
-//   justify-content: center;
-//   transform: scale(0.8);
-//   height: 250px;
-//   box-shadow: 0px 4px 10px #122e7447;
-//   background-color: white;
-//   border-radius: 5px;
-//   margin: 50px 0 20px;
-
-//   & img {
-//     height: 100%;
-//     border-radius: 5px;
-//     // 可能会裁剪图片 ( 设备宽度 != 375px ) 
-//     object-fit: cover;
-//     flex: 1;
-//   }
-
-// }
-
-// // 当前图片恢复大小
-// .swiper-slide-active {
-//   transform: scale(1);
-// }
-
-
-
-// // 盒子 4 猜你喜欢 内容
-// .like {
-//   flex: 1;
-//   padding-bottom: 10px;
-
-//   img {
-//     display: inline-block;
-//     // outline: solid;
-//     width: 50px;
-//     height: 77px;
-//     object-fit: cover;
-//     // margin-left: 20px;
-//     margin-right: 30px;
-//   }
-
-//   span {
-//     font-size: 15px;
-//     width: 210px;
-//     overflow: hidden;
-//     white-space: nowrap;
-//     text-overflow: ellipsis;
-//     -o-text-overflow: ellipsis;
-//     // color: #4d4d4d;
-//   }
-// }
-
-// 固定盒子大小
-.cell-group {
-  margin-bottom: 15px;
-  padding: 0 10px;
-
-  &.product-info {
-    padding-top: 15px;
-    padding-bottom: 10px;
-  }
-
-  // // 整体偏移 顶部
-  &:first-child {
-    // margin-top: 47px;
-  }
-
-  // 整体偏移 底部 防止底栏遮挡
-  &:last-child {
-    margin-bottom: 20px;
-  }
-
-  &.small-group {
-    height: 41px;
-  }
-
-  &.middle-group {
-    height: 77px;
-  }
-
-  // 商品评价预览
-  &.large-group {
-    // outline: solid;
-    justify-content: flex-start;
-    height: fit-content;
-    padding: 5px 10px 10px;
-    // height: 77px;
-  }
-
-  .h-left {
-    // 覆盖引入样式
-    // 减少「商品评价」左边距
-    margin: 0;
-  }
-}
-
-
-.cell-div {
-  &.title {
-    font-size: 16px;
-  }
-
-  &.price {
-    // outline: solid;
-
-    span::before {
-      content: "¥";
-      margin-right: 1px;
-      margin-left: 3px;
-    }
-
-    .nowPrice {
-      font-size: 21px;
-      color: red;
-      font-weight: bold;
-    }
-
-    .oldPrice {
-      font-size: 12px;
-      color: grey;
-      text-decoration: line-through
-    }
-  }
-
-  &.info {
-    span {
-      margin-right: 20px;
-    }
-
-    .cell-info-content {
-      // outline: solid;
-      font-size: 14px;
-      font-weight: bold;
-
-      &.post,
-      &::after {
-        margin-left: 2px;
-        font-weight: normal;
-        font-size: 13px;
-        color: #7c7c7c;
-      }
-
-      &.sold::after {
-        content: "已购";
-      }
-
-      &.rate::after {
-        content: "好评";
-      }
-    }
-  }
-
-  &.selected {
-    font-size: 14px;
-    font-weight: bold;
-
-    &::before {
-      content: "已选";
-      margin-right: 25px;
-      font-weight: normal;
-      font-size: 13px;
-      color: #7c7c7c;
-    }
-  }
-}
-
-
-
-
+// <!--———— 2.4 主体 ——————-->
+// <!-- 更多选项 客服 分享 收藏 -->
 .item {
   margin: 2px 0;
 
@@ -600,7 +639,8 @@ export default {
   }
 }
 
-
+// <!--———— 2.5 主体 ——————-->
+// <!-- 商品评价 评价数量 查看全部 预览评价 -->
 .rate {
   margin: 10px 0;
 
@@ -641,22 +681,80 @@ export default {
   }
 }
 
+// <!-- 2.5.2. 上部 评价标签 有图 ...... -->
+.labels {
+  max-width: 323x;
+  /* 固定最大宽度 */
+  overflow-x: scroll;
+  /* 水平方向显示滚动条 */
+  white-space: nowrap;
+  margin-bottom: 10px;
 
-// avatar
-// info
-// id
-// date
-// .my-info-left {
-//   margin-left: 20px;
-//   margin-top: 20px;
-//   display: flex;
-//   align-items: center;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-//   /* 垂直居中 */
-//   >span {
-//     //  outline: solid;
-//     margin-left: 10px;
-//     font-size: 16px;
-//   }
-// }
+  .label-item {
+    font-size: 14px;
+    display: inline-block;
+    padding: 0 7px;
+    background-color: @light-blue;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 13px;
+    margin-right: 5px;
+  }
+}
+
+// <!--———— 3. 底部 ——————-->
+// <!-- 按钮 加入购物车 购买 -->
+.purchase-tab {
+  // outline: solid;
+  margin: 0 auto 20px;
+  font-size: 18px;
+  width: 300px;
+  height: 46px;
+  background-color: transparent;
+
+  /deep/ .purchase-button {
+    font-size: 16px;
+  }
+}
+
+// <!--———— 4. 弹窗 ——————-->
+// <!-- 商品详情 sku -->
+/deep/ .sku-div {
+  max-height: 75%;
+
+  &>div:first-child {
+    &>div:last-child {
+      margin-left: 130px;
+    }
+
+    &>div:first-child {
+      width: 125px;
+      height: 125px;
+      border: 5px solid #5AD4EA;
+      margin: 12px 12px 12px 0;
+      overflow: hidden;
+      border-radius: 15px;
+      position: absolute;
+      bottom: 5px;
+      background-color: #fff;
+    }
+  }
+
+  &>div:nth-child(2) {
+    *[class*=active] {
+      background: #5AD4EA;
+      color: white;
+    }
+  }
+
+  &>div:nth-child(3) {
+    button:first-child {
+      background: #5AD4EA;
+    }
+  }
+}
 </style>

@@ -4,63 +4,62 @@ import router from '@/router'
 import store from '@/store'
 
 
-export const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
-
-const instance = axios.create({
-  baseURL,
-  timeout: 2000,
-});
-
-// 请求拦截器
-instance.interceptors.request.use(config => {
-  // 发送请求前执行
-  console.log("发送请求前执行")
-  
-  // 从store中读取token,并添加到请求头
-  const token = store?.state?.user?.profile?.token ?? 'Real-token-is-unreachable-This-is-a-test-token';
-  // console.log(store)
-  // console.log(store.state)
-  console.log("token: "+token)
-  
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-    // console.log("config.headers.Authorization: "+config.headers.Authorization)
-  }
-
-  return config
-}, error => {
-  return Promise.reject(error)
-})
-
-// 响应拦截器
-instance.interceptors.response.use(
-
-  // 隐式返回（implicit return）
-  response => response.data,
-
-  err => {
-  // 401 状态码，进入该函数
-  if (err.response && err.response.status === 401) {
-    // 1. 清空无效用户信息
-    // 2. 跳转到登录页
-    // 3. 跳转需要传参（当前路由地址）给登录页码
-    console.log("清空无效用户信息")
-    store.commit('user/setUser', {})
-    // 当前路由地址
-    // 组件里头：`/user?a=10` $route.path === /user  $route.fullPath === /user?a=10
-    const fullPath = encodeURIComponent(router.currentRoute.fullPath)
-    console.log(router.currentRoute.fullPath)
-    // encodeURIComponent 转换uri编码，防止解析地址出问题
-    router.push('/auth/login?redirectUrl=' + fullPath)
-  }
-  return Promise.reject(err)
-
-  }
-);
-
 // 请求工具函数
-export default (url, method, submitData) => {
+export default (url, method, submitData, changeURL) => {
   // 负责发请求：请求地址，请求方式，提交的数据
+  const baseURL = changeURL ? 'https://mock.boxuegu.com/mock/1175/' : 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
+
+  const instance = axios.create({
+    baseURL,
+    timeout: 2000,
+  });
+  
+  // 请求拦截器
+  instance.interceptors.request.use(config => {
+    // 发送请求前执行
+    console.log("发送请求前执行")
+    
+    // 从store中读取token,并添加到请求头
+    const token = store?.state?.user?.profile?.token ?? 'Real-token-is-unreachable-This-is-a-test-token';
+    // console.log(store)
+    // console.log(store.state)
+    console.log("token: "+token)
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+      // console.log("config.headers.Authorization: "+config.headers.Authorization)
+    }
+  
+    return config
+  }, error => {
+    return Promise.reject(error)
+  })
+  
+  // 响应拦截器
+  instance.interceptors.response.use(
+  
+    // 隐式返回（implicit return）
+    response => response.data,
+  
+    err => {
+    // 401 状态码，进入该函数
+    if (err.response && err.response.status === 401) {
+      // 1. 清空无效用户信息
+      // 2. 跳转到登录页
+      // 3. 跳转需要传参（当前路由地址）给登录页码
+      console.log("清空无效用户信息")
+      store.commit('user/setUser', {})
+      // 当前路由地址
+      // 组件里头：`/user?a=10` $route.path === /user  $route.fullPath === /user?a=10
+      // encodeURIComponent 转换uri编码，防止解析地址出问题
+      const fullPath = encodeURIComponent(router.currentRoute.fullPath)
+      console.log(router.currentRoute.fullPath)
+      router.push('/auth/login?redirectUrl=' + fullPath)
+    }
+    return Promise.reject(err)
+  
+    }
+  );
 
   return instance({
     url,

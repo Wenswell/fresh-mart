@@ -11,39 +11,46 @@
       <van-swipe-cell :before-close="beforeClose" class="goods-box" :right-width="45" :name="item.skuId">
 
         <!-- 该店铺的商品 左侧选框-->
-        <van-checkbox @click="updateItem(item)" v-model="item.selected" class="checkbox"></van-checkbox>
+        <van-checkbox @change="updateItem(item)" :disabled="!item.isEffective" v-model="item.selected" class="checkbox"></van-checkbox>
 
         <!-- 该店铺的商品 商品卡片 -->
-        <van-card num="2" class="goods-card">
+        <van-card num="2" class="goods-card" @click="$router.push(`/shop/products/${item.id}`)">
+
           <!-- 该店铺的商品 商品卡片 商品名称 -->
           <template #title>
             <p class="goods-title right-txt">{{ item.name }}</p>
           </template>
+
           <!-- 该店铺的商品 商品卡片 详情（尺寸规格，只传入了第一组） -->
           <template #desc>
             <div class="goods-desc right-txt" v-if="item.attrsText" v-text="item.attrsText"></div>
             <!-- <div class="goods-desc right-txt" v-if="item.skus" v-text="firstSku(item.skus)"></div> -->
           </template>
+
           <!-- 该店铺的商品 商品卡片 价格 -->
           <template #price>
+
             <!-- 该店铺的商品 商品卡片 价格 现在价格 -->
             <span class="goods-price now right-txt">
               {{ item.nowPrice.toString().slice(0, -2) }}<span class="goods-price now deci">{{
                 item.nowPrice.toString().slice(-2) }}</span>
               <!-- {{ item.price.now.toString().slice(0, -2) }}<span class="goods-price now deci">.{{item.price.now.toString().slice(-2) }}</span> -->
             </span>
+
             <!-- 该店铺的商品 商品卡片 价格 原价 > 现价时显示 -->
             <span v-if="item.nowPrice - item.nowOriginalPrice <= 0" class="goods-price old right-txt">
               {{ item.nowOriginalPrice.toString().slice(0, -2) }}<span class="goods-price old deci">.{{
                 item.nowOriginalPrice.toString().slice(-2) }}</span>
             </span>
           </template>
+
           <!-- 该店铺的商品 商品卡片 图片 -->
           <template #thumb>
             <div class="goods-img-div">
               <img class="goods-img" :src="item.picture" />
             </div>
           </template>
+
           <!-- 该店铺的商品 商品卡片 计数器 -->
           <template #num>
             <!-- <van-stepper @change="sumPrice" v-model="checkResult[item.itemId]" :min="1" :max="item.amount.max" integer input-width="38px" -->
@@ -52,23 +59,23 @@
           </template>
         </van-card>
         <template #right>
+
           <!-- 该店铺的商品 商品卡片 左滑显示删除按钮 -->
           <van-button type="danger" round text="删除" class="delete-button" />
         </template>
       </van-swipe-cell>
     </div>
-    <!-- <p>{{ list }}</p> -->
+
     <!-- 底部 提交订单栏 -->
     <van-submit-bar class="submit-bar" :price="getTotalPrice * 100" button-text="结算" @submit="onSubmit"
       suffix-label="(不含运费)" button-color="#5AD4EA">
-      <van-checkbox v-model="checkedAll">全选</van-checkbox>
+      <van-checkbox :disabled="isDisabled" v-model="checkedAll">全选</van-checkbox>
     </van-submit-bar>
 
   </div>
 </template>
 
 <script>
-// import store from '@/store'
 import { mapState } from 'vuex'
 
 export default {
@@ -98,19 +105,10 @@ export default {
       });
     },
     onClickRight() {
-      console.log("right")
-    this.$store.dispatch('cart/selectAllItem', true)
-      
+      console.log("右上'管理'")
     },
     onSubmit() {
-      console.log("点击结算 " + this.totalPrice)
-    },
-
-    checkSelectAll() {
-      console.log("左下全选⭕ checkSelectAll")
-    this.$store.dispatch('cart/selectAllItem', this.sumChecked)
-    console.log(this.sumChecked)
-
+      console.log("点击'结算'")
     },
 
     beforeClose({ name, position, instance }) {
@@ -136,24 +134,22 @@ export default {
       list: state => state.list
     }),
     getTotalPrice() {
-      let res = this.$store.getters['cart/updateTotalPrice']
-      // this.totalPrice = res
+      let res = this.$store.getters['cart/validSelectedPrice']
       console.log("getTotalPrice", res)
       return res
     },
 
     checkedAll: {
     get() {
-      console.log("this.$store.getters['cart/hasUnchecked']", this.$store.getters['cart/hasUnchecked'])
-      return this.$store.getters['cart/hasUnchecked']
+      return this.$store.getters['cart/isCheckAll']
     },
     set(value) {
       this.$store.dispatch('cart/selectAllItem', value)      
     }
   },
-  },
-  watch: {
-
+  isDisabled() {
+      return this.$store.getters['cart/hasIneffective']  
+    },
   },
   mounted() {
     console.log("store.dispatch('cart/mergeCart")
@@ -227,7 +223,7 @@ export default {
   display: inline-block;
   margin: 20px 15px;
   margin: 0;
-  padding: 20px 15px;
+  padding: 30px 15px;
 }
 
 // 商品框-主体
