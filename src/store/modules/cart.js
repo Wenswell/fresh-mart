@@ -1,4 +1,4 @@
-import { getCartListApi, updateItemApi, selectAllItemApi } from "@/api/cart";
+import { getCartListApi, updateItemApi, selectAllItemApi,getCartCountApi } from "@/api/cart";
 
 // 购物车模块
 
@@ -45,6 +45,12 @@ const state = {
 }
 
 const getters = {
+
+  async getCartCount() {
+    const res = await getCartCountApi();
+    // console.log("res.result", res.result)
+    return res.result.count;
+  },
 
   // 有效商品 列表
   validList(state) {

@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    <!-- 顶栏搜索栏 定位 -->
     <van-sticky>
       <van-search class="top-search" v-model="searchStr" show-action shape="round" background="#fff0"
         placeholder="请输入搜索关键词" @search="onSearch">
@@ -15,30 +17,14 @@
       </van-search>
     </van-sticky>
 
-    <!-- 顶部轮播 -->
-    <!-- <swiper :options="swiperOptions">
-      <swiper-slide v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></swiper-slide>
-      <div class="swiper-pagination home-page-swiper" slot="pagination"></div>
-    </swiper> -->
-
-    <!-- 顶部轮播 -->
-    <!-- <van-swipe class="my-swipe" :autoplay="10000" indicator-color="white">
-      <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
-      <van-swipe-item><van-image width="100%" :src="require('@/assets/images/topAd0.png')" /></van-swipe-item>
-    </van-swipe> -->
-
-    <!-- 顶部轮播 -->
+    <!-- 上方轮播 -->
     <!-- Slider main container -->
     <div ref="swiper" class="swiper">
       <div class="swiper-wrapper">
         <!-- Slides -->
-        <div class="swiper-slide" v-for="(item,index) in bannerImgList" :key="index"><img :src="item" class="swiper-img" /></div>
+        <div class="swiper-slide" v-for="(item, index) in bannerImgList" :key="index"><img :src="item"
+            class="swiper-img" /></div>
       </div>
-
-      <!-- Navigation arrows -->
-      <!-- <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div> -->
-
       <div class="swiper-pagination"></div>
     </div>
 
@@ -51,20 +37,6 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-
-    <!-- 上方分类导航 -->
-    <!-- <div class="top-grid">
-      <van-grid :column-num="5" :gutter="5" square :border="false">
-        <van-grid-item
-          v-for="value in gridItemList"
-          :key="value"
-          @click="toThisCont(value)"
-        />
-      </van-grid>
-    </div> -->
-
-    <!-- 暂用-导航点击事件 -->
-    <!-- <van-popup v-model="popupShow">{{ popupCont }}</van-popup> -->
 
     <!-- 中部胶囊广告 -->
     <van-image width="100%" :src="require('@/assets/images/capsuleAd.png')" @click="toThisPage('新用户注册')" />
@@ -85,14 +57,12 @@
 
     <!-- 横向展示优惠折扣商品 -->
     <!-- 需要商品图统一宽度/高度，否则无法统一展示大小 -->
-    <div class="discountDiv">
-      <van-grid :border="false" :column-num="8" style="width: 1100px; overflow: scroll">
-        <van-grid-item v-for="(item, index) in discountItemList" :key="index">
-          <div class="discountImg">
-            <van-image width="90%" :src="require('@/assets/images/' + item.name + '.png')" />
-          </div>
-          <div class="nowPrice bigTxt">{{ item.newP }}</div>
-          <div class="oldPrice smallTxt">{{ item.oldP }}</div>
+    <div class="discount-div">
+      <van-grid :border="false" :column-num="10" style="width: 1200px; overflow: scroll">
+        <van-grid-item v-for="(item, index) in guesslikeproduct" :key="index">
+          <van-image class="discount-img-div" :src="item.picture" />
+          <div class="nowPrice bigTxt">{{ item.price }}</div>
+          <div class="oldPrice smallTxt">{{ item.price / 0.8 }}</div>
         </van-grid-item>
       </van-grid>
     </div>
@@ -119,6 +89,8 @@
 
 <script>
 import tdata from '@/assets/test-data.json'
+import { getGuessLikeProductApi } from '@/api/product'
+
 
 export default {
   data() {
@@ -130,10 +102,19 @@ export default {
       bannerImgList: tdata.bannerImgList,
       homeCatalog: tdata.homeCatalog,
       discountItemList: tdata.discountItemList,
+      guesslikeproduct: [],
     };
   },
 
   methods: {
+
+    getProductList() {
+      getGuessLikeProductApi().then(res => {
+        this.guesslikeproduct = res.result.items
+        console.log("this.guesslikeproduct", this.guesslikeproduct)
+      })
+    },
+
     onSearch() {
       console.log(this.searchStr);
     },
@@ -143,6 +124,8 @@ export default {
     },
   },
   mounted() {
+    this.getProductList()
+
     const SECOND = 1000 // milliseconds
 
     new this.$swiper(this.$refs.swiper, {
@@ -200,24 +183,27 @@ export default {
 .swiper {
   // max-width: 600px;
   height: 100px;
-// .swiper-slide {
-//    display: flex;
-//    justify-content: center;
-//    align-items: center;
-// }
-img {
+
+  // .swiper-slide {
+  //    display: flex;
+  //    justify-content: center;
+  //    align-items: center;
+  // }
+  img {
     /* 图片居中填充 */
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
+
   /deep/ .swiper-pagination {
     text-align: end;
     right: 25px;
     left: auto;
     // outline: solid;
     width: max-content;
+
     // outline: solid;
     .swiper-pagination-bullet {
       background-color: #000;
@@ -235,35 +221,6 @@ img {
 }
 
 
-// .swiper-container {
-//   height: 110px;
-
-//   .swiper-img {
-//     /* 图片居中填充 */
-//     width: 100%;
-//     height: 100%;
-//     object-fit: cover;
-//     object-position: center;
-//   }
-
-//   .home-page-swiper {
-//     text-align: end;
-//     padding-right: 25px;
-
-//     /deep/.swiper-pagination-bullet {
-//       background-color: #000;
-//       width: 10px;
-//       height: 10px;
-//       margin-right: 2px;
-//       opacity: 0.35;
-//     }
-
-//     /deep/ .swiper-pagination-bullet-active {
-//       background-color: #fff;
-//       opacity: 1;
-//     }
-//   }
-// }
 
 /* 中间分类 */
 .cell-group {
@@ -329,30 +286,46 @@ img {
   background-color: #363636;
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
 
 /* 横向展示优惠折扣商品 */
 ::-webkit-scrollbar {
   display: none;
 }
 
-.discountDiv {
+.discount-div {
   overflow: scroll;
   margin-top: 15px;
 }
 
-.discountImg {
-  /* outline: solid; */
-  width: 90px;
+.discount-img-div {
+  width: 85px;
   height: 85px;
-  background: url(@/assets/images/discount80p.png) no-repeat;
-  background-size: 100%;
   display: flex;
+  background-color: #DDF8FF;
   justify-content: center;
   align-items: center;
-  padding-left: 15px;
+
+  /deep/ img {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  &::before {
+    content: "8.0折";
+    white-space: nowrap;
+    z-index: 2;
+    position: absolute;
+    zoom: 0.45;
+    color: white;
+    width: 70px;
+    left: -15px;
+    top: 15px;
+    height: 37px;
+    padding: 2px 0 0 10px;
+    background-color: #46E1FF;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
 }
 
 .nowPrice {
@@ -397,5 +370,4 @@ body::-webkit-scrollbar {
   left: 40%;
   width: 50%;
   height: auto;
-}
-</style>
+}</style>
