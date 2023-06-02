@@ -201,7 +201,6 @@ export default {
       }
       result = result.slice(0, -1) // 去除最后一个";"号
       this.selectSku = result
-      console.log("result", result)
     },
 
     // 构建轮播图
@@ -234,6 +233,8 @@ export default {
       this.$toast('skuid:' + data.selectedSkuComb.id + '\n添加成功');
       // 加入购物车
       addProductToCartApi({ 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
+      // 关闭sku展示
+      this.skuShow = false
       // 更新购物车数量
       this.getCartCount()
     },

@@ -24,6 +24,8 @@ import { Dialog } from 'vant';
 import { Tag } from 'vant';
 import { GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant';
 import { Sku } from 'vant';
+import { DropdownMenu, DropdownItem } from 'vant';
+import { List } from 'vant';
 
 
 
@@ -67,3 +69,7 @@ Vue.use(GoodsAction);
 Vue.use(GoodsActionButton);
 Vue.use(GoodsActionIcon);
 Vue.use(Sku);
+
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(List);
