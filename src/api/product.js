@@ -20,7 +20,7 @@ export const getEvaluatePageApi = (id, page, pageSize) => {
 
 // 根据 skuID 加入购物车
 export const addProductToCartApi = ({ skuId, count }) => {
-  return request(`/member/cart`, 'post', { skuId, count })
+  return request('/member/cart', 'post', { skuId, count })
 }
 
 
@@ -31,5 +31,46 @@ export const addProductToCartApi = ({ skuId, count }) => {
 
 // 获取猜你喜欢商品
 export const getGuessLikeProductApi = () => {
-  return request(`/home/goods/guessLike`, 'get')
+  return request('/home/goods/guessLike', 'get')
+}
+
+// 获取一级分类列表
+export const getTopCategoryApi = () => {
+  return request('/category/top', 'get')
+}
+
+// 特惠推荐分为了抢先尝鲜、新品预告
+export const getPreferenceApi = () => {
+  return request('/home/preference/mutli', 'get')
+}
+
+// 爆款推荐分为了 24 小时热榜，热销总榜，人气周榜
+export const getInVogueApi = () => {
+  return request('/home/inVogue/mutli', 'get')
+}
+
+
+
+
+// 搜索商品
+export const searchProductApi = ({  
+  keyword,
+  page = 1,
+  pageSize = 10,
+  onlyDiscount= false,
+  sortField = "",
+  sortMethod = "" 
+}) => {
+  return request(
+    '/search/all', 
+    'post', 
+    {
+      page, 
+      pageSize,
+      keyword,
+      onlyDiscount,
+      sortField,
+      sortMethod  
+    }
+  )
 }

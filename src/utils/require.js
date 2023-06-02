@@ -11,7 +11,7 @@ export default (url, method, submitData, changeURL) => {
 
   const instance = axios.create({
     baseURL,
-    timeout: 2000,
+    timeout: 15000,
   });
   
   // 请求拦截器
