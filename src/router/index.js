@@ -9,15 +9,23 @@ const routes = [
     redirect: '/shop',
   },
   {
+    path: '/search',
+    // redirect: '/shop',
+    component: () => import('@/views/Shop/SearchPage'),
+  },
+  {
     path: '/shop',
-    // redirect: '/shop/seckill',
     redirect: '/shop/products',
     component: () => import('@/views/Shop/ShopContainer'),
     children: [
       {
-        path: 'seckill',
-        name: 'seckill',
-        component: () => import('@/views/Shop/SecKill'),
+        path: 'popular',
+        redirect: 'popular/2087394920',
+      },
+      {
+        path: 'popular/:type',
+        name: 'popular',
+        component: () => import('@/views/Shop/PopularList'),
       },
     ],
   },
@@ -135,9 +143,6 @@ const routes = [
         path: 'my',
         name: 'my',
         component: () => import('@/views/Layout/MyPage'),
-        meta: {
-          background: 'url(@/assets/images/homeBack.jpg) no-repeat 0 0 / 100%'
-        },
       },
     ],
   },

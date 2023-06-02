@@ -1,10 +1,11 @@
 <template>
   <div>
 
-    <!-- 顶栏搜索栏 定位 -->
+    <!--———— 1. 顶栏 ——————-->
+    <!-- 搜索栏 定位 -->
     <van-sticky>
-      <van-search class="top-search" v-model="searchStr" show-action shape="round" background="#fff0"
-        placeholder="请输入搜索关键词" @search="onSearch">
+      <van-search @click="$router.push('/search')"  class="top-search" readonly v-model="searchStr" show-action shape="round" background="#fff0"
+        placeholder="请输入搜索关键词">
         <template #left-icon>
           <van-icon class="search-ico" name="search" />
         </template>
@@ -17,19 +18,21 @@
       </van-search>
     </van-sticky>
 
-    <!-- 上方轮播 -->
+    
+    <!--———— 2.1. 主体 轮播图 ——————-->
     <!-- Slider main container -->
     <div ref="swiper" class="swiper">
       <div class="swiper-wrapper">
         <!-- Slides -->
         <div class="swiper-slide" v-for="(item, index) in bannerImgList" :key="index"><img :src="item"
-            class="swiper-img" /></div>
+          class="swiper-img" /></div>
+        </div>
+        <div class="swiper-pagination"></div>
       </div>
-      <div class="swiper-pagination"></div>
-    </div>
-
-
-    <!-- 上方分类导航 -->
+      
+      
+    <!--———— 2.2. 主体 分类导航 ——————-->
+    <!-- 分类导航*10 -->
     <van-cell-group class="cell-group product-info" inset>
       <van-grid :column-num="5" :border="false">
         <van-grid-item class="top-category" v-for="item in homeCatalog" :key="item.route" @click="toThisPage(item.route)">
@@ -37,10 +40,12 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-
+    
+    <!--———— 2.3. 主体 新用户广告 ——————-->
     <!-- 中部胶囊广告 -->
     <van-image width="100%" :src="require('@/assets/images/capsuleAd.png')" @click="toThisPage('新用户注册')" />
-
+    
+    <!--———— 2.4.1 主体 限时折扣 倒计时 ——————-->
     <!-- 限时折扣标题 + 倒计时 -->
     <div>
       <van-count-down :time="time">
@@ -54,29 +59,30 @@
         </template>
       </van-count-down>
     </div>
-
+    
+    <!--———— 2.4.2 主体 限时折扣 主体内容 ——————-->
     <!-- 横向展示优惠折扣商品 -->
-    <!-- 需要商品图统一宽度/高度，否则无法统一展示大小 -->
     <div class="discount-div">
       <van-grid :border="false" :column-num="10" style="width: 1200px; overflow: scroll">
-        <van-grid-item v-for="(item, index) in guesslikeproduct" :key="index">
+        <van-grid-item v-for="(item, index) in guesslikeproduct" :key="index" @click="$router.push(`/shop/products/${item.id}`)">
           <van-image class="discount-img-div" :src="item.picture" />
           <div class="nowPrice bigTxt">{{ item.price }}</div>
           <div class="oldPrice smallTxt">{{ item.price / 0.8 }}</div>
         </van-grid-item>
       </van-grid>
     </div>
-
+    
+    <!--———— 2.5 主体 团购/秒杀入口 ——————-->
     <!-- 团购/秒杀入口 -->
     <van-grid :border="false" :column-num="2" class="bottomContainer">
-      <van-grid-item to="/shop/seckill">
+      <van-grid-item to="/shop/popular">
         <div class="container">
           <div class="text-title bigTitle">拼团购</div>
           <div class="text-content smallTxt">先到先得数量有限</div>
           <img src="@/assets/images/pingtuanAd.png" alt="" class="image" />
         </div>
       </van-grid-item>
-      <van-grid-item to="/shop/seckill">
+      <van-grid-item to="/shop/popular">
         <div class="container">
           <div class="text-title bigTitle">抢秒杀</div>
           <div class="text-content smallTxt">精选精选精选精</div>
@@ -97,11 +103,9 @@ export default {
     return {
       searchStr: "",
       locationStr: "天河区",
-      popupCont: "",
       time: 2 * 60 * 60 * 1000,
       bannerImgList: tdata.bannerImgList,
       homeCatalog: tdata.homeCatalog,
-      discountItemList: tdata.discountItemList,
       guesslikeproduct: [],
     };
   },
@@ -115,14 +119,12 @@ export default {
       })
     },
 
-    onSearch() {
-      console.log(this.searchStr);
-    },
     toThisPage(value) {
       console.log(value)
       this.$toast(value);
     },
   },
+
   mounted() {
     this.getProductList()
 

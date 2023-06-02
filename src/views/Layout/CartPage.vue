@@ -152,7 +152,7 @@ export default {
     },
   },
   mounted() {
-    console.log("store.dispatch('cart/mergeCart")
+    console.log("store.dispatch('cart/mergeCart)")
     this.$store.dispatch('cart/mergeCart')
   }
 }
