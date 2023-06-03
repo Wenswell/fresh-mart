@@ -26,6 +26,8 @@ import { GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant';
 import { Sku } from 'vant';
 import { DropdownMenu, DropdownItem } from 'vant';
 import { List } from 'vant';
+import { AddressList } from 'vant';
+import { RadioGroup, Radio } from 'vant';
 
 
 
@@ -73,3 +75,7 @@ Vue.use(Sku);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(List);
+
+Vue.use(AddressList);
+Vue.use(Radio);
+Vue.use(RadioGroup);

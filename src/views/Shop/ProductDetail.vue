@@ -155,7 +155,14 @@
     <van-sku class="sku-div" v-model="skuShow" :sku="sku" :goods="goods" :goods-id="sku.collection_id" :quota="0"
       :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
       @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
-
+      <template #sku-body-top>
+        <!-- 收货 信息地址栏 -->
+        <van-cell @click="toAddress" class="address-div" center :is-link="true" icon="location-o">
+          <template #title>
+            <div v-for="item in addressList" :key="item">{{ item }}</div>
+          </template>
+        </van-cell>
+      </template>
     </van-sku>
 
 
@@ -172,19 +179,33 @@ export default {
       mySwiper: '',   //轮播图
 
       //以下是商品详情sku弹窗信息
+      skuShow: false,   // 弹窗开关 Sku 商品规格
       result: '',           // 原始商品信息
+
       evaluate: '',         // 评价数据
       keywords: [],         // 评价关键词
       evaluateContent: [],  // 评价具体内容
+
       props: ['productId'], // 点击购买/加购返回信息
-      skuShow: false, // 弹窗开关 Sku 商品规格
-      sku: {},        // 主要 result过滤后 商品sku及数量
+      sku: {},        // 【主要】 result过滤后的 商品sku及数量
       selectSku: '',   // 选中的sku
       cartCount: '',  // 购物车数量
       goods: {},      // 默认商品 sku 缩略图
+
+      addressList: [],  // 收货信息地址，只用于展示
+
     }
   },
   methods: {
+
+    // 去修改地址
+
+    toAddress() {
+      console.log("this.$route.path", this.$route.path)
+      this.$bus.$emit("from-path", this.$route.path)
+      console.log("this.$bus", this.$bus)
+      this.$router.push('/user/address')
+    },
 
     // 获取购物车数量
     async getCartCount() {
@@ -302,7 +323,7 @@ export default {
         }
 
         sku.collection_id = result.id, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
-          sku.stock_num = result.inventory, // 商品总库存
+          sku.stock_num = result.inventory || result.skus[0].inventory, // 商品总库存
           sku.price = result.price, // 默认价格（单位元）
           sku.none_sku = false, // 是否无规格商品
           sku.messages = [],
@@ -310,7 +331,11 @@ export default {
 
         // 填充完成 存至 data.sku
         this.sku = sku
-        // console.log("this.sku", this.sku)
+
+        console.log("result.userAddresses", result.userAddresses)
+        const { receiver, contact, fullLocation, address } = result.userAddresses.find(address => address.isDefault !== 0) ?? result.userAddresses[0];
+        this.addressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+
 
       }).then(() => {
         // 有数据后创建轮播图
@@ -756,6 +781,21 @@ export default {
     button:first-child {
       background: #5AD4EA;
     }
+  }
+}
+
+
+
+// sku 弹窗 地址栏
+
+.address-div {
+  padding: 8px;
+  font-size: 13px;
+
+  //两侧图标大小
+  >i {
+    margin: 8px;
+    font-size: 22px;
   }
 }
 </style>
