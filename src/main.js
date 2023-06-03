@@ -21,11 +21,16 @@ import "@/utils/swiper"
 import "@/utils/flexible"
 import "@/assets/styles/reset.css"
 
+// 事件总线
 
 Vue.config.productionTip = false
 
 new Vue({
+  el:'#app',
   router,
   store,
   render: h => h(App),
-}).$mount('#app')
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  }
+})

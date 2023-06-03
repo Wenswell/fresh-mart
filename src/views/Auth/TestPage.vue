@@ -1,6 +1,21 @@
 <template>
   <div>
     this is test page
+    <van-cell-group>
+      <van-cell class="address-div" center :is-link="true" icon="location-o" size="large">
+        <template #title>
+          <div v-for="item in getAddressList()" :key="item">{{ item }}</div>
+        </template>
+      </van-cell>
+
+    </van-cell-group>
+
+    {{ getAddressList() }}
+
+    <!-- {{ res.result.userAddresses[0].receiver }},{{ res.result.userAddresses[0].contact }},{{
+      res.result.userAddresses[0].fullLocation }}
+    {{ res.result.userAddresses[0].address }}
+    {{ res.result.userAddresses[0] }} -->
 
     <van-button @click="test1" type="large" class="submit-btn">{{ $route.name }}</van-button>
   </div>
@@ -10,13 +25,118 @@
 // import store from '@/store'
 import { mapMutations } from 'vuex'
 export default {
+
+  data() {
+    return {
+      res: {
+        "code": "1",
+        "msg": "操作成功",
+        "result": {
+          "id": "3998535",
+          "name": "学步更自如，婴幼童机能学步鞋4-6码",
+          "spuCode": "3998535",
+          "desc": "宝宝的第一双鞋，成长不将就",
+          "price": "109.00",
+          "oldPrice": "109.00",
+          "discount": 1,
+          "inventory": 3133825,
+          "brand": {
+            "id": "spider99999999999",
+            "name": "传智自有品牌",
+            "nameEn": "chuanzhi",
+            "logo": "https://yanxuan-item.nosdn.127.net/f6ddd429632de6170900dc2fbc541fd8.png?type=webp&imageView&thumbnail=78x78&quality=95",
+            "picture": "https://yanxuan-item.nosdn.127.net/f6ddd429632de6170900dc2fbc541fd8.png?type=webp&imageView&thumbnail=78x78&quality=95",
+            "type": null,
+            "desc": null,
+            "place": null
+          },
+          "salesCount": 769,
+          "commentCount": 0,
+          "collectCount": 0,
+          "mainVideos": [],
+          "videoScale": 1,
+          "mainPictures": [],
+          "specs": [],
+          "skus": [],
+          "categories": [],
+          "details": {},
+          "isPreSale": false,
+          "isCollect": false,
+          "recommends": null,
+          "userAddresses": [
+            {
+              "id": "1662992398390661122",
+              "receiver": "fdsg",
+              "contact": "13445234556",
+              "provinceCode": "110000",
+              "cityCode": "110100",
+              "countyCode": "110101",
+              "address": "通风管道回到法国",
+              "isDefault": 0,
+              "fullLocation": "北京市 北京市 东城区",
+              "postalCode": null,
+              "addressTags": null
+            },
+            {
+              "id": "1662992386013270018",
+              "receiver": "fdsg",
+              "contact": "13445234556",
+              "provinceCode": "110000",
+              "cityCode": "110100",
+              "countyCode": "110101",
+              "address": "通风管道回到法国",
+              "isDefault": 0,
+              "fullLocation": "北京市 北京市 东城区",
+              "postalCode": null,
+              "addressTags": null
+            },
+            {
+              "id": "1661901764321873922",
+              "receiver": "zh",
+              "contact": "13444000000",
+              "provinceCode": "130000",
+              "cityCode": "130100",
+              "countyCode": "130105",
+              "address": "lalalalalal",
+              "isDefault": 1,
+              "fullLocation": "河北省 石家庄市 新华区",
+              "postalCode": null,
+              "addressTags": null
+            }
+          ],
+          "similarProducts": [],
+          "hotByDay": [],
+          "evaluationInfo": null
+        }
+      }
+    }
+  },
+
   methods: {
     ...mapMutations('user', ['setUser']),
+
+    getAddressList() {
+      const { receiver, contact, fullLocation, address } = this.res.result.userAddresses.find(address => address.isDefault !== 0) ?? this.res.result.userAddresses[0];
+      return [`${receiver}, ${contact}, ${fullLocation}`, address];
+    },
+    // getAddressList() {
+    //   const defaultAdr = this.res.result.userAddresses.find(address => address.isDefault !== 0)
+    //     ?? this.res.result.userAddresses[0];
+
+    //   let addressList = []
+
+    //   addressList.push(defaultAdr.receiver + ', ' + defaultAdr.contact + ', ' + defaultAdr.fullLocation)
+    //   addressList.push(defaultAdr.address)
+
+    //   return addressList
+    // },
+
     test1() {
       console.log('---test0---')
 
-      let res = this.$store.commit('cart/selectedList')
-      console.log("------------res", res)
+
+      // let res = this.$store.commit('cart/selectedList')
+      // console.log("------------res", res)
       //       let res2 = mergeLocalCartApi([
       //   {
       //     "id": "1369155859933827074",
@@ -59,9 +179,19 @@ export default {
 
       // store.commit('user/setUser', {})
     }
-  }
+  },
 
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.address-div {
+  outline: solid;
+
+  //左侧图标大小
+  >i {
+    margin: 8px;
+    font-size: 22px;
+  }
+}
+</style>
