@@ -34,7 +34,7 @@ const routes = [
     redirect: '/shop/products/3995846'
   },
   {
-    path: '/shop/products/:id', 
+    path: '/shop/products/:id',
     // redirect: '/shop/products/1',
     component: () => import('@/views/Shop/ProductDetail')
   },
@@ -58,6 +58,18 @@ const routes = [
         path: 'test',
         name: 'test',
         component: () => import('@/views/Auth/TestPage'),
+      },
+    ],
+  },
+  {
+    path: '/user',
+    redirect: '/user/address',
+    component: () => import('@/views/user'),
+    children: [
+      {
+        path: 'address',
+        name: 'address',
+        component: () => import('@/views/user/UserAddress'),
       },
     ],
   },

@@ -73,38 +73,3 @@ export default (url, method, submitData, changeURL) => {
     // throw error // 如果需要将错误继续向上传递，需要将错误重新抛出
   })
 }
-
-
-
-// export default function request(config) {
-//   // 添加请求拦截器
-//   axios.interceptors.request.use(config => {
-//     // 从store中读取token,并添加到请求头
-//     const token = store.state.token
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`
-//     }
-//     return config
-//   }, error => {
-//     return Promise.reject(error)
-//   })
-
-//   // 添加响应拦截器
-//   axios.interceptors.response.use(response => {
-//     return response
-//   }, error => {
-//     // 401则跳转到登录页面
-//     if (error.response.status === 401) {
-//       store.commit('logout')
-//       router.push({
-//         name: 'login'
-//       })
-//     }
-//     return Promise.reject(error)
-//   })
-// }
-
-// // 导出axios实例
-// export const instance = axios.create({
-//   baseURL: '你的请求域名'
-// })
