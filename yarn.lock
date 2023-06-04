@@ -1343,6 +1343,11 @@
   dependencies:
     "@types/node" "*"
 
+"@vant/area-data@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.npmmirror.com/@vant/area-data/-/area-data-1.4.1.tgz#b4f1bce05dbb147dc08fd2ed9b2a0f63d3329b29"
+  integrity sha512-D8zI/rfxREhnIKGoYzsEJZ73fte4JARhFeFftLIH7ynu1sPrCBEgPkLEbwPyvw3VC4JdSIuzaK5uOhu+BcoPXw==
+
 "@vant/icons@^1.7.1":
   version "1.8.0"
   resolved "https://registry.npmmirror.com/@vant/icons/-/icons-1.8.0.tgz#36b13f2e628b533f6523a93a168cf02f07056674"

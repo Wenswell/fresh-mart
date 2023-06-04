@@ -1,94 +1,223 @@
 <template>
-  <div>
-    <van-nav-bar
-      class="top-bar"
-      title="收货地址"
-      left-arrow
-      @click-left="onBackPage"
-    />
-    <button @click="closebtn">显示隐藏使用按钮</button>
+  <div class="address-page">
+    <van-nav-bar class="top-bar" title="收货地址" left-arrow @click-left="$router.push(fromPath)" />
+    <van-dialog class="address-edit-div" v-model="show" :title="Object.keys(defalutAddress).length === 0 ?'新增收货地址':'修改收货地址'" :showConfirmButton="false">
+      <van-address-edit :is-saving="btnDisable" class="address-edit" :area-list="areaList" show-set-default :address-info="defalutAddress"
+        :area-columns-placeholder="['请选择', '请选择', '请选择']" @save="onSave" />
+      <div class="btn-address-close" @click="onCloseEdit"><van-icon name="cross" /></div>
+    </van-dialog>
 
-    <div class="address-div" v-for="item in userAddresses" :key="item.id">
-      <div class="address-div-content">
-        <div class="address-div-text">
-          <div>
-            <span class="">{{ item.receiver }}, {{ item.contact }}</span>
-            <span class="">{{ item.fullLocation }} {{ item.address }}</span>
+    <van-radio-group v-model="selectDefault">
+      <!-- 判断是否进入选择模式：是否来自商品详情页面 -->
+      <div class="address-div" :class="{ 'chosen': fromPath !== '/layout/my' && index == chosen }"
+        v-for="(item, index) in userAddresses" :key="item.id">
+        <div class="address-div-content">
+          <div class="address-div-text" @click="chosenThis(index)">
+            <div>
+              <span class="">{{ item.receiver }}, {{ item.contact }}</span>
+              <span class="">{{ item.fullLocation }} {{ item.address }}</span>
+            </div>
+            <template v-if="fromPath !== '/layout/my'">
+              <van-button v-show="index !== chosen" class="chosen-btn" type="primary" plain size="mini">使用</van-button>
+              <div v-show="index == chosen" class="chosen-hook">✔</div>
+            </template>
           </div>
-          <van-button v-if="showbtn" type="primary" plain size="mini">修改</van-button>
-        </div>
-        <div class="address-div-bottom">
-          <van-radio v-model="userAddresses[0].isDefault">默认</van-radio>
-          <van-button type="primary" plain size="mini">修改</van-button>
+          <div class="address-div-bottom">
+            <van-radio :name="index">默认</van-radio>
+            <van-button @click="onEditAddress(index)" type="primary" plain size="mini">修改</van-button>
+          </div>
         </div>
       </div>
-    </div>
+    </van-radio-group>
+
+    <van-button class="btn-add-address" @click="onAddAddress" type="primary" color="#5AD4EA" size="large"><van-icon
+        size="14" name="add" /> 添加收货地址</van-button>
 
 
   </div>
 </template>
-<!-- 
-  孙思凡	1602146078	13146684998	江苏省	无锡市	滨湖区	汉庭酒店东绛新东国际广场店
-  张雪梅	1561025729	18726514186	江苏省	苏州市	虎丘区	101乡道南200
-  唐绍英	1541753064	18469177925	云南省	昆明市	五华区	龙泉路408号云南财经职业学院
-
-钱仁新	1541748526	13951611560	江苏省	南京市	白下区	仁寿里30号302室
-丁嘉辉	1601969747	13132235729	浙江省	杭州市	西湖区	三墩镇金地自在城鹭影轩18幢2004
-张远强	1587881828	18780105402	四川省	成都市	龙泉驿区	龙泉街道龙泉街道驿都大道337号恩德恒鼎世纪2号楼10楼F-C -->
 
 <script>
+// import { ref } from 'vue';
+import { areaList } from '@vant/area-data';
+import { addNewAddressApi, getAddressListApi, changeAddressApi } from '@/api/user'
+
 export default {
   data() {
     return {
-      fromPath: '',
-      showbtn: true,
-      userAddresses: [
-        { "id": "1662992398390661122", "receiver": "钱仁新", "contact": "13951611560", "provinceCode": "110000", "cityCode": "110100", "countyCode": "110101", "address": "仁寿里30号302室", "isDefault": 0, "fullLocation": "江苏省	南京市	白下区", "postalCode": null, "addressTags": null },
-        { "id": "1662992386013270018", "receiver": "丁嘉辉", "contact": "13132235729", "provinceCode": "220000", "cityCode": "220100", "countyCode": "220101", "address": "三墩镇金地自在城鹭影轩18幢2004", "isDefault": 0, "fullLocation": "浙江省	杭州市	西湖区", "postalCode": null, "addressTags": null },
-        { "id": "1661901764321873922", "receiver": "张远强", "contact": "18780105402", "provinceCode": "330000", "cityCode": "330100", "countyCode": "330101", "address": "龙泉街道龙泉街道驿都大道337号恩德恒鼎世纪2号楼10楼F", "isDefault": 0, "fullLocation": "四川省	成都市	龙泉驿区", "postalCode": null, "addressTags": null },
-      ],
+
+      areaList,
+      show: false,
+      defalutAddress: {},
+      addressId: '',
+      btnDisable: false,
+
+
+      fromPath: '/layout/my',   // 目前只有商品sku和我的 2个页面能到达此页
+      chosen: 0,  // 选择模式使用
+      selectDefault: 0,
+      userAddresses: [],
     }
   },
   methods: {
-    onBackPage(){
-      console.log('点击返回')
-    // console.log("-------------this.$bus", this.$bus)
-    // console.log("-------------this.$bus.$on", this.$bus.$on)
-    // console.log("-------------this.$bus.$on('from-path')", this.$bus.$on('from-path'))
-    //   console.log("-----this.fromPath", this.fromPath)
-    //   // console.log("this.fromPath??'/layout/my'", this.fromPath??'/layout/my')
-    //   // this.$router.push(this.fromPath??'/layout/my');
-    //   this.$bus.$on('from-path', params => {
-    //     console.log("+++++++++++params", params)
-    //   this.fromPath = params;
-    //   console.log("-------------this.fromPath", this.fromPath)
-      // console.log("this.fromPath??'/layout/my'", this.fromPath??'/layout/my')
-    })
 
+    updateNewAddressList(){
+      getAddressListApi().then(res => {
+      console.log('获取地址结果', res.result)
+      this.userAddresses = res.result
+      // 初始化默认地址选择
+      this.selectDefault = this.userAddresses.findIndex(item => item.isDefault === 1)
+    })
     },
-    
-    closebtn() {
-      console.log("this.showbtn", this.showbtn)
-      this.showbtn = !this.showbtn
-      console.log("this.showbtn", this.showbtn)
-    }
+
+    fromVanToApi(obj) {
+      const {
+        name: receiver,
+        tel: contact,
+        areaCode: countyCode,
+        addressDetail: address,
+        isDefault
+      } = obj;
+      const provinceCode = countyCode.substr(0, 2).padEnd(6, '0')
+      const cityCode = countyCode.substr(0, 4).padEnd(6, '0')
+      const fullLocation = [obj.province, obj.city, obj.county].join('\t')
+      return { receiver, contact, address, fullLocation, postalCode: '', isDefault: Number(isDefault), provinceCode, cityCode, countyCode, addressTags: null }
+    },
+    fromApiToVan(index) {
+      const waiting = this.userAddresses[index]
+      const {
+        receiver: name,
+        contact: tel,
+        countyCode: areaCode,
+        address: addressDetail,
+        isDefault
+      } = waiting;
+      const [province, city, county] = waiting.fullLocation.split('\t');
+      return { name, tel, country: '', province, city, county, areaCode, postalCode: '', addressDetail, isDefault: !!isDefault }
+    },
+
+    onCloseEdit() {
+      this.show = false
+      this.btnDisable = false
+    },
+    onEditAddress(index) {
+      console.log('index: ', index)
+      this.defalutAddress = this.fromApiToVan(index)
+      this.addressId = this.userAddresses[index].id
+      console.log("this.defalutAddress", this.defalutAddress)
+      this.show = true
+    },
+    onSave(content) {
+      //先禁用按钮
+      this.btnDisable = true
+      // 保存修改 / 保存新增
+      console.log('save')
+      console.log("content", content)
+      const addressObj = this.fromVanToApi(content)
+
+      if (this.addressId) {
+        console.log(`修改id=${this.addressId}的地址`)
+        changeAddressApi(this.addressId, addressObj).then(res => {
+          console.log('修改地址结果', res)
+          console.log("res.code == 1", res.code == 1)
+          if(res.code == 1){
+            this.$toast('修改成功')
+            // 修改本地结果
+            this.updateNewAddressList()
+            // 关闭弹窗
+            this.onCloseEdit()
+          }
+        })
+      } else {
+        addNewAddressApi(addressObj).then(res => {
+          console.log('新增地址结果', res)
+          console.log("res.code == 1", res.code == 1)
+          if(res.code == 1){
+            this.$toast('添加成功')
+            // 修改本地结果
+            this.updateNewAddressList()
+            // 关闭弹窗
+            this.onCloseEdit()
+          }
+        })
+      }
+    },
+    onAddAddress() {
+      console.log('add new')
+      this.defalutAddress = {}
+      this.addressId = '',
+        this.show = true
+    },
+    // 从商品详情页面来选择地址
+    // 选择模式使用
+    chosenThis(index) {
+      this.chosen = index
+      setTimeout(() => {
+      this.$router.push(this.fromPath)  
+    }, 150)  
+      console.log("index", index)
+    },
+  },
+  beforeDestroy() {
+    this.$bus.$emit('chosen-address-index', this.chosen)
+    this.$bus.$off('from-path')
+    this.$bus.$off('chosen-address-index')
   },
   created() {
-
+    // 事件总线获取上个页面、
     // 目前只有商品sku和我的 2个页面能到达此页
+    this.$bus.$on('from-path', (params) => {
+      this.fromPath = params ?? '/layout/my';
+      console.log("+params ?? '/layout/my'", params ?? '/layout/my')
+    })
+    this.$bus.$on('chosen-address-index', params => this.chosen = params)
+    this.updateNewAddressList()
+  },
+  mounted() {
+    // 从 我的 页面进入时不需要选择并返回地址
+    if (this.fromPath === '/layout/my') this.chosenThis = () => { }
+  },
+  watch: {
+    // 监视默认地址选择并更新默认地址
+    selectDefault(newVal) {
+      console.log("newVal", newVal)
+      console.log("this.userAddresses[newVal].id", this.userAddresses[newVal].id)
+      console.log("this.userAddresses[newVal]", this.userAddresses[newVal])
+      changeAddressApi(this.userAddresses[newVal].id, this.userAddresses[newVal]).then(res => {
+        console.log("更改默认地址结果 res", res)
+        if(res.code == 1){
+          // this.updateNewAddressList() // 直接更新会打乱顺序
+          this.userAddresses.forEach((item, index) => {
+            item.isDefault = index === newVal ? 1 : 0;
+          })
+            this.$toast('更新成功')
+        }
+      })
 
-},
+    }
+
+  },
 
 }
 </script>
 
 <style lang="less" scoped>
+// 整个界面
+.address-page {
+  background: #F4F4F4;
+  height: 100vh;
+}
+
 // 地址盒子
 .address-div {
+  background: white;
   font-size: 14px;
-  box-shadow: 0px 0px 3px #333;
   margin: 10px 0;
   padding: 10px;
+
+  &.chosen {
+    background: #F7F7F7;
+  }
 
   // 盒子主要内容
   .address-div-content {
@@ -114,15 +243,24 @@ export default {
         line-height: 20px;
       }
 
-      >button {
+      .chosen-btn {
         width: 50px;
         height: 30px;
+      }
+
+      .chosen-hook {
+        flex: 0 0 20px;
+        margin: 0 8px;
+        font-weight: bold;
+        color: #5AD4EA;
       }
     }
 
     .address-div-bottom {
       display: flex;
       justify-content: space-between;
+      border-top: 0.5px solid #ddd;
+      padding-top: 10px;
 
       >button {
         width: 45px;
@@ -130,5 +268,54 @@ export default {
       }
     }
   }
+}
+
+
+// 修改地址弹窗
+.address-edit-div {
+  border-radius: 5px;
+  width: 90vw;
+
+  white-space: nowrap;
+  overflow: visible;
+
+  /deep/ button {
+    border-radius: 5px;
+    margin: 0 auto;
+    width: 80vw;
+    background-color: @blue;
+    border: none;
+  }
+
+  .btn-address-close {
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    background: #ddd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /deep/ .address-edit>:first-child div {
+    gap: 8px;
+  }
+
+  // /deep/ .address-edit > div > div:nth-child(4) > div > div > div:first-child {
+  //   width: 10px;
+  //   outline: solid;
+  // }
+}
+
+//底部新增按钮
+.btn-add-address {
+  border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  margin: 0 5%;
+  width: 90%;
 }
 </style>

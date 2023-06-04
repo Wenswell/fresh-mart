@@ -2,7 +2,7 @@
   <div>
 
     <!-- 个人信息 头像ID 会员信息 浏览 收藏 购物券 -->
-    <van-cell-group class="cell-group" inset>
+    <van-cell-group class="cell-group" inset @click="$router.push('/user/address')">
       <van-cell class="my-info" :border="false">
         <template #title>
           <div class="my-info-left">
@@ -108,6 +108,7 @@
 
 <script>
 import tdata from '@/assets/test-data.json'
+// import { Toast } from 'vant';
 
 export default {
   data() {
@@ -119,11 +120,10 @@ export default {
   },
   methods: {
     toPage(page) {
-      console.log(page)
+      this.$toast(page)
     }
   },
   mounted() {
-    console.log(this.cartList)
   }
 }
 </script>
