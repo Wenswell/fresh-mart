@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       active: 0,
-      phoneNum: "13888888888",
+      phoneNum: "13951611560",
       verifyNum: "",
       passWd: "123456",
       btnText: "获取验证码",
@@ -56,7 +56,7 @@ export default {
         return
       }
       console.log(res.result.account)
-      this.$toast("登录成功！\n" + res.result.account)
+      this.$toast(res.result.account+"，欢迎回来！")
 
       // 将返回的user数据（包括token）存放到 Vuex 的 Store 中
       store.commit('user/setUser', res.result)

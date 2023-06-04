@@ -24,3 +24,22 @@ export const loginByPasswordApi = (account, password) => {
 
 
 
+// 地址 添加新地址 -> 得到id
+export const addNewAddressApi = (newObj) => {
+  return request('/member/address', 'post', newObj)
+}
+
+// 地址 获取所有地址列表
+export const getAddressListApi = () => {
+  return request('/member/address', 'get' )
+}
+
+// 地址 修改原有地址
+export const changeAddressApi = (id, newObj) => {
+  return request(`/member/address/${id}`, 'PUT', newObj)
+}
+
+// 地址 删除地址
+export const deleteAddressApi = (id) => {
+  return request(`/member/address/${id}`, 'DELETE' )
+}
