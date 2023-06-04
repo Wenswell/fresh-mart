@@ -31,7 +31,7 @@ export const addNewAddressApi = (newObj) => {
 
 // 地址 获取所有地址列表
 export const getAddressListApi = () => {
-  return request('/member/address', 'get' )
+  return request('/member/address', 'get')
 }
 
 // 地址 修改原有地址
@@ -41,5 +41,23 @@ export const changeAddressApi = (id, newObj) => {
 
 // 地址 删除地址
 export const deleteAddressApi = (id) => {
-  return request(`/member/address/${id}`, 'DELETE' )
+  return request(`/member/address/${id}`, 'DELETE')
 }
+
+
+
+
+
+//订单 立即购买 单件商品
+export const toBuyNowApi = ({
+  skuId,
+  count = 1,
+  addressId,
+}) => {
+  return request('/member/order/pre/now', 'GET', {
+    skuId,
+    count,
+    addressId,
+  })
+}
+

@@ -262,13 +262,20 @@ export default {
     onBuyClicked(data) {
       // console.log("onBuyClicked", JSON.stringify(data))
       this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址序号:' + this.chosenAddressIndex +'\n直接前往购买');
-      console.group('直接前往购买')
-      console.group('所有信息',data)
-      console.group('购买数量',data.selectedNum)
-      console.group('商品信息',data.selectedSkuComb)
+      // console.group('直接前往购买')
+      // console.group('所有信息',data)
+      // console.group('购买数量',data.selectedNum)
+      // console.group('商品信息',data.selectedSkuComb)
       // console.group('商品skuID',data.selectedSkuComb.id)
-      console.group('地址',this.addressList[this.chosenAddressIndex])
-      
+      // console.group('地址',this.addressList[this.chosenAddressIndex])
+      // 直接提交订单 - 在vuex中完成
+      this.$store.dispatch('user/toBuyNow', {
+        skuId: data.selectedSkuComb.id,
+        count: data.selectedNum,
+        addressId: this.addressList[this.chosenAddressIndex].id,
+      })
+      // 提交后转到订单页面
+      this.$router.push('/order')
     },
 
     // 商品id -> API -> 商品详细内容
