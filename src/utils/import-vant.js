@@ -29,6 +29,10 @@ import { List } from 'vant';
 import { AddressList } from 'vant';
 import { RadioGroup, Radio } from 'vant';
 
+import { AddressEdit } from 'vant';
+
+
+Vue.use(AddressEdit);
 
 
 

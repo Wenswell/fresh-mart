@@ -24,6 +24,10 @@
 <script>
 // import store from '@/store'
 import { mapMutations } from 'vuex'
+import request from '@/utils/require'
+
+
+
 export default {
 
   data() {
@@ -134,6 +138,30 @@ export default {
     test1() {
       console.log('---test0---')
 
+      return request(`/member/profile`, 'put', { 
+        nickname:'技通武林玉面君子',
+        gender:'男',
+        birthday:'1357-02-04',
+        provinceCode:'320000',
+        cityCode:'320500',
+        countyCode:'320508',
+        profession:'南・慕・容',
+      })
+      
+
+
+
+
+      // 注册账号⬇️
+      // request('/register', 'post', { 
+      //   'account':'慕容复',
+      //   'mobile': '13951611560',
+      //   'code': '123456',
+      //   'password': '123456',
+      //   'type': 'app',
+      //  })
+      // 注册账号⬆️
+        
 
       // let res = this.$store.commit('cart/selectedList')
       // console.log("------------res", res)

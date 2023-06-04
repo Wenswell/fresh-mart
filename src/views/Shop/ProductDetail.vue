@@ -159,7 +159,7 @@
         <!-- 收货 信息地址栏 -->
         <van-cell @click="toAddress" class="address-div" center :is-link="true" icon="location-o">
           <template #title>
-            <div v-for="item in addressList" :key="item">{{ item }}</div>
+            <div v-for="item in showAddressList" :key="item">{{ item }}</div>
           </template>
         </van-cell>
       </template>
@@ -192,18 +192,16 @@ export default {
       cartCount: '',  // 购物车数量
       goods: {},      // 默认商品 sku 缩略图
 
-      addressList: [],  // 收货信息地址，只用于展示
+      addressList: [],  // 收货地址列表
+      showAddressList: [],  // 收货信息地址，只用于展示
+      chosenAddressIndex: 0,  // 接收选择的地址序号
 
+      path: ''    //当前路由路径
     }
   },
   methods: {
-
-    // 去修改地址
-
     toAddress() {
-      console.log("this.$route.path", this.$route.path)
-      this.$bus.$emit("from-path", this.$route.path)
-      console.log("this.$bus", this.$bus)
+      this.path = this.$route.path
       this.$router.push('/user/address')
     },
 
@@ -226,7 +224,7 @@ export default {
 
     // 构建轮播图
     creatNewSwiper() {
-      console.log("this.$refs.swiper", this.$refs.swiper)
+      // console.log("this.$refs.swiper", this.$refs.swiper)
       new this.$swiper(this.$refs.swiper, {
 
         // 已全局注册
@@ -263,7 +261,21 @@ export default {
     // 直接购买 - 已选sku
     onBuyClicked(data) {
       // console.log("onBuyClicked", JSON.stringify(data))
-      this.$toast('skuid:' + data.selectedSkuComb.id + '\n直接前往购买');
+      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址序号:' + this.chosenAddressIndex +'\n直接前往购买');
+      // console.group('直接前往购买')
+      // console.group('所有信息',data)
+      // console.group('购买数量',data.selectedNum)
+      // console.group('商品信息',data.selectedSkuComb)
+      // console.group('商品skuID',data.selectedSkuComb.id)
+      // console.group('地址',this.addressList[this.chosenAddressIndex])
+      // 直接提交订单 - 在vuex中完成
+      this.$store.dispatch('user/toBuyNow', {
+        skuId: data.selectedSkuComb.id,
+        count: data.selectedNum,
+        addressId: this.addressList[this.chosenAddressIndex].id,
+      })
+      // 提交后转到订单页面
+      this.$router.push('/order')
     },
 
     // 商品id -> API -> 商品详细内容
@@ -312,7 +324,7 @@ export default {
           sku.list.push({
             //... 其他属性   
             id: skus.id,
-            price: skus.price,
+            price: skus.price*100,
             stock_num: skus.inventory,
             // ... 使用reduce赋值规格
             ...skus.specs.reduce((obj, spec) => {
@@ -332,10 +344,13 @@ export default {
         // 填充完成 存至 data.sku
         this.sku = sku
 
-        console.log("result.userAddresses", result.userAddresses)
-        const { receiver, contact, fullLocation, address } = result.userAddresses.find(address => address.isDefault !== 0) ?? result.userAddresses[0];
-        this.addressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
-
+        if(result.userAddresses.length){
+          this.addressList = result.userAddresses
+          const { receiver, contact, fullLocation, address } = result.userAddresses[this.chosenAddressIndex] ?? result.userAddresses.find(address => address.isDefault !== 0) ;
+          this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+        } else {
+          this.$toast('没有添加地址！')
+        }
 
       }).then(() => {
         // 有数据后创建轮播图
@@ -347,10 +362,8 @@ export default {
     // 商品id -> 商品评价数据
     getProductEvaluateById(id) {
       getProductEvaluateApi(id).then(res => {
-        console.log("getProductEvaluateApi res", res)
         let evaluate = res.result
         this.evaluate = evaluate
-        console.log("this.evaluate", evaluate)
 
         const keywords = [];
 
@@ -369,8 +382,6 @@ export default {
         }
 
         this.keywords = keywords
-        console.log(keywords);
-
 
       })
     },
@@ -400,7 +411,16 @@ export default {
     },
 
   },
+  beforeDestroy() {
+    this.$bus.$emit('from-path', this.path)
+    this.$bus.$emit('chosen-address-index', this.chosenAddressIndex)
+    this.$bus.$off('chosen-address-index')
+  },
   created() {
+    this.$bus.$on('chosen-address-index', (params) => {
+      // 接收选择的地址序号
+      this.chosenAddressIndex = params
+    })
 
     // 获取动态路由参数 -- 商品id
     this.productId = this.$route.params.id

@@ -9,6 +9,17 @@ const routes = [
     redirect: '/shop',
   },
   {
+    path: '/order',
+    redirect: '/order/check',
+    component: () => import('@/views/Order'),
+    children: [
+      {
+        path: 'check',
+        component: () => import('@/views/Order/CheckOrder'),
+      },
+    ],
+  },
+  {
     path: '/search',
     // redirect: '/shop',
     component: () => import('@/views/Shop/SearchPage'),
