@@ -33,7 +33,7 @@
 
 
 <script>
-import store from '@/store'
+
 
 import { getVerifyCodeApi, loginByVerifyNumberApi } from "@/api/user";
 export default {
@@ -61,9 +61,11 @@ export default {
       }
       console.log(res.result.account)
       this.$toast(res.result.account+"，欢迎回来！")
-
       // 将返回的user数据（包括token）存放到 Vuex 的 Store 中
-      store.commit('user/setUser', res.result)
+      this.$store.commit('user/setUser', res.result)
+
+      // 更新地址
+      this.$store.dispatch('user/updateAddressList')
 
       // 进入主页
       this.$router.push('/layout/home')

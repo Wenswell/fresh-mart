@@ -156,7 +156,7 @@
       :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
       @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
       <template #sku-body-top>
-        <ShowAddressCard :showAddressList="showAddressList"></ShowAddressCard>
+        <ShowAddressCard :showAddressList="showAddressList" :chosenAddressId="chosenAddressId"></ShowAddressCard>
       </template>
     </van-sku>
 
@@ -350,6 +350,7 @@ export default {
           : result.userAddresses.find(address => address.isDefault !== 0);
           // 保存至data用于展示
           this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+          console.log("this.showAddressList", this.showAddressList)
           // 保存至data用于发送订单请求
           this.chosenAddressId = id
         } else {
@@ -416,10 +417,7 @@ export default {
 
   },
   beforeDestroy() {
-    this.$bus.$emit('from-path', this.path)
-    this.$bus.$emit('chosen-address-id', this.chosenAddressId)
-    this.$bus.$off('from-path')
-    this.$bus.$off('chosen-address-id')
+
   },
   created() {
     this.$bus.$on('chosen-address-id', (params) => {
