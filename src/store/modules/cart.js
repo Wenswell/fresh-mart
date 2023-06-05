@@ -4,44 +4,7 @@ import { getCartListApi, updateItemApi, selectAllItemApi,getCartCountApi } from 
 
 // 购物车商品列表
 const state = {
-  list: [
-    //   {
-    //     "id": "1369155859933827074",
-    //     "skuId": "1369155866451775490",
-    //     "name": "钻石陶瓷涂层多用锅18cm 小奶锅",
-    //     "attrsText": "颜色:蓝色 产地:中国 尺寸:30cm ",
-    //     "specs": [],
-    //     "picture": "http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-05/6fdcac19-dd44-442c-9212-f7ec3cf3ed18.jpg",
-    //     "price": "128.00",
-    //     "nowPrice": "128.00",
-    //     "nowOriginalPrice": "128.00",
-    //     "selected": false,
-    //     "stock": 99957,
-    //     "count": 5,
-    //     "isEffective": true,
-    //     "discount": null,
-    //     "isCollect": false,
-    //     "postFee": 0
-    //   },
-    //   {
-    //     "id": "1369155859933827074",
-    //     "skuId": "1369155868389543937",
-    //     "name": "钻石陶瓷涂层多用锅18cm 小奶锅",
-    //     "attrsText": "颜色:蓝色 产地:日本 尺寸:20cm ",
-    //     "specs": [],
-    //     "picture": "http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-05/6fdcac19-dd44-442c-9212-f7ec3cf3ed18.jpg",
-    //     "price": "128.00",
-    //     "nowPrice": "128.00",
-    //     "nowOriginalPrice": "128.00",
-    //     "selected": true,
-    //     "stock": 99948,
-    //     "count": 4602,
-    //     "isEffective": true,
-    //     "discount": null,
-    //     "isCollect": false,
-    //     "postFee": 0
-    //   }
-  ]
+  list: []
 }
 
 const getters = {
