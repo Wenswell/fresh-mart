@@ -7,22 +7,29 @@
       <van-cell title="单元格" value="内容" />
       <van-cell title="单元格" value="内容" label="描述信息" />
     </van-cell-group>
+
+    <ShowAddressCard :showAddressList="{a:'asdas',vv:'asdasf'}"></ShowAddressCard>
+
     <!-- <p>{{ getToBuyOrderInfo }}</p>
     <p>{{ getToBuyOrderInfo.goods }}</p>
     <p>{{ getToBuyOrderInfo.goods[0].count }}</p>
     <p>{{ getToBuyOrderInfo.userAddresses[0].id }}</p> -->
     +<p>{{ { goods, userAddresses } = getToBuyOrderInfo }}</p>
-    <!-- ++<p>{{ goods[0].skuId }}</p>
+    ++<p>{{ goods }}</p>
     +++<p>{{ goods[0].count }}</p>
-    ++++<p>{{ userAddresses[0].id }}</p> -->
+    ++++<p>{{ userAddresses[0].id }}</p>
 
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import ShowAddressCard from '@/views/Shop/ShowAddressCard.vue'
 
 export default {
+  components: {
+    ShowAddressCard,
+  }, 
   data() {
     return {
       toBuyOrderInfo: {},

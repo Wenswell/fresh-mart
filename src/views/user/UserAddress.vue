@@ -19,8 +19,8 @@
               <span class="">{{ item.fullLocation }} {{ item.address }}</span>
             </div>
             <template v-if="fromPath !== '/layout/my'">
-              <van-button v-show="index !== chosen" class="chosen-btn" type="primary" plain size="mini">使用</van-button>
-              <div v-show="index == chosen" class="chosen-hook">✔</div>
+              <van-button v-show="item.id !== chosen" class="chosen-btn" type="primary" plain size="mini">使用</van-button>
+              <div v-show="item.id == chosen" class="chosen-hook">✔</div>
             </template>
           </div>
           <div class="address-div-bottom">
@@ -170,10 +170,15 @@ export default {
     // 事件总线获取上个页面、
     // 目前只有商品sku和我的 2个页面能到达此页
     this.$bus.$on('from-path', (params) => {
+      // console.log("this.$bus.$on from-path params", params)
       this.fromPath = params ?? '/layout/my';
-      console.log("+params ?? '/layout/my'", params ?? '/layout/my')
+      // console.log("this.fromPath", this.fromPath)
+      // console.log("+params ?? '/layout/my'", params ?? '/layout/my')
     })
-    this.$bus.$on('chosen-address-index', params => this.chosen = params)
+    this.$bus.$on('chosen-address-id', params => {
+      console.log(" this.$bus.$onchosen-address-id", params)
+      this.chosen = params
+    })
     this.updateNewAddressList()
   },
   mounted() {
@@ -183,9 +188,6 @@ export default {
   watch: {
     // 监视默认地址选择并更新默认地址
     selectDefault(newVal) {
-      console.log("newVal", newVal)
-      console.log("this.userAddresses[newVal].id", this.userAddresses[newVal].id)
-      console.log("this.userAddresses[newVal]", this.userAddresses[newVal])
       changeAddressApi(this.userAddresses[newVal].id, this.userAddresses[newVal]).then(res => {
         console.log("更改默认地址结果 res", res)
         if(res.code == 1){

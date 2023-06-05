@@ -156,12 +156,7 @@
       :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
       @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
       <template #sku-body-top>
-        <!-- 收货 信息地址栏 -->
-        <van-cell @click="toAddress" class="address-div" center :is-link="true" icon="location-o">
-          <template #title>
-            <div v-for="item in showAddressList" :key="item">{{ item }}</div>
-          </template>
-        </van-cell>
+        <ShowAddressCard :showAddressList="showAddressList"></ShowAddressCard>
       </template>
     </van-sku>
 
@@ -171,8 +166,13 @@
 
 <script>
 import { getProductDetailApi, getProductEvaluateApi, addProductToCartApi, getEvaluatePageApi } from '@/api/product'
+import ShowAddressCard from './ShowAddressCard.vue'
 
 export default {
+  components: {
+    ShowAddressCard,
+  }, 
+
   data() {
     return {
       productId: "",  // 当前商品id / 动态路由地址
@@ -200,14 +200,6 @@ export default {
     }
   },
   methods: {
-    toAddress() {
-      this.path = this.$route.path
-      // this.$router.push('/user/address')
-      // 防止 product->address->product->address
-      this.$router.replace({
-        name: 'address' 
-      })
-    },
 
     // 获取购物车数量
     async getCartCount() {
@@ -351,13 +343,15 @@ export default {
         if(result.userAddresses.length){
           // 保存一份地址列表至data
           this.addressList = result.userAddresses
-          const { receiver, contact, fullLocation, address } = this.chosenAddressId 
+          const { id,receiver, contact, fullLocation, address } = this.chosenAddressId 
           // 提取选择的地址
           ? result.userAddresses.find(address => address.id === this.chosenAddressId) 
           // 否则 未选择地址（默认为0）则使用默认地址
           : result.userAddresses.find(address => address.isDefault !== 0);
           // 保存至data用于展示
           this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+          // 保存至data用于发送订单请求
+          this.chosenAddressId = id
         } else {
           this.$toast('没有添加地址！')
         }
@@ -423,8 +417,9 @@ export default {
   },
   beforeDestroy() {
     this.$bus.$emit('from-path', this.path)
-    this.$bus.$emit('chosen-address-index', this.chosenAddressIndex)
-    this.$bus.$off('chosen-address-index')
+    this.$bus.$emit('chosen-address-id', this.chosenAddressId)
+    this.$bus.$off('from-path')
+    this.$bus.$off('chosen-address-id')
   },
   created() {
     this.$bus.$on('chosen-address-id', (params) => {
@@ -437,6 +432,8 @@ export default {
 
     // 获取动态路由参数 -- 商品id
     this.productId = this.$route.params.id
+
+    this.path = this.$route.fullPath
 
     // 商品id -> 商品详情
     this.getProductById(this.productId)
@@ -819,16 +816,4 @@ export default {
 
 
 
-// sku 弹窗 地址栏
-
-.address-div {
-  padding: 8px;
-  font-size: 13px;
-
-  //两侧图标大小
-  >i {
-    margin: 8px;
-    font-size: 22px;
-  }
-}
 </style>
