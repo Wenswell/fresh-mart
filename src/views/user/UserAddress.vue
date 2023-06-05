@@ -1,6 +1,7 @@
 <template>
   <div class="address-page">
-    <van-nav-bar class="top-bar" title="收货地址" left-arrow @click-left="$router.push(fromPath)" />
+    <van-nav-bar class="top-bar" title="收货地址" left-arrow @click-left="$router.back()" />
+    <!-- <van-nav-bar class="top-bar" title="收货地址" left-arrow @click-left="$router.push(fromPath)" /> -->
     <van-dialog class="address-edit-div" v-model="show" :title="Object.keys(defalutAddress).length === 0 ?'新增收货地址':'修改收货地址'" :showConfirmButton="false">
       <van-address-edit :is-saving="btnDisable" class="address-edit" :area-list="areaList" show-set-default :address-info="defalutAddress"
         :area-columns-placeholder="['请选择', '请选择', '请选择']" @save="onSave" />
@@ -12,7 +13,7 @@
       <div class="address-div" :class="{ 'chosen': fromPath !== '/layout/my' && index == chosen }"
         v-for="(item, index) in userAddresses" :key="item.id">
         <div class="address-div-content">
-          <div class="address-div-text" @click="chosenThis(index)">
+          <div class="address-div-text" @click="chosenThis(item.id)">
             <div>
               <span class="">{{ item.receiver }}, {{ item.contact }}</span>
               <span class="">{{ item.fullLocation }} {{ item.address }}</span>
@@ -23,7 +24,7 @@
             </template>
           </div>
           <div class="address-div-bottom">
-            <van-radio :name="index">默认</van-radio>
+            <van-radio class="chosen-defalut-radio" :name="index"></van-radio>
             <van-button @click="onEditAddress(index)" type="primary" plain size="mini">修改</van-button>
           </div>
         </div>
@@ -150,18 +151,20 @@ export default {
     },
     // 从商品详情页面来选择地址
     // 选择模式使用
-    chosenThis(index) {
-      this.chosen = index
+    chosenThis(id) {
+      this.chosen = id
       setTimeout(() => {
-      this.$router.push(this.fromPath)  
-    }, 150)  
-      console.log("index", index)
+      // 防止 product->address->product->address
+      this.$router.replace(this.fromPath)  
+    }, 50)  
+      console.log("chosenThis id", id)
     },
   },
   beforeDestroy() {
-    this.$bus.$emit('chosen-address-index', this.chosen)
+    this.$bus.$emit('chosen-address-id', this.chosen)
+    this.$bus.$emit('open-sku', true)
     this.$bus.$off('from-path')
-    this.$bus.$off('chosen-address-index')
+    this.$bus.$off('chosen-address-id')
   },
   created() {
     // 事件总线获取上个页面、
@@ -265,6 +268,20 @@ export default {
       >button {
         width: 45px;
         height: 25px;
+      }
+      // van-radio__icon van-radio__icon--round van-radio__icon--checked
+      // van-radio__icon van-radio__icon--round
+      .chosen-defalut-radio{
+        &::after{
+          content: '默认';
+          font-size: 14px;
+          margin: 0 5px 2px;
+          color: #9C9C9C;
+        }
+        &[aria-checked="true"]::after{
+          content: '已设默认';
+          color: #5AD4EA;
+        }
       }
     }
   }

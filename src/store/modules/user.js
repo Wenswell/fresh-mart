@@ -28,8 +28,17 @@ const getters = {
 
   const actions = {
     // 点击 直接购买 直接【预】提交单个物品的订单
+      // ----------以下为使用参考----------
+      // this.$store.dispatch('user/toBuyNow', {
+      //   skuId: data.selectedSkuComb.id,
+      //   count: data.selectedNum,
+      //   addressId: this.chosenAddressId,
+      // })
+      // // 提交后转到订单页面
+      // this.$router.push('/order')
+      // ----------以上为使用参考----------
     async toBuyNow(context,obj) {
-      // console.log("toBuyNow--GET--obj", obj)
+      console.log("toBuyNow--GET--obj", obj)
       const res = await toBuyNowApi(obj)
       // console.log("++ toBuyNow res", res)
       context.commit('setOrder', res.result)
