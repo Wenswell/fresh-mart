@@ -156,12 +156,7 @@
       :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
       @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
       <template #sku-body-top>
-        <!-- 收货 信息地址栏 -->
-        <van-cell @click="toAddress" class="address-div" center :is-link="true" icon="location-o">
-          <template #title>
-            <div v-for="item in showAddressList" :key="item">{{ item }}</div>
-          </template>
-        </van-cell>
+        <ShowAddressCard :showAddressList="showAddressList" :chosenAddressId="chosenAddressId"></ShowAddressCard>
       </template>
     </van-sku>
 
@@ -171,8 +166,13 @@
 
 <script>
 import { getProductDetailApi, getProductEvaluateApi, addProductToCartApi, getEvaluatePageApi } from '@/api/product'
+import ShowAddressCard from './ShowAddressCard.vue'
 
 export default {
+  components: {
+    ShowAddressCard,
+  }, 
+
   data() {
     return {
       productId: "",  // 当前商品id / 动态路由地址
@@ -194,16 +194,12 @@ export default {
 
       addressList: [],  // 收货地址列表
       showAddressList: [],  // 收货信息地址，只用于展示
-      chosenAddressIndex: 0,  // 接收选择的地址序号
+      chosenAddressId: 0,  // 接收选择的地址id
 
       path: ''    //当前路由路径
     }
   },
   methods: {
-    toAddress() {
-      this.path = this.$route.path
-      this.$router.push('/user/address')
-    },
 
     // 获取购物车数量
     async getCartCount() {
@@ -261,7 +257,7 @@ export default {
     // 直接购买 - 已选sku
     onBuyClicked(data) {
       // console.log("onBuyClicked", JSON.stringify(data))
-      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址序号:' + this.chosenAddressIndex +'\n直接前往购买');
+      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址id:' + this.chosenAddressIndex +'\n直接前往购买');
       // console.group('直接前往购买')
       // console.group('所有信息',data)
       // console.group('购买数量',data.selectedNum)
@@ -272,10 +268,10 @@ export default {
       this.$store.dispatch('user/toBuyNow', {
         skuId: data.selectedSkuComb.id,
         count: data.selectedNum,
-        addressId: this.addressList[this.chosenAddressIndex].id,
+        addressId: this.chosenAddressId,
       })
       // 提交后转到订单页面
-      this.$router.push('/order')
+      this.$router.push('/order/check')
     },
 
     // 商品id -> API -> 商品详细内容
@@ -345,9 +341,18 @@ export default {
         this.sku = sku
 
         if(result.userAddresses.length){
+          // 保存一份地址列表至data
           this.addressList = result.userAddresses
-          const { receiver, contact, fullLocation, address } = result.userAddresses[this.chosenAddressIndex] ?? result.userAddresses.find(address => address.isDefault !== 0) ;
+          const { id,receiver, contact, fullLocation, address } = this.chosenAddressId 
+          // 提取选择的地址
+          ? result.userAddresses.find(address => address.id === this.chosenAddressId) 
+          // 否则 未选择地址（默认为0）则使用默认地址
+          : result.userAddresses.find(address => address.isDefault !== 0);
+          // 保存至data用于展示
           this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+          console.log("this.showAddressList", this.showAddressList)
+          // 保存至data用于发送订单请求
+          this.chosenAddressId = id
         } else {
           this.$toast('没有添加地址！')
         }
@@ -412,18 +417,21 @@ export default {
 
   },
   beforeDestroy() {
-    this.$bus.$emit('from-path', this.path)
-    this.$bus.$emit('chosen-address-index', this.chosenAddressIndex)
-    this.$bus.$off('chosen-address-index')
+
   },
   created() {
-    this.$bus.$on('chosen-address-index', (params) => {
+    this.$bus.$on('chosen-address-id', (params) => {
+      console.log("=======chosen-address-id", params)
       // 接收选择的地址序号
-      this.chosenAddressIndex = params
+      this.chosenAddressId = params
     })
+    // 打开SKU选择弹窗
+    this.$bus.$on('open-sku', params => this.skuShow = Boolean(params))
 
     // 获取动态路由参数 -- 商品id
     this.productId = this.$route.params.id
+
+    this.path = this.$route.fullPath
 
     // 商品id -> 商品详情
     this.getProductById(this.productId)
@@ -806,16 +814,4 @@ export default {
 
 
 
-// sku 弹窗 地址栏
-
-.address-div {
-  padding: 8px;
-  font-size: 13px;
-
-  //两侧图标大小
-  >i {
-    margin: 8px;
-    font-size: 22px;
-  }
-}
 </style>

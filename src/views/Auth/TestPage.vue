@@ -138,15 +138,16 @@ export default {
     test1() {
       console.log('---test0---')
 
-      return request(`/member/profile`, 'put', { 
-        nickname:'技通武林玉面君子',
-        gender:'男',
-        birthday:'1357-02-04',
-        provinceCode:'320000',
-        cityCode:'320500',
-        countyCode:'320508',
-        profession:'南・慕・容',
-      })
+      return request(`/member/address/1665310987344941057`, 'DELETE', {id:1665310987344941057} )
+      // return request(`/member/profile`, 'put', { 
+      //   nickname:'技通武林玉面君子',
+      //   gender:'男',
+      //   birthday:'1357-02-04',
+      //   provinceCode:'320000',
+      //   cityCode:'320500',
+      //   countyCode:'320508',
+      //   profession:'南・慕・容',
+      // })
       
 
 

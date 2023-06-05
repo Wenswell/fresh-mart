@@ -36,6 +36,10 @@ export const getAddressListApi = () => {
 
 // 地址 修改原有地址
 export const changeAddressApi = (id, newObj) => {
+  console.group("changeAddressApi", changeAddressApi)
+  console.log("id", id)
+  console.log("newObj", newObj)
+  console.groupEnd()
   return request(`/member/address/${id}`, 'PUT', newObj)
 }
 
