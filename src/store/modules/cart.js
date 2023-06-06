@@ -1,4 +1,4 @@
-import { getCartListApi, updateItemApi, selectAllItemApi,getCartCountApi } from "@/api/cart";
+import { getCartListApi, updateItemApi, selectAllItemApi,getCartCountApi,deleteCartListApi } from "@/api/cart";
 
 // 购物车模块
 
@@ -46,6 +46,27 @@ const getters = {
 }
 
 const actions = {
+
+  // 移除部分商品
+  async removeSomeItem(context){
+    // 获取选中的商品
+    const selectedSkuIdList = context.getters['validSelectedList'].map(item=>item.skuId)
+    // console.log("removeSomeItem selectedItemList", selectedSkuIdList)
+    const res = await deleteCartListApi({  
+      // ids:[],
+      ids:selectedSkuIdList,
+      clearAll:false,
+      clearInvalid:false,
+    })
+    // 删除本地商品
+
+    console.log("删除部分商品", res.msg)
+
+  },
+
+  // 清除无效商品
+
+  // 清空购物车
 
   // 全选 / 全部取消
   selectAllItem(context, selected) {
@@ -97,6 +118,10 @@ const actions = {
 }
 
 const mutations = {
+
+
+  // 移除本地购物车列表的部分商品
+  // removeSomeItemLocal()
 
   // 修改本地的有效物品全选状态
   selectAllItemLocal(state, payload) {

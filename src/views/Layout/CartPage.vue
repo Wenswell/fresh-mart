@@ -1,7 +1,7 @@
 <template>
   <div class="cart-container">
     <!-- 顶栏 -->
-    <van-nav-bar :fixed="true" title="购物车" right-text="管理" @click-right="onClickRight" />
+    <van-nav-bar :fixed="true" title="购物车" :right-text="editMode?'退出管理':'管理'" @click-right="onClickRight" />
 
     <!-- 购物车 商品列表 子循环 每个店铺的商品 -->
     <div v-for="item in list" :key="item.skuId">
@@ -67,10 +67,18 @@
     </div>
 
     <!-- 底部 提交订单栏 -->
-    <van-submit-bar class="submit-bar" :price="getTotalPrice * 100" button-text="结算" @submit="onSubmit"
+    <van-submit-bar v-show="!editMode" class="submit-bar" :price="getTotalPrice * 100" button-text="结算" @submit="onSubmit"
       suffix-label="(不含运费)" button-color="#5AD4EA">
       <van-checkbox :disabled="isDisabled" v-model="checkedAll">全选</van-checkbox>
     </van-submit-bar>
+
+    <div v-show="editMode" class="bottom-in-edit-mode">
+      <van-checkbox class="edit-mode-check" :disabled="isDisabled" v-model="checkedAll">全选</van-checkbox>
+      <!-- <div class="edit-mode-text"><van-icon name="delete-o" />清除无效商品</div> -->
+      <van-button @click="onRemoveInvalid" class="edit-mode-btn" round><van-icon name="delete-o" /> 移除无效商品</van-button>
+      <van-button @click="onAddToCollect" class="edit-mode-btn" round>移入收藏</van-button>
+      <van-button @click="onDelete" class="edit-mode-btn" round>删除</van-button>
+    </div>
 
   </div>
 </template>
@@ -83,9 +91,32 @@ export default {
     return {
       cartListFromApi: '',
       sumChecked: false,
+      editMode:true,
     };
   },
   methods: {
+onRemoveInvalid(){
+  console.group('onRemoveInvalid')
+  this.$toast('onRemoveInvalid')
+  console.groupEnd()
+},
+onAddToCollect(){
+  console.group('onAddToCollect')
+  this.$toast('onAddToCollect')
+  console.groupEnd()
+},
+onDelete(){
+  console.group('onDelete')
+  this.$toast('onDelete')
+  // 全选时清空
+  if(this.checkedAll){
+    this.$toast('清空购物车')
+  } else {
+    // 删除部分
+  this.$store.dispatch('cart/removeSomeItem')
+  }
+  console.groupEnd()
+},
 
     updateItem(item) {
       console.log("updateItem")
@@ -104,6 +135,7 @@ export default {
     },
     onClickRight() {
       console.log("右上'管理'")
+      this.editMode = !this.editMode
     },
     onSubmit() {
       console.log("点击'结算'")
@@ -160,6 +192,39 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+// 编辑模式 底栏
+.bottom-in-edit-mode{ 
+  height: 50px;
+  bottom: 50px;
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  // background-color:antiquewhite;
+  font-size: 14px;
+  .edit-mode-check{
+    flex: 1;
+  }
+  .edit-mode-text{
+    line-height: 14px;
+    color:coral;
+  }
+  .edit-mode-btn:last-child{
+    background: linear-gradient(#ff005f, #ff1b00);
+    color: white;
+  }
+  .edit-mode-btn{
+    height: 30px;
+    padding: 0 10px;
+  }
+}
+
+
+//顶栏
 .shop-title {
   height: 40px;
 }
@@ -318,4 +383,5 @@ div.goods-card {
   margin-bottom: 49px;
   padding: 0 10px;
 }
+
 </style>
