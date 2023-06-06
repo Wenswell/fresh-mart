@@ -1,8 +1,7 @@
 <template>
-  <div>
 
         <!-- 收货 信息地址栏 -->
-        <van-cell @click="toAddress" class="address-div" center :is-link="true" icon="location-o">
+        <van-cell @click="toAddress" class="address-div" center :is-link="!banEdit" icon="location-o">
           <template #title>
             <div v-for="(item,index) in showAddressList" :key="index">{{ item }}</div>
           </template>
@@ -16,22 +15,25 @@ export default {
     ProductCard,
   }, 
 -->
-  </div>
 </template>
 
 <script>
 export default {
-  props: ['showAddressList', 'chosenAddressId'],
+  props: ['showAddressList', 'chosenAddressId', 'banEdit'],
   data() {
     return {
     }
   },
-beforeCreate(){console.log('%c ShowAddressCard - beforeCreate','color:#f3f;')},
-created(){console.log('%c ShowAddressCard - created','color:#f3f;')},
-beforeMount(){console.log('%c ShowAddressCard - beforeMount','color:#f3f;')},
-mounted(){console.log('%c ShowAddressCard - mounted','color:#f3f;')},
-beforeUpdate(){console.log('%c ShowAddressCard - beforeUpdate','color:#f3f;')},
-updated(){console.log('%c ShowAddressCard - updated','color:#f3f;')},
+// beforeCreate(){console.log('%c ShowAddressCard - beforeCreate','color:#f3f;')},
+// beforeMount(){console.log('%c ShowAddressCard - beforeMount','color:#f3f;')},
+// mounted(){console.log('%c ShowAddressCard - mounted','color:#f3f;')},
+// beforeUpdate(){console.log('%c ShowAddressCard - beforeUpdate','color:#f3f;')},
+// updated(){console.log('%c ShowAddressCard - updated','color:#f3f;')},
+created(){
+  console.log('%c ShowAddressCard - created','color:#f3f;')
+  // 禁用点击
+  if(this.banEdit) this.toAddress = ()=>{}
+},
 beforeDestroy(){
   console.log('%c ShowAddressCard - beforeDestroy','color:#f3f;')
   console.log("this.chosenAddressId", this.chosenAddressId)
@@ -40,12 +42,14 @@ beforeDestroy(){
     this.$bus.$emit('chosen-address-id', this.chosenAddressId)
     this.$bus.$off('chosen-address-id')
 },
-destroyed(){console.log('%c ShowAddressCard - destroyed','color:#f3f;')},
+// destroyed(){console.log('%c ShowAddressCard - destroyed','color:#f3f;')},
 
   methods:{
 
 
     toAddress() {
+  console.log('this.props',this.props)
+  console.log('this.banEdit',this.banEdit)
       //先保存当前路径（beforeDestroy执行时已经切换到下一个页面了
       this.path = this.$route.path 
       

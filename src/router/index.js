@@ -17,6 +17,10 @@ const routes = [
         path: 'check',
         component: () => import('@/views/Order/CheckOrder'),
       },
+      {
+        path: 'pay',
+        component: () => import('@/views/Order/PayOrder'),
+      },
     ],
   },
   {
