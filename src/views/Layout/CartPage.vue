@@ -51,13 +51,13 @@
             </div>
           </template>
 
-          <!-- 该店铺的商品 商品卡片 计数器 -->
-          <template #num>
+          <!-- <template #num> -->
             <!-- <van-stepper @change="sumPrice" v-model="checkResult[item.itemId]" :min="1" :max="item.amount.max" integer input-width="38px" -->
-            <van-stepper @change="updateItem(item)" v-model="item.count" :disabled="!item.isEffective" :min="1"
-              :max="item.stock" integer input-width="38px" button-size="26px" class="stepper" />
-          </template>
-        </van-card>
+              <!-- </template> -->
+            </van-card>
+            <!-- 该店铺的商品 商品卡片 计数器 -->
+          <van-stepper @change="updateItem(item)" v-model="item.count" :disabled="!item.isEffective" :min="1"
+            :max="item.stock" integer input-width="38px" button-size="26px" class="stepper" />
         <template #right>
 
           <!-- 该店铺的商品 商品卡片 左滑显示删除按钮 -->
@@ -89,8 +89,6 @@ export default {
 
     updateItem(item) {
       console.log("updateItem")
-      // console.log(skuId)
-      // console.log(payload)
 
       this.$store.dispatch('cart/updateCart', {
         skuId: item.skuId,
@@ -109,6 +107,9 @@ export default {
     },
     onSubmit() {
       console.log("点击'结算'")
+      this.$store.dispatch('user/createOrder')
+      // 提交后转到订单页面
+      this.$router.push('/order/check')
     },
 
     beforeClose({ name, position, instance }) {
@@ -191,6 +192,9 @@ export default {
 
 /deep/ .stepper {
   outline: solid;
+  position: absolute;
+  right: 8px;
+  bottom: -8px;
 }
 
 

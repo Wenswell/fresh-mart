@@ -1,24 +1,47 @@
 <template>
-  <div>
-    确认订单（未提交）
-    <van-nav-bar title="确认订单" left-text="返回" left-arrow @click-left="onClickLeft" />
+  <div class="check-order">
 
-    <van-cell-group>
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" label="描述信息" />
-    </van-cell-group>
+    <ShowAddressCard :showAddressList="processedOrderInfo.getShowAddressList[0]"
+      :chosenAddressId="processedOrderInfo.chosenAddressId"></ShowAddressCard>
 
-    <ShowAddressCard 
-    :showAddressList="processedOrderInfo.getShowAddressList[0]"
-    :chosenAddressId="processedOrderInfo.chosenAddressId"
-    ></ShowAddressCard>
+    <div class="product">
+      <van-cell title="【API中无店铺名称】" />
+      <div class="product-card" v-for="item in getToBuyOrderInfo.goods" :key="item.skuId">
+        <img class="product-card-left-img" :src="item.picture">
+        <div class="product-card-right">
+          <span class="product-name">{{ item.name }}</span>
+          <span class="product-desc">{{ item.attrsText }}</span>
+          <span class="product-price">{{ item.payPrice }}</span>
+        </div>
+        <div v-if="getToBuyOrderInfo.goods.length!==1" class="product-card-num"><van-icon name="cross" size="12" />{{ item.count }}</div>
+      </div>
+      <div v-if="getToBuyOrderInfo.goods.length===1" class="product-bottom-count">
+        <span>购买数量</span>
+        <van-stepper v-model="stepperValue" />
+      </div>
+    </div>
 
+    <div class="product-sum">
+      <span class="sum-left">商品总价<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPrice }}.00</span></span>
+      <span class="sum-left">邮费<span class="sum-right">{{ getToBuyOrderInfo.summary.postFee }}.00</span></span>
+      <span class="sum-left">折扣<span class="sum-right">{{ getToBuyOrderInfo.summary.discountPrice }}.00</span></span>
+      <span class="sum-left">合计<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPayPrice }}.00</span>
+      </span>
+    </div>
 
-    <!-- +<p>{{ { goods, userAddresses } = getToBuyOrderInfo }}</p> -->
-    {{ getToBuyOrderInfo }}
-    skuId: <p>{{ getToBuyOrderInfo.goods[0].skuId }}</p>
-    count: <p>{{ getToBuyOrderInfo.goods[0].count }}</p>
-    address id: <p>{{ getToBuyOrderInfo.userAddresses[0].id }}</p>
+    <div class="pay-channel">
+      <div class="pay-method" :class="{ chosen: payChosen == 'alipay' }" @click="payChosen = 'alipay'">
+        <van-icon name="alipay" size="16" color="#0273FD" />
+        支付宝
+      </div>
+      <div class="pay-method" :class="{ chosen: payChosen == 'wechat-pay' }" @click="clickWechatPay">
+        <van-icon name="wechat-pay" size="16" color="#24B510" />
+        微信支付
+      </div>
+    </div>
+
+    <van-submit-bar class="submit-bar" :price="getToBuyOrderInfo.summary.totalPayPrice * 100" button-text="提交订单"
+      @submit="onSubmit" />
 
   </div>
 </template>
@@ -34,12 +57,43 @@ export default {
   data() {
     return {
       toBuyOrderInfo: {},
+      radio: '1',
+      payChosen: 'alipay',
+      // chosenAddress:'',
     }
   },
   methods: {
-    onClickLeft() {
-      this.$toast('确定取消订单吗？')
+    clickWechatPay() {
+      this.payChosen = 'wechat-pay'
+      // this.$toast("只支持支付宝")
+      // setTimeout(() => {
+      //   this.payChosen = 'alipay'
+      // }, 300);
     },
+    onSubmit(){
+      console.group('提交订单 -> 结算')
+      // console.log("chosenAddress", this.chosenAddress)
+      // console.log("getToBuyOrderInfo", this.getToBuyOrderInfo)
+      let newData = {
+        deliveryTimeType:1,
+        payType:1,
+        payChannel:this.payChosen=='alipay'?1:2,
+        buyerMessage:'',
+        addressId:this.getToBuyOrderInfo.userAddresses[0].id,
+        goods: this.getToBuyOrderInfo.goods.map(good => ({
+          skuId: good.skuId,
+          count: good.count   
+        }))
+      }
+      
+      console.log("!!newData", newData)
+      
+      this.$store.dispatch('user/submitOrderApi', newData)
+      
+      console.groupEnd()
+
+      this.$router.replace('/order/pay')
+    }
   },
   beforeCreate() {
     // let toBuyOrderInfo = this.$store.getters['user/getToBuyOrderInfo']
@@ -49,9 +103,16 @@ export default {
     // console.log("订单提交所需：id",toBuyOrderInfo.userAddresses[0].id)
     this.$bus.$on('chosen-address-id', newId => {
       console.log("+++this.$bus.$on【chosen-address-id】", newId)
-      this.chosen = newId
+      // this.chosenAddress = newId
       // 需要根据修改的地址更新订单
-      this.$store.dispatch('user/toBuyNowUpdateAddress', newId)
+      let toBuyOrderInfo = this.$store.getters['user/getToBuyOrderInfo']
+      if(toBuyOrderInfo.goods.length===1){
+        // 直接购买时可以直接用API更新订单
+        this.$store.dispatch('user/toBuyNowUpdateOrder', { addressId: newId })
+      } else {
+        // 否则更新本地信息
+        this.$store.dispatch('user/editCreatedOrder', newId)
+      }
 
     })
   },
@@ -62,7 +123,7 @@ export default {
       const orderInfo = this.getToBuyOrderInfo;
       const getShowAddressList = orderInfo.userAddresses.map(({ receiver, contact, fullLocation, address }) => {
         const formattedLocation = fullLocation.split(' ').slice(1).join('')
-        return [`${receiver} ${contact} ${formattedLocation}`,address]
+        return [`${receiver} ${contact} ${formattedLocation}`, address]
       })
       const chosenAddressId = orderInfo.userAddresses[0].id
       console.log("chosenAddressId", chosenAddressId)
@@ -70,9 +131,145 @@ export default {
 
       return { getShowAddressList, chosenAddressId }
     },
+    stepperValue: {
+      get() {
+        // 返回当前物品数值
+        return this.getToBuyOrderInfo.goods[0].count
+      },
+      set(num) {
+        // 更新订单信息
+        this.$store.dispatch('user/toBuyNowUpdateOrder', { count: num })
+      }
+    }
+
   }
 
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+// 整个界面
+.check-order {
+  margin-top: 50px;
+
+  >div:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+}
+
+// 商品卡片（图片+名称+描述+价格
+.product-card {
+  background: #F4F4F4;
+  display: flex;
+  padding: 10px 15px;
+  gap: 10px;
+  font-size: 14px;
+
+  .product-card-left-img {
+    width: 85px;
+    height: 100%;
+    background: white;
+    border-radius: 4px;
+  }
+
+  .product-card-right {
+    height: 90px;
+    display: flex;
+    flex: 1;
+    gap: 2px;
+    flex-direction: column;
+
+    :nth-child(-n+2) {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* 显示两行 */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      /* 使用省略号来表示未显示的文本 */
+    }
+
+    .product-desc {
+      font-size: 12px;
+      color: #9C9C9C;
+    }
+
+    .product-price {
+      bottom: -7px;
+      position: relative;
+
+      &::before {
+        content: '¥';
+      }
+    }
+  }
+
+  .product-card-num{
+    margin-top: 10px;
+  }
+}
+
+// 商品卡片下方的 购买数量
+.product-bottom-count {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 17px 10px 10px;
+  font-size: 14px;
+}
+
+// 最后的价格展示
+.product-sum {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 10px;
+  padding: 10px 10px;
+
+  .sum-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 5px;
+
+    border-bottom: 1px solid #F4F4F4;
+
+    .sum-right {
+      font-weight: bold;
+
+      &::before {
+        content: '¥';
+        margin-right: 2px;
+        font-size: 80%;
+      }
+    }
+  }
+}
+
+// 支付渠道
+.pay-channel {
+  padding: 10px;
+  background-color: white;
+  font-size: 14px;
+
+  .pay-method {
+    border-bottom: 1px solid #F4F4F4;
+    padding: 10px 0;
+
+    &.chosen::after {
+      content: '✔';
+      position: absolute;
+      right: 15px;
+    }
+  }
+}
+
+
+// 底部 提交订单
+.submit-bar>:first-child {
+  gap: 10px
+}
+</style>

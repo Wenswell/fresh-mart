@@ -1,4 +1,4 @@
-import { toBuyNowApi, getAddressListApi, changeAddressApi, addNewAddressApi } from "@/api/user";
+import { toBuyNowApi, getAddressListApi, changeAddressApi, addNewAddressApi,createOrderApi,submitOrderApi } from "@/api/user";
 
 // 用户模块
 const state = {
@@ -17,6 +17,8 @@ const state = {
 
   order: '',
 
+  payorder: {},
+
   // 登录后回跳路径
   redirectUrl: '/'
 }
@@ -29,7 +31,6 @@ const getters = {
     return [...state.address].sort((a, b) => {
       return a.isDefault === 0 ? -1 : b.isDefault === 0 ? 1 : 0;
     });
-
   },
   
   // 根据id获取对应地址
@@ -42,7 +43,14 @@ const getters = {
     return state.order
   },
 
+  // 获取订单【支付】信息
+  getToPayOrderInfo(state) {
+    return state.payorder
+  },
+
+  // 获取更新所需提交的订单信息
   getToBuyOrderToUpdateInfo(state){
+    console.log("getToBuyOrderToUpdateInfo state", state)
     return {
       skuId: state.order.goods[0].skuId,
       count: state.order.goods[0].count,
@@ -78,12 +86,37 @@ const actions = {
     context.commit('setOrder', res.result)
   },
 
-  async toBuyNowUpdateAddress(context, id){
-    const orderInfo = context.getters['getToBuyOrderToUpdateInfo']
-    orderInfo.addressId = id
-    const res = await toBuyNowApi(orderInfo)
+  
+  async toBuyNowUpdateOrder(context, updateObj){
+    console.log("[[]]toBuyNowUpdateOrder", updateObj)
+    const newOrderInfo = {...context.getters['getToBuyOrderToUpdateInfo'], ...updateObj}
+    const res = await toBuyNowApi(newOrderInfo)
     context.commit('setOrder', res.result)
   },
+
+  //购物车提交订单
+  async createOrder(context) {
+    const res = await createOrderApi()
+    context.commit('setOrder', res.result)
+  },
+
+  //更改多件商品的地址
+  async editCreatedOrder(context, id) {
+    const addressObj = context.getters['getAddressById'](id)
+    const orderObj = context.getters['getToBuyOrderInfo']
+    // orderObj.userAddresses.unshift (addressObj)
+    orderObj.userAddresses = [addressObj]
+    context.commit('setOrder', orderObj)
+  },
+
+  //提交订单->付款
+  async submitOrderApi(context, obj){
+    const res = await submitOrderApi(obj)
+    console.log("提交订单->付款 结果res", res)
+    context.commit('setpayorder', res.result)
+  },
+
+
 
   async updateAddressList(context) {
     const res = await getAddressListApi()
@@ -153,6 +186,10 @@ const mutations = {
   setOrder(state, result) {
     state.order = result
     console.log("NOW -- state.order", state.order)
+  },
+  setpayorder(state, result) {
+    state.payorder = result
+    console.log("NOW -+- state.payorder", state.payorder)
   },
 }
 

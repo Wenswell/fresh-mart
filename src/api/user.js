@@ -65,3 +65,32 @@ export const toBuyNowApi = ({
   })
 }
 
+
+
+// 生成订单 购物车结算
+export const createOrderApi = () => {
+  return request('/member/order/pre', 'GET')
+}
+
+
+
+// 提交订单 
+
+export const submitOrderApi = (obj) => {
+  return request('/member/order', 'POST', obj)
+}
+
+
+
+// 支付 - 支付宝 - APP用
+
+export const toPayViaAliPayApi = (id) => {
+  return request('/pay/aliPay/app', 'GET', {orderId:id})
+}
+
+// 支付 模拟支付
+
+export const mockPayApi = (id) => {
+  return request('/pay/mock', 'GET', {orderId:id})
+}
+
