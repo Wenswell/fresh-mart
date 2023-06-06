@@ -26,3 +26,21 @@ export const updateItemApi = ({ skuId, selected, count }) => {
 export const selectAllItemApi = ({ selected, ids }) => {
   return request('/member/cart/selected', 'put', { selected, ids })
 }
+
+// 移除 部分|所有|无效 商品
+
+export const deleteCartListApi = ({  
+  ids=[],
+  clearAll=false,
+  clearInvalid=false,
+}) => {
+  return request(
+    '/member/cart', 
+    'DELETE', 
+    {
+      ids,
+      clearAll,
+      clearInvalid,
+    }
+  )
+}

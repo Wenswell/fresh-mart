@@ -24,7 +24,8 @@
 <script>
 // import store from '@/store'
 import { mapMutations } from 'vuex'
-import request from '@/utils/require'
+// import request from '@/utils/require'
+import { toPayViaAliPayApi } from "@/api/user";
 
 
 
@@ -138,7 +139,10 @@ export default {
     test1() {
       console.log('---test0---')
 
-      return request(`/member/address/1665310987344941057`, 'DELETE', {id:1665310987344941057} )
+      const res = toPayViaAliPayApi('1666040402085416961')
+      console.log("toPayViaAliPayApi [][][]res", res)
+
+      // return request(`/member/address/1665310987344941057`, 'DELETE', {id:1665310987344941057} )
       // return request(`/member/profile`, 'put', { 
       //   nickname:'技通武林玉面君子',
       //   gender:'男',
