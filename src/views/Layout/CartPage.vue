@@ -91,7 +91,7 @@ export default {
     return {
       cartListFromApi: '',
       sumChecked: false,
-      editMode:true,
+      editMode:false,
     };
   },
   methods: {
@@ -159,8 +159,7 @@ onDelete(){
           this.$dialog.confirm({
             message: '确定删除吗？',
           }).then(() => {
-            console.log("deleteItem: " + name);
-            console.log("close");
+             this.$store.dispatch('cart/removeSomeItem',[name]).then(res => this.$toast(res==1?'已删除':'删除失败'))
             instance.close();
           }).catch(err => console.log(err));
           break;

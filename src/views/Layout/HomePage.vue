@@ -63,7 +63,7 @@
     <!--———— 2.4.2 主体 限时折扣 主体内容 ——————-->
     <!-- 横向展示优惠折扣商品 -->
     <div class="discount-div">
-      <van-grid :border="false" :column-num="10" style="width: 1210px; overflow: scroll">
+      <van-grid :border="false" :column-num="guesslikeproduct.length" :style="{ width: `calc(${guesslikeproduct.length} * 120px)` }" style="overflow: scroll">
         <van-grid-item v-for="(item, index) in guesslikeproduct" :key="index" @click="$router.push(`/shop/products/${item.id}`)">
           <van-image class="discount-img-div" :src="item.picture" />
           <div class="nowPrice bigTxt">{{ item.price }}</div>

@@ -1,4 +1,5 @@
-import {toBuyNowApi,getAddressListApi,changeAddressApi,addNewAddressApi,createOrderApi,submitOrderApi,} from "@/api/user"
+import {toBuyNowApi,getAddressListApi,changeAddressApi,addNewAddressApi,createOrderApi,submitOrderApi,getHistoryApi} from "@/api/user"
+
 
 // 用户模块
 const state = {
@@ -26,6 +27,25 @@ const state = {
 }
 
 const getters = {
+
+  // 获取用户名、头像
+  getUserNameImg(state){
+    return {name:state.profile.account,img:state.profile.avatar}
+  },
+
+  // 获取历史记录数量
+  async getHistoryNum(){
+    return await getHistoryApi({})
+  },
+
+  //获取收藏数量
+  getCollectNum(state){
+    return state.collect.counts
+  },
+
+  getCollect(state){
+    return state.collect
+  },
 
   // 获取所有地址
   getAddressList(state) {
@@ -70,6 +90,15 @@ const getters = {
 }
 
 const actions = {
+
+  //获取历史记录
+  async getHistoryPage(context, page){
+    const res = await getHistoryApi({page:page})
+    // return await getHistoryApi({})
+    // console.log("res", res)
+    return res.result
+  },
+
   
   // 点击 直接购买 直接【预】提交单个物品的订单
   // ----------以下为使用参考----------
@@ -171,8 +200,22 @@ const actions = {
 
 const mutations = {
   // 保存收藏信息
-  setCollect(state,payolad){
-    state.collect = payolad
+  setCollect(state,newObj){
+    // 初始化
+    if(newObj.page == 1) {
+      state.collect = newObj
+      // 只有加载数据更新才会更新本地数据
+    } else if (newObj.page > state.collect.page) {
+      state.collect = {
+        ...newObj,
+        items: [
+          // 保留顺序合并
+          ...state.collect.items.map(item => ({ ...item })) ,   
+          ...newObj.items.map(item => ({ ...item }))   
+        ]  
+      }
+    }
+    console.groupEnd()
   },
 
   

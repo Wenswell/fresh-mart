@@ -66,9 +66,11 @@ const actions = {
   // 收藏商品
   // 获取收藏列表
   async updateCollect(context, page) {
+    console.log("updateCollect")
     const res = await getCollectObjApi({page:page})
     console.log("updateCollectApi res", res)
-    context.commit('setCollect', res.result)
+    context.commit('user/setCollect', res.result,{ root: true })
+    return 'done'
   },
 
   //添加收藏 - 购物车用
@@ -97,9 +99,9 @@ const actions = {
 
 
   // 移除部分商品
-  async removeSomeItem(context){
+  async removeSomeItem(context, skuId){
     // 获取选中的商品
-    const selectedSkuIdList = context.getters['validSelectedList'].map(item=>item.skuId)
+    const selectedSkuIdList = skuId ? skuId : context.getters['validSelectedList'].map(item=>item.skuId)
     // console.log("removeSomeItem selectedItemList", selectedSkuIdList)
     const res = await deleteCartListApi({  
       // ids:[],

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <van-nav-bar title="爆款推荐" left-arrow @click-left="$router.back()" :border="false" />
+    <van-nav-bar title="爆款推荐" left-arrow @click-left="$router.push('/layout/home')" :border="false" />
 
     <van-grid :border="false" :column-num="3">
       <van-grid-item @click="$router.push(item.id)" :class="{ 'active': $route.params.type == item.id }" class="popular-title" v-for="item in inVogueResult.subTypes" :key="item.id">
