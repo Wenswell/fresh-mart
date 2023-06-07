@@ -66,6 +66,9 @@ export default {
 
       // 更新地址
       this.$store.dispatch('user/updateAddressList')
+      
+      // 更新收藏
+      this.$store.dispatch('cart/updateCollect')
 
       // 进入主页
       this.$router.push('/layout/home')

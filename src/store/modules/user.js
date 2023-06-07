@@ -1,4 +1,4 @@
-import { toBuyNowApi, getAddressListApi, changeAddressApi, addNewAddressApi,createOrderApi,submitOrderApi } from "@/api/user";
+import {toBuyNowApi,getAddressListApi,changeAddressApi,addNewAddressApi,createOrderApi,submitOrderApi,} from "@/api/user"
 
 // 用户模块
 const state = {
@@ -12,6 +12,8 @@ const state = {
     mobile: '',
     token: ''
   },
+
+  collect: {},
 
   address: [],
 
@@ -86,7 +88,7 @@ const actions = {
     context.commit('setOrder', res.result)
   },
 
-  
+  // 更新订单信息
   async toBuyNowUpdateOrder(context, updateObj){
     console.log("[[]]toBuyNowUpdateOrder", updateObj)
     const newOrderInfo = {...context.getters['getToBuyOrderToUpdateInfo'], ...updateObj}
@@ -118,12 +120,14 @@ const actions = {
 
 
 
+  // 更新地址列表
   async updateAddressList(context) {
     const res = await getAddressListApi()
     if (!res.result.length) console.log('用户地址列表为空')
     context.commit('setAddress', res.result)
   },
 
+  // 改变默认地址
   async changeDefault(context, id) {
     console.group('changeDefault')
     console.log("context", context)
@@ -142,6 +146,7 @@ const actions = {
     console.groupEnd()
   },
 
+  // 编辑现有地址
   async editAddress(context, [id, obj]) {
     const res = await changeAddressApi(id, obj)
     if (res.code == 1) {
@@ -152,6 +157,7 @@ const actions = {
     } else console.error('editAddress/changeAddressApi 失败', res)
   },
   
+  //添加新地址
   async addNewAddress(context, obj) {
     const res = await addNewAddressApi(obj)
     if (res.code == 1) {
@@ -164,6 +170,12 @@ const actions = {
 }
 
 const mutations = {
+  // 保存收藏信息
+  setCollect(state,payolad){
+    state.collect = payolad
+  },
+
+  
   // 修改用户信息
   setUser(state, payload) {
     state.profile = payload
@@ -187,6 +199,7 @@ const mutations = {
     state.order = result
     console.log("NOW -- state.order", state.order)
   },
+  //保存待支付订单信息
   setpayorder(state, result) {
     state.payorder = result
     console.log("NOW -+- state.payorder", state.payorder)
