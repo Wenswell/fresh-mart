@@ -18,7 +18,7 @@ export default new Vuex.Store({
   plugins: [
     createPersistedState ({
       key: 'my-app-store',  
-      paths: ['user.profile', 'cart', 'user.address', 'user.order' ,'user.payorder']
+      paths: ['user', 'cart']
     })
   ]
 })

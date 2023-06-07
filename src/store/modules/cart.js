@@ -1,4 +1,11 @@
-import { getCartListApi, updateItemApi, selectAllItemApi,getCartCountApi,deleteCartListApi } from "@/api/cart";
+import { getCartListApi, updateItemApi, selectAllItemApi, deleteCartListApi } from "@/api/cart";
+import { 
+  addProductToCartApi,
+  getCollectObjApi,
+  collectProductApi,
+  // cancelCollectApi 
+} from "@/api/product";
+
 
 // 购物车模块
 
@@ -9,16 +16,25 @@ const state = {
 
 const getters = {
 
-  async getCartCount() {
-    const res = await getCartCountApi();
-    // console.log("res.result", res.result)
-    return res.result.count;
+  getCartCount(state){
+    return state.list.length
   },
+
+  // async getCartCount() {
+  //   const res = await getCartCountApi();
+  //   // console.log("res.result", res.result)
+  //   return res.result.count;
+  // },
 
   // 有效商品 列表
   validList(state) {
     // 有效商品: 有库存、isEffective
     return state.list.filter(goods => goods.stock > 0 && goods.isEffective)
+  },
+
+  // 无效商品列表
+  inValidList(state) {
+    return state.list.filter(goods => goods.stock == 0 || !goods.isEffective)
   },
 
   // 有效商品 && 选中的商品 列表
@@ -47,10 +63,45 @@ const getters = {
 
 const actions = {
 
+  // 收藏商品
+  // 获取收藏列表
+  async updateCollect(context, page) {
+    console.log("updateCollect")
+    const res = await getCollectObjApi({page:page})
+    console.log("updateCollectApi res", res)
+    context.commit('user/setCollect', res.result,{ root: true })
+    return 'done'
+  },
+
+  //添加收藏 - 购物车用
+  async addSelectedToCollect(context) {
+    // 1. 添加收藏
+    const selectedIdList = context.getters['validSelectedList'].map(item=>item.id)
+    // console.log("addToCollect ids", selectedIdList)
+    const res = await collectProductApi({collectObjectIds:selectedIdList})
+    // console.log("addToCollect res", res)
+    // 2. 删除商品
+    context.dispatch('removeSomeItem')
+    return res.code
+  },
+
+  //添加收藏 - 单件商品
+  async addToCollect(context, ids) {
+    console.log("addToCollect ids", ids)
+    const res = await collectProductApi({collectObjectIds:ids})
+    console.log("addToCollect res", res)
+  },
+
+
+  // collectProductApi,
+  // ,
+  // cancelCollectApi
+
+
   // 移除部分商品
-  async removeSomeItem(context){
+  async removeSomeItem(context, skuId){
     // 获取选中的商品
-    const selectedSkuIdList = context.getters['validSelectedList'].map(item=>item.skuId)
+    const selectedSkuIdList = skuId ? skuId : context.getters['validSelectedList'].map(item=>item.skuId)
     // console.log("removeSomeItem selectedItemList", selectedSkuIdList)
     const res = await deleteCartListApi({  
       // ids:[],
@@ -59,14 +110,42 @@ const actions = {
       clearInvalid:false,
     })
     // 删除本地商品
-
-    console.log("删除部分商品", res.msg)
-
+    context.commit('removeSomeItemLocal', selectedSkuIdList)
+    // console.log("删除部分商品", res.msg)
+    return res.code
+    
+  },
+  
+  // 清除无效商品
+  async removeInvalidItem(context){
+    // 获取无效商品
+    const inValidList = context.getters['inValidList'].map(item=>item.skuId)
+    
+    const res = await deleteCartListApi({  
+      // ids:[],
+      ids:inValidList,
+      clearAll:false,
+      clearInvalid:false,
+    })
+    // 删除本地商品
+    // context.commit('removeInvalidItemLocal')
+    context.commit('removeSomeItemLocal', inValidList)
+    // console.log("删除部分商品", res.msg)
+    return res.code
   },
 
-  // 清除无效商品
-
   // 清空购物车
+  async emptyCartItem(context){
+    
+    const res = await deleteCartListApi({  
+      ids:[],
+      clearAll:true,
+      clearInvalid:true,
+    })
+    // 删除本地商品
+    context.commit('setCart', [])
+    return res.code
+  },
 
   // 全选 / 全部取消
   selectAllItem(context, selected) {
@@ -93,6 +172,15 @@ const actions = {
       console.log("------updateCart end-------")
     })
   },
+
+  //加入购物车
+  async addProductToCart(context, obj){
+    const res = await addProductToCartApi(obj)
+    if(res.code == 1 ) console.log('addProductToCart成功')
+    context.dispatch('mergeCart')
+  },
+
+  //合并购物车
   async mergeCart(context) {
     // console.log("------async getWholeCartList start-------")
 
@@ -120,8 +208,21 @@ const actions = {
 const mutations = {
 
 
-  // 移除本地购物车列表的部分商品
-  // removeSomeItemLocal()
+  // 移除本地购物车列表的 部分 商品
+  removeSomeItemLocal(state,list){
+    // console.log("state.list", state.list)
+    state.list = state.list.filter(item => {
+      return !list.includes(item.skuId)
+    })
+  },
+  
+  // // 移除本地购物车列表的 无效 商品
+  // removeInvalidItemLocal(state){
+  //   state.list = state.list.filter(item => {
+  //     return item.isEffective
+  //   })
+  // },
+  
 
   // 修改本地的有效物品全选状态
   selectAllItemLocal(state, payload) {

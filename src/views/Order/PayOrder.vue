@@ -27,10 +27,10 @@
     </div>
 
     <div class="product-sum">
-      <span class="sum-left">商品总价<span class="sum-right">{{ getToPayOrderInfo.totalMoney }}.00</span></span>
-      <span class="sum-left">邮费<span class="sum-right">{{ getToPayOrderInfo.postFee }}.00</span></span>
+      <span class="sum-left">商品总价<span class="sum-right">{{ getToPayOrderInfo.totalMoney.toFixed(2) }}</span></span>
+      <span class="sum-left">邮费<span class="sum-right">{{ getToPayOrderInfo.postFee.toFixed(2) }}</span></span>
       <!-- <span class="sum-left">折扣<span class="sum-right">{{ getToPayOrderInfo.totalMoney }}.00</span></span> -->
-      <span class="sum-left">合计<span class="sum-right">{{ getToPayOrderInfo.payMoney }}.00</span></span>
+      <span class="sum-left">合计<span class="sum-right">{{ getToPayOrderInfo.payMoney.toFixed(2) }}</span></span>
       <span class="sum-left">订单编号<span class="sum-right">{{ getToPayOrderInfo.id }}</span></span>
       <span class="sum-left">下单时间<span class="sum-right">{{ getToPayOrderInfo.createTime }}</span></span>
     </div>

@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { getProductDetailApi, getProductEvaluateApi, addProductToCartApi, getEvaluatePageApi } from '@/api/product'
+import { getProductDetailApi, getProductEvaluateApi, getEvaluatePageApi } from '@/api/product'
 import ShowAddressCard from './ShowAddressCard.vue'
 
 export default {
@@ -189,7 +189,7 @@ export default {
       props: ['productId'], // 点击购买/加购返回信息
       sku: {},        // 【主要】 result过滤后的 商品sku及数量
       selectSku: '',   // 选中的sku
-      cartCount: '',  // 购物车数量
+      // cartCount: '',  // 购物车数量
       goods: {},      // 默认商品 sku 缩略图
 
       addressList: [],  // 收货地址列表
@@ -199,13 +199,18 @@ export default {
       path: ''    //当前路由路径
     }
   },
+  computed:{
+    cartCount() {
+    return this.$store.getters['cart/getCartCount']
+  }
+  },
   methods: {
 
     // 获取购物车数量
-    async getCartCount() {
-      let count = await this.$store.getters['cart/getCartCount']
-      this.cartCount = count
-    },
+    // async getCartCount() {
+    //   let count = await this.$store.getters['cart/getCartCount']
+    //   this.cartCount = count
+    // },
 
     // 获取选择的sku用于展示
     changeSelectedSku(res) {
@@ -247,11 +252,11 @@ export default {
       // console.log("onAddCartClicked", data)
       this.$toast('skuid:' + data.selectedSkuComb.id + '\n添加成功');
       // 加入购物车
-      addProductToCartApi({ 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
+      this.$store.dispatch('cart/addProductToCart',{ 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
       // 关闭sku展示
       this.skuShow = false
       // 更新购物车数量
-      this.getCartCount()
+      // this.getCartCount()
     },
 
     // 直接购买 - 已选sku
@@ -443,7 +448,7 @@ export default {
     this.getEvaluatePageById(this.productId)
 
     // 获取购物车数量
-    this.getCartCount()
+    // this.getCartCount()
 
 
   },

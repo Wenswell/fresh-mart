@@ -74,3 +74,55 @@ export const searchProductApi = ({
     }
   )
 }
+
+
+
+// 收藏商品
+export const collectProductApi = ({
+  collectObjectIds = [],
+  collectType=1,
+}) => {
+  return request(
+    '/member/collect', 
+    'post', 
+    {
+      collectType, 
+      collectObjectIds,
+    }
+  )
+}
+
+
+// 获取收藏
+export const getCollectObjApi = ({
+  page=1,
+  pageSize=10,
+  collectType = 1,
+}) => {
+  return request(
+    '/member/collect', 
+    'GET', 
+    {
+      page,
+      pageSize,
+      collectType,
+    }
+  )
+}
+
+
+// 取消收藏
+export const cancelCollectApi = ({
+  ids=[],
+  type = 1,
+}) => {
+  return request(
+    '/member/collect/batch', 
+    'DELETE', 
+    {
+      ids,
+      type,
+    }
+  )
+}
+
