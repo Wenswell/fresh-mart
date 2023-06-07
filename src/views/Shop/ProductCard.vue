@@ -26,7 +26,7 @@
         </template>
         <!-- 该店铺的商品 商品卡片 计数器 -->
         <template #num>
-          <van-button @click="$router.push('/shop/products/'+data.id)" class="toBuyBtn" round type="primary" color="#5ad4ea">抢购</van-button>
+          <van-button @click="$router.push('/shop/products/'+data.id)" class="toBuyBtn" round type="primary" color="#5ad4ea">加购</van-button>
         </template>
       </van-card>
 

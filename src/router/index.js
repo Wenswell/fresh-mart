@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/shop',
+    redirect: '/auth',
   },
   {
     path: '/order',
@@ -33,6 +33,16 @@ const routes = [
     redirect: '/shop/products',
     component: () => import('@/views/Shop/ShopContainer'),
     children: [
+      {
+        path: 'collect',
+        name: 'collect',
+        component: () => import('@/views/Shop/CollectPage'),
+      },
+      {
+        path: 'history',
+        name: 'history',
+        component: () => import('@/views/Shop/HistoryPage'),
+      },
       {
         path: 'popular',
         redirect: 'popular/2087394920',

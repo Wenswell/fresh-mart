@@ -22,10 +22,10 @@
     </div>
 
     <div class="product-sum">
-      <span class="sum-left">商品总价<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPrice }}.00</span></span>
-      <span class="sum-left">邮费<span class="sum-right">{{ getToBuyOrderInfo.summary.postFee }}.00</span></span>
-      <span class="sum-left">折扣<span class="sum-right">{{ getToBuyOrderInfo.summary.discountPrice }}.00</span></span>
-      <span class="sum-left">合计<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPayPrice }}.00</span>
+      <span class="sum-left">商品总价<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPrice.toFixed(2) }}</span></span>
+      <span class="sum-left">邮费<span class="sum-right">{{ getToBuyOrderInfo.summary.postFee.toFixed(2) }}</span></span>
+      <span class="sum-left">折扣<span class="sum-right">{{ getToBuyOrderInfo.summary.discountPrice.toFixed(2) }}</span></span>
+      <span class="sum-left">合计<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPayPrice.toFixed(2) }}</span>
       </span>
     </div>
 
@@ -152,10 +152,6 @@ export default {
 .check-order {
   margin-top: 50px;
 
-  >div:not(:last-child) {
-    margin-bottom: 10px;
-  }
-
 }
 
 // 商品卡片（图片+名称+描述+价格
@@ -254,6 +250,7 @@ export default {
   padding: 10px;
   background-color: white;
   font-size: 14px;
+  padding-bottom: 50px;
 
   .pay-method {
     border-bottom: 1px solid #F4F4F4;

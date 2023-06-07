@@ -2,12 +2,12 @@
   <div>
 
     <!-- 个人信息 头像ID 会员信息 浏览 收藏 购物券 -->
-    <van-cell-group class="cell-group" inset @click="$router.push('/user/address')">
+    <van-cell-group class="cell-group" inset>
       <van-cell class="my-info" :border="false">
         <template #title>
           <div class="my-info-left">
-            <van-image round width="48px" height="48px" :src="require('@/assets/images/' + 'rank5.png')" />
-            <span>佚名</span>
+            <van-image round width="48px" height="48px" :src="img" />
+            <span>{{ name }}</span>
           </div>
 
         </template>
@@ -24,13 +24,21 @@
       </van-cell>
       <!-- <van-cell class="my-data" title="单元格" value="内容" label="描述信息" /> -->
       <van-grid class="my-data" :border="false" :column-num="3">
-        <van-grid-item class="my-data-item" v-for="item in myDataTop" :key="item.title">
-          <div class="my-data-div up">{{ item.num }}</div>
-          <div class="my-data-div down">{{ item.title }}</div>
+        <van-grid-item @click="$router.push('/shop/history')"  class="my-data-item">
+          <div class="my-data-div up">{{ historyCount }}</div>
+          <div class="my-data-div down">浏览</div>
+        </van-grid-item>
+        <van-grid-item @click="$router.push('/shop/collect')" class="my-data-item">
+          <div class="my-data-div up">{{ collectCount }}</div>
+          <div class="my-data-div down">收藏</div>
+        </van-grid-item>
+        <van-grid-item @click="$toast('API不包含优惠券')" class="my-data-item">
+          <div class="my-data-div up">0</div>
+          <div class="my-data-div down">购物券</div>
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-    
+
     <!-- 我的订单 -->
     <van-cell-group class="cell-group" inset>
       <van-cell class="cell header" :border="false">
@@ -50,7 +58,7 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-    
+
     <!-- 我的工具 -->
     <van-cell-group class="cell-group" inset>
       <van-cell class="cell header" :border="false">
@@ -70,7 +78,7 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
-    
+
     <!-- 猜你喜欢 -->
     <van-cell-group class="cell-group" inset>
       <van-cell class="cell header" :border="false">
@@ -108,14 +116,18 @@
 
 <script>
 import tdata from '@/assets/test-data.json'
-// import { Toast } from 'vant';
 
 export default {
   data() {
     return {
-      myDataTop: tdata.myDataTop,
+      // myDataTop: tdata.myDataTop,
       myOrderInfo: tdata.myOrderInfo,
       myToolInfo: tdata.myToolInfo,
+
+      historyCount: 0,
+      collectCount: 0,
+      name: '',
+      img: '',
     }
   },
   methods: {
@@ -123,13 +135,30 @@ export default {
       this.$toast(page)
     }
   },
-  mounted() {
-  }
+  created() {
+    this.$store.getters['user/getHistoryNum'].then(res => {
+      // console.log("res", res)
+      this.historyCount = res.result.counts
+    })
+    const { name, img } = this.$store.getters['user/getUserNameImg']
+    this.name = name
+    this.img = img
+    this.collectCount = this.$store.getters['user/getCollectNum']
+    
+    // 更新收藏
+    this.$store.dispatch('cart/updateCollect')
+  },
+  computed: {
+    // userInfo() {
+    //   const historyCount = this.$store.getters['user/getHistoryNum'];
+    //   console.log("historyCount", historyCount)
+    //   return {historyCount}
+    // },
+  },
 }
 </script>
 
 <style lang="less" scoped>
-
 // 固定盒子大小
 .cell-group {
   // /* outline: solid; */
@@ -143,12 +172,12 @@ export default {
   overflow: hidden;
   // margin: 10px auto;
   margin-bottom: 15px;
-  
+
   // 整体偏移 顶部
   &:first-child {
     margin-top: 47px;
   }
-  
+
   // 整体偏移 底部 防止底栏遮挡
   &:last-child {
     margin-bottom: 60px;

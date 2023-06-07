@@ -1,4 +1,5 @@
-import { toBuyNowApi, getAddressListApi, changeAddressApi, addNewAddressApi,createOrderApi,submitOrderApi } from "@/api/user";
+import {toBuyNowApi,getAddressListApi,changeAddressApi,addNewAddressApi,createOrderApi,submitOrderApi,getHistoryApi} from "@/api/user"
+
 
 // 用户模块
 const state = {
@@ -13,6 +14,8 @@ const state = {
     token: ''
   },
 
+  collect: {},
+
   address: [],
 
   order: '',
@@ -24,6 +27,25 @@ const state = {
 }
 
 const getters = {
+
+  // 获取用户名、头像
+  getUserNameImg(state){
+    return {name:state.profile.account,img:state.profile.avatar}
+  },
+
+  // 获取历史记录数量
+  async getHistoryNum(){
+    return await getHistoryApi({})
+  },
+
+  //获取收藏数量
+  getCollectNum(state){
+    return state.collect.counts
+  },
+
+  getCollect(state){
+    return state.collect
+  },
 
   // 获取所有地址
   getAddressList(state) {
@@ -68,6 +90,15 @@ const getters = {
 }
 
 const actions = {
+
+  //获取历史记录
+  async getHistoryPage(context, page){
+    const res = await getHistoryApi({page:page})
+    // return await getHistoryApi({})
+    // console.log("res", res)
+    return res.result
+  },
+
   
   // 点击 直接购买 直接【预】提交单个物品的订单
   // ----------以下为使用参考----------
@@ -86,7 +117,7 @@ const actions = {
     context.commit('setOrder', res.result)
   },
 
-  
+  // 更新订单信息
   async toBuyNowUpdateOrder(context, updateObj){
     console.log("[[]]toBuyNowUpdateOrder", updateObj)
     const newOrderInfo = {...context.getters['getToBuyOrderToUpdateInfo'], ...updateObj}
@@ -118,12 +149,14 @@ const actions = {
 
 
 
+  // 更新地址列表
   async updateAddressList(context) {
     const res = await getAddressListApi()
     if (!res.result.length) console.log('用户地址列表为空')
     context.commit('setAddress', res.result)
   },
 
+  // 改变默认地址
   async changeDefault(context, id) {
     console.group('changeDefault')
     console.log("context", context)
@@ -142,6 +175,7 @@ const actions = {
     console.groupEnd()
   },
 
+  // 编辑现有地址
   async editAddress(context, [id, obj]) {
     const res = await changeAddressApi(id, obj)
     if (res.code == 1) {
@@ -152,6 +186,7 @@ const actions = {
     } else console.error('editAddress/changeAddressApi 失败', res)
   },
   
+  //添加新地址
   async addNewAddress(context, obj) {
     const res = await addNewAddressApi(obj)
     if (res.code == 1) {
@@ -164,6 +199,26 @@ const actions = {
 }
 
 const mutations = {
+  // 保存收藏信息
+  setCollect(state,newObj){
+    // 初始化
+    if(newObj.page == 1) {
+      state.collect = newObj
+      // 只有加载数据更新才会更新本地数据
+    } else if (newObj.page > state.collect.page) {
+      state.collect = {
+        ...newObj,
+        items: [
+          // 保留顺序合并
+          ...state.collect.items.map(item => ({ ...item })) ,   
+          ...newObj.items.map(item => ({ ...item }))   
+        ]  
+      }
+    }
+    console.groupEnd()
+  },
+
+  
   // 修改用户信息
   setUser(state, payload) {
     state.profile = payload
@@ -187,6 +242,7 @@ const mutations = {
     state.order = result
     console.log("NOW -- state.order", state.order)
   },
+  //保存待支付订单信息
   setpayorder(state, result) {
     state.payorder = result
     console.log("NOW -+- state.payorder", state.payorder)

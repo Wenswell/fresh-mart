@@ -91,31 +91,37 @@ export default {
     return {
       cartListFromApi: '',
       sumChecked: false,
-      editMode:true,
+      editMode:false,
     };
   },
   methods: {
 onRemoveInvalid(){
-  console.group('onRemoveInvalid')
-  this.$toast('onRemoveInvalid')
-  console.groupEnd()
+  // console.group('onRemoveInvalid')
+  // this.$toast('onRemoveInvalid')
+  this.$store.dispatch('cart/removeInvalidItem').then(res => this.$toast(res==1?'已清除':'清除失败'))
+  // console.groupEnd()
 },
 onAddToCollect(){
   console.group('onAddToCollect')
   this.$toast('onAddToCollect')
+  this.$store.dispatch('cart/addSelectedToCollect').then(res => this.$toast(res==1?'已加入收藏':'收藏失败'))
+  
   console.groupEnd()
 },
 onDelete(){
-  console.group('onDelete')
-  this.$toast('onDelete')
+  // this.$toast('onDelete')
   // 全选时清空
   if(this.checkedAll){
-    this.$toast('清空购物车')
+    this.$dialog.confirm({
+      message: '确定清空购物车吗？',
+    }).then(() => {
+      console.log('清空购物车')
+      this.$store.dispatch('cart/emptyCartItem').then(res => this.$toast(res==1?'已清空':'清空失败'))
+    }).catch(err => console.log(err));
   } else {
     // 删除部分
-  this.$store.dispatch('cart/removeSomeItem')
+  this.$store.dispatch('cart/removeSomeItem').then(res => this.$toast(res==1?'已删除':'删除失败'))
   }
-  console.groupEnd()
 },
 
     updateItem(item) {
@@ -153,8 +159,7 @@ onDelete(){
           this.$dialog.confirm({
             message: '确定删除吗？',
           }).then(() => {
-            console.log("deleteItem: " + name);
-            console.log("close");
+             this.$store.dispatch('cart/removeSomeItem',[name]).then(res => this.$toast(res==1?'已删除':'删除失败'))
             instance.close();
           }).catch(err => console.log(err));
           break;
@@ -204,8 +209,10 @@ onDelete(){
   align-items: center;
   gap: 10px;
   padding: 0 10px;
-  // background-color:antiquewhite;
+  background-color:white;
   font-size: 14px;
+  // border-top: 1px solid #eee;
+  // border: none;
   .edit-mode-check{
     flex: 1;
   }

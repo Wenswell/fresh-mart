@@ -49,6 +49,18 @@ export const deleteAddressApi = (id) => {
 }
 
 
+// 获取历史记录
+export const getHistoryApi = ({
+  page = 1,
+  pagSize = 10,
+}) => {
+  return request('/member/browseHistory', 'GET', {
+    page,
+    pagSize,
+  })
+}
+
+
 
 
 
