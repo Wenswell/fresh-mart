@@ -13,8 +13,26 @@ export const getProductEvaluateApi = (id) => {
 }
 
 // 根据ID获取 商品评价分页内容
-export const getEvaluatePageApi = (id, page, pageSize) => {
-  return request(`/goods/${id}/evaluate/page`, 'get', {page, pageSize}, 'change')
+export const getEvaluatePageApi = ({
+  id, 
+  page, 
+  pageSize,
+  hasPicture,
+  tag,
+  sortField,
+  sortMethod,
+}) => {
+  const params = {
+    page, 
+    pageSize
+  }
+  
+  if (hasPicture) params.hasPicture = hasPicture;
+  if (tag) params.tag = tag;
+  if (sortField) params.sortField = sortField;  
+  if (sortMethod) params.sortMethod = sortMethod;
+  
+  return request(`/goods/${id}/evaluate/page`, 'get', params, 'change')
 }
 
 

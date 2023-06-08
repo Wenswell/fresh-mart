@@ -85,8 +85,8 @@
             <span class="item item-ico"></span>
             <div class="item text">分享</div>
           </van-grid-item>
-          <van-grid-item class="item more">
-            <span class="item item-ico"></span>
+          <van-grid-item @click="onCollect" class="item more">
+            <span :class="{collect:result.isCollect}" class="item item-ico"></span>
             <div class="item text">收藏</div>
           </van-grid-item>
         </van-grid>
@@ -205,6 +205,17 @@ export default {
   }
   },
   methods: {
+
+    // 收藏、取消收藏
+    onCollect(){
+      this.result.isCollect ?
+      //取消收藏
+      (this.$store.dispatch('cart/cancelCollect', this.result.id),
+      this.result.isCollect = !this.result.isCollect)
+      //收藏
+      :(this.$store.dispatch('cart/addToCollect', this.result.id),
+      this.result.isCollect = !this.result.isCollect)
+    },
 
     // 获取购物车数量
     // async getCartCount() {
@@ -399,7 +410,7 @@ export default {
     // 商品id -> 商品评价具体内容
     getEvaluatePageById(id) {
 
-      getEvaluatePageApi(id, 1, 3).then(res => {
+      getEvaluatePageApi({id, page:1, pageSize:3}).then(res => {
         const result = res.result
         const data = [];
 
@@ -693,6 +704,9 @@ export default {
 
     &:nth-child(3) .item-ico {
       background-position-x: -67px;
+      &.collect{
+      background-position-x: -86px;
+    }
     }
 
   }

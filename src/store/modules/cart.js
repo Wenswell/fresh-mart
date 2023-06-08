@@ -3,7 +3,7 @@ import {
   addProductToCartApi,
   getCollectObjApi,
   collectProductApi,
-  // cancelCollectApi 
+  cancelCollectApi 
 } from "@/api/product";
 
 
@@ -87,9 +87,18 @@ const actions = {
 
   //添加收藏 - 单件商品
   async addToCollect(context, ids) {
-    console.log("addToCollect ids", ids)
-    const res = await collectProductApi({collectObjectIds:ids})
-    console.log("addToCollect res", res)
+    // console.log("addToCollect ids", ids)
+    await collectProductApi({collectObjectIds:ids})
+    console.log(`商品ID=${ids}收藏成功`)
+    // console.log("addToCollect res", res)
+  },
+
+  //取消收藏 - 单件商品
+  async cancelCollect(context, ids) {
+    // console.log("addToCollect ids", ids)
+    await cancelCollectApi({collectObjectIds:ids})
+    console.log(`商品ID=${ids}取消收藏成功`)
+    // console.log("addToCollect res", res)
   },
 
 

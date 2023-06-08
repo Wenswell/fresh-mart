@@ -7,7 +7,19 @@ import store from '@/store'
 // 请求工具函数
 export default (url, method, submitData, changeURL) => {
   // 负责发请求：请求地址，请求方式，提交的数据
-  const baseURL = changeURL ? 'https://mock.boxuegu.com/mock/1175/' : 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
+  // const baseURL = changeURL ? 'https://mock.boxuegu.com/mock/1175/' : 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
+  function getBaseURL(param) {
+    switch(param){
+      case 'change':
+        return 'https://mock.boxuegu.com/mock/1175/';
+      case 'apipc':
+        return 'https://apipc-xiaotuxian-front.itheima.net/';
+      default:
+        return 'https://pcapi-xiaotuxian-front-devtest.itheima.net/';
+    }
+  }
+  
+  const baseURL = getBaseURL(changeURL);
 
   const instance = axios.create({
     baseURL,
