@@ -1,4 +1,10 @@
-import {toBuyNowApi,getAddressListApi,changeAddressApi,addNewAddressApi,createOrderApi,submitOrderApi,getHistoryApi} from "@/api/user"
+import {
+  toBuyNowApi,
+  getAddressListApi,changeAddressApi,addNewAddressApi,
+  createOrderApi,submitOrderApi,
+  getHistoryApi, 
+  getOrderListApi,getOrderDetailApi,rePurchaseApi
+} from "@/api/user"
 
 
 // 用户模块
@@ -90,6 +96,30 @@ const getters = {
 }
 
 const actions = {
+
+  //获取订单列表
+  async getOrder(context, {page, orderState}){
+    console.log("orderState", orderState)
+    //订单状态，1 为待付款、2 为待发货、3 为待收货、4 为待评价、5 为已完成、6 为已取消，未传该参数或 0 为全部
+    const res = await getOrderListApi({page:page, orderState:orderState})
+    return res.result
+  },
+
+  //获取单个订单的详情
+  async getOrderDatail(context, orderId){
+    const res = await getOrderDetailApi(orderId)
+    return res.result
+  },
+  
+  // 再次购买 -> 订单详情
+  async rePurchase(context, orderId){
+    const res = await rePurchaseApi(orderId)
+    context.commit('setOrder', res.result)
+    return 'done'
+  },
+  
+
+  
 
   //获取历史记录
   async getHistoryPage(context, page){

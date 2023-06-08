@@ -14,12 +14,28 @@ const routes = [
     component: () => import('@/views/Order'),
     children: [
       {
+        path: 'all',
+        name: 'all',
+        component: () => import('@/views/Order/AllOrderPage'),
+      },
+      {
         path: 'check',
+        name: 'check',
         component: () => import('@/views/Order/CheckOrder'),
       },
       {
         path: 'pay',
+        name: 'pay',
         component: () => import('@/views/Order/PayOrder'),
+      },
+      {
+        path: 'detail',
+        redirect: 'all',
+      },
+      {
+        path: 'detail/:type',
+        name: 'detail',
+        component: () => import('@/views/Order/OrderDetail'),
       },
     ],
   },
@@ -33,6 +49,16 @@ const routes = [
     redirect: '/shop/products',
     component: () => import('@/views/Shop/ShopContainer'),
     children: [
+      {
+        path: 'products',
+        redirect: 'products/3995846'
+      },
+      {
+        path: 'products/:id',
+        // redirect: '/shop/products/1',
+        name:'products',
+        component: () => import('@/views/Shop/ProductDetail')
+      },
       {
         path: 'collect',
         name: 'collect',
@@ -52,16 +78,16 @@ const routes = [
         name: 'popular',
         component: () => import('@/views/Shop/PopularList'),
       },
+      {
+        path: 'evaluate',
+        redirect: 'evaluate/3995846',
+      },
+      {
+        path: 'evaluate/:id',
+        name: 'evaluate',
+        component: () => import('@/views/Shop/AllEvaluate'),
+      },
     ],
-  },
-  {
-    path: '/shop/products',
-    redirect: '/shop/products/3995846'
-  },
-  {
-    path: '/shop/products/:id',
-    // redirect: '/shop/products/1',
-    component: () => import('@/views/Shop/ProductDetail')
   },
   {
     path: '/auth',

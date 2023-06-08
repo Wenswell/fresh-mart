@@ -1,6 +1,6 @@
 <template>
   <div class="order">
-    <van-nav-bar :fixed="true" :title="$route.fullPath == '/order/pay' ? '待付款' : '提交订单'" left-text="返回" left-arrow @click-left="onCancel" />
+    <van-nav-bar :fixed="true" :title="getTitle" left-text="返回" left-arrow @click-left="onCancel" />
 
     <router-view />
   </div>
@@ -22,6 +22,22 @@ export default {
           // on cancel
         });
     }
+  },
+  computed:{
+    getTitle(){
+      switch (this.$route.name) {
+      case 'pay':
+        return '待付款';
+      case 'check':
+        return '提交订单';
+      case 'all':
+        return '全部订单';
+      case 'detail':
+        return '订单详情';
+      default:
+        return '订单';
+    }
+    },
   },
 }
 </script>
