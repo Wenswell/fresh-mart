@@ -46,13 +46,13 @@
           <span class="cell header h-left">我的订单</span>
         </template>
         <template #right-icon>
-          <span class="cell header h-right">查看全部
+          <span @click="$router.push('/order/all')" class="cell header h-right">查看全部
             <van-icon class="cell header h-ico" name="arrow" />
           </span>
         </template>
       </van-cell>
       <van-grid class="cell items" :border="false" :column-num="5">
-        <van-grid-item class="item order" v-for="item in myOrderInfo" :key="item.page" @click="toPage(item.page)">
+        <van-grid-item class="item order" v-for="item in myOrderInfo" :key="item.page" @click="toOrder(item.id)">
           <span class="item item-ico"></span>
           <div class="item text">{{ item.detail }}</div>
         </van-grid-item>
@@ -131,6 +131,12 @@ export default {
     }
   },
   methods: {
+    toOrder(id){
+      this.$router.push({
+        name: 'all',
+        query: {id}
+      })
+    },
     toPage(page) {
       this.$toast(page)
     }

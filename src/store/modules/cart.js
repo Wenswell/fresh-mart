@@ -3,7 +3,9 @@ import {
   addProductToCartApi,
   getCollectObjApi,
   collectProductApi,
-  // cancelCollectApi 
+  cancelCollectApi,
+  getProductEvaluateApi,getEvaluatePageApi,
+  getProductDetailApi,
 } from "@/api/product";
 
 
@@ -63,6 +65,43 @@ const getters = {
 
 const actions = {
 
+  async getProductDetail(context, id) {
+    let resObj={}
+    await getProductDetailApi({id}).then(res => {
+      resObj = res.result
+    })
+    return resObj
+  },
+
+  // 商品评价关键词
+  async getEvaluateKeywords(context,id) {
+    let evaluate = {} 
+    await getProductEvaluateApi(id).then(res => {
+      evaluate = res.result
+      if (evaluate.hasPictureCount) {
+        evaluate.tags.unshift({
+          title: "有图",
+          tagCount: evaluate.hasPictureCount
+        });
+      }
+      evaluate.tags.unshift({
+        title: "全部",
+        tagCount: evaluate.evaluateCount
+      });
+    })
+    return evaluate
+  },
+
+  // 商品评价
+  async getEvaluate(context, payload) {
+    console.log("payload", payload)
+    let resObj={}
+    await getEvaluatePageApi(payload).then(res => {
+      resObj = res.result
+    })
+    return resObj
+  },
+
   // 收藏商品
   // 获取收藏列表
   async updateCollect(context, page) {
@@ -87,9 +126,18 @@ const actions = {
 
   //添加收藏 - 单件商品
   async addToCollect(context, ids) {
-    console.log("addToCollect ids", ids)
-    const res = await collectProductApi({collectObjectIds:ids})
-    console.log("addToCollect res", res)
+    // console.log("addToCollect ids", ids)
+    await collectProductApi({collectObjectIds:ids})
+    console.log(`商品ID=${ids}收藏成功`)
+    // console.log("addToCollect res", res)
+  },
+
+  //取消收藏 - 单件商品
+  async cancelCollect(context, ids) {
+    // console.log("addToCollect ids", ids)
+    await cancelCollectApi({collectObjectIds:ids})
+    console.log(`商品ID=${ids}取消收藏成功`)
+    // console.log("addToCollect res", res)
   },
 
 

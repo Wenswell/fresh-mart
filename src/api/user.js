@@ -106,3 +106,32 @@ export const mockPayApi = (id) => {
   return request('/pay/mock', 'GET', {orderId:id})
 }
 
+
+
+// 获取订单列表
+
+export const getOrderListApi = ({
+  page = 1,
+  orderState = 0,
+  //订单状态，1 为待付款、2 为待发货、3 为待收货、4 为待评价、5 为已完成、6 为已取消，未传该参数或 0 为全部
+  pagSize = 10,
+}) => {
+  return request('/member/order', 'GET', {
+  page,
+  pagSize,
+  orderState,
+  })
+}
+
+
+// 获取单个订单的详细信息
+export const getOrderDetailApi = (id) => {
+  return request(`/member/order/${id}`, 'GET', {id})
+}
+
+
+// 订单id -> 再次购买
+export const rePurchaseApi = (id) => {
+  return request(`/member/order/repurchase/${id}`, 'GET', {id})
+}
+

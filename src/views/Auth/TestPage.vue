@@ -130,13 +130,20 @@ export default {
       console.group('---test1---')
 
       request(
-        '/member/browseHistory',
+        `/member/order/repurchase/1666653000954810370`,
         'GET',
         {
-          page: 1,
-          pagSize: 10,
+          id: 1666653000954810370,
         }
       )
+      // request(
+      //   '/member/browseHistory',
+      //   'GET',
+      //   {
+      //     page: 1,
+      //     pagSize: 10,
+      //   }
+      // )
       // 更新收藏
       // this.$store.dispatch('user/updateCollectApi',1)
 
