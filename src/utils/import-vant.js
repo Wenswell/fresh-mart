@@ -30,8 +30,11 @@ import { AddressList } from 'vant';
 import { RadioGroup, Radio } from 'vant';
 
 import { AddressEdit } from 'vant';
+import { Rate } from 'vant';
+import { Lazyload } from 'vant';
 
-
+Vue.use(Lazyload);
+Vue.use(Rate);
 Vue.use(AddressEdit);
 
 
