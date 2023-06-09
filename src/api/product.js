@@ -15,8 +15,8 @@ export const getProductEvaluateApi = (id) => {
 // 根据ID获取 商品评价分页内容
 export const getEvaluatePageApi = ({
   id, 
-  page, 
-  pageSize,
+  page=1, 
+  pageSize=10,
   hasPicture,
   tag,
   sortField,

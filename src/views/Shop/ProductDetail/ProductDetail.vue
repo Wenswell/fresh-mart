@@ -1,9 +1,9 @@
 <template>
-  <div class="product-div">
+  <div>
 
     <!--———— 1. 顶栏 ——————-->
     <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
-    <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="$router.back()"
+    <!-- <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="$router.back()"
       @click-right="$router.push('/layout/cart')">
       <template #left>
         <van-icon size="20" name="arrow-left" />
@@ -14,11 +14,11 @@
       <template #title>
         <van-row type="flex" justify="center" gutter="45">
           <van-col class="top-bar-opt" span="6">商品</van-col>
-          <van-col class="top-bar-opt" span="6">评价</van-col>
+          <van-col @click="onToEvaluate" class="top-bar-opt" span="6">评价</van-col>
           <van-col class="top-bar-opt" span="6">详情</van-col>
         </van-row>
       </template>
-    </van-nav-bar>
+    </van-nav-bar> -->
 
     <!--———— 2.1 主体 ——————-->
     <!-- 轮播图 商品图片 -->
@@ -86,7 +86,7 @@
             <div class="item text">分享</div>
           </van-grid-item>
           <van-grid-item @click="onCollect" class="item more">
-            <span :class="{collect:result.isCollect}" class="item item-ico"></span>
+            <span :class="{ collect: result.isCollect }" class="item item-ico"></span>
             <div class="item text">收藏</div>
           </van-grid-item>
         </van-grid>
@@ -105,7 +105,7 @@
 
         <!-- 2.5.1. 顶部右侧 查看全部  -->
         <template #right-icon>
-          <span class="cell header h-right">查看全部
+          <span @click="$router.replace('evaluate')" class="cell header h-right">查看全部
             <van-icon class="header h-ico" name="arrow" />
           </span>
         </template>
@@ -114,8 +114,7 @@
 
       <!-- 2.5.2. 上部 评价标签 有图 ...... -->
       <div class="labels" :border="false">
-        <span class="label-item" v-for="item in keywords" :key="item.title">{{ item.title }}({{ item.count
-        }})</span>
+        <span class="label-item" v-for="item in evaluate.tags" :key="item.title" v-show="item.title!='全部'">{{ item.title }}({{ item.tagCount }})</span>
       </div>
 
       <!-- 2.5.3. 主体 评价内容循环 -->
@@ -165,13 +164,13 @@
 </template>
 
 <script>
-import { getProductDetailApi, getProductEvaluateApi, getEvaluatePageApi } from '@/api/product'
-import ShowAddressCard from './ShowAddressCard.vue'
+import { getEvaluatePageApi } from '@/api/product'
+import ShowAddressCard from '../ShowAddressCard.vue'
 
 export default {
   components: {
     ShowAddressCard,
-  }, 
+  },
 
   data() {
     return {
@@ -182,8 +181,7 @@ export default {
       skuShow: false,   // 弹窗开关 Sku 商品规格
       result: '',           // 原始商品信息
 
-      evaluate: '',         // 评价数据
-      keywords: [],         // 评价关键词
+      evaluate:{},          //评价数据
       evaluateContent: [],  // 评价具体内容
 
       props: ['productId'], // 点击购买/加购返回信息
@@ -199,22 +197,18 @@ export default {
       path: ''    //当前路由路径
     }
   },
-  computed:{
-    cartCount() {
-    return this.$store.getters['cart/getCartCount']
-  }
-  },
+
   methods: {
 
     // 收藏、取消收藏
-    onCollect(){
+    onCollect() {
       this.result.isCollect ?
-      //取消收藏
-      (this.$store.dispatch('cart/cancelCollect', this.result.id),
-      this.result.isCollect = !this.result.isCollect)
-      //收藏
-      :(this.$store.dispatch('cart/addToCollect', this.result.id),
-      this.result.isCollect = !this.result.isCollect)
+        //取消收藏
+        (this.$store.dispatch('cart/cancelCollect', this.result.id),
+          this.result.isCollect = !this.result.isCollect)
+        //收藏
+        : (this.$store.dispatch('cart/addToCollect', this.result.id),
+          this.result.isCollect = !this.result.isCollect)
     },
 
     // 获取购物车数量
@@ -263,7 +257,7 @@ export default {
       // console.log("onAddCartClicked", data)
       this.$toast('skuid:' + data.selectedSkuComb.id + '\n添加成功');
       // 加入购物车
-      this.$store.dispatch('cart/addProductToCart',{ 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
+      this.$store.dispatch('cart/addProductToCart', { 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
       // 关闭sku展示
       this.skuShow = false
       // 更新购物车数量
@@ -273,13 +267,7 @@ export default {
     // 直接购买 - 已选sku
     onBuyClicked(data) {
       // console.log("onBuyClicked", JSON.stringify(data))
-      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址id:' + this.chosenAddressIndex +'\n直接前往购买');
-      // console.group('直接前往购买')
-      // console.group('所有信息',data)
-      // console.group('购买数量',data.selectedNum)
-      // console.group('商品信息',data.selectedSkuComb)
-      // console.group('商品skuID',data.selectedSkuComb.id)
-      // console.group('地址',this.addressList[this.chosenAddressIndex])
+      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址id:' + this.chosenAddressIndex + '\n直接前往购买');
       // 直接提交订单 - 在vuex中完成
       this.$store.dispatch('user/toBuyNow', {
         skuId: data.selectedSkuComb.id,
@@ -293,11 +281,12 @@ export default {
     // 商品id -> API -> 商品详细内容
     getProductById(id) {
 
-      getProductDetailApi({ id }).then(res => {
+      this.$store.dispatch('cart/getProductDetail', id).then(res => {
         // result即结果
-        let result = res.result
+        let result = res
         // result 存至 data
         this.result = result
+        console.log("this.result", this.result)
         this.goods = { // 默认商品 sku 缩略图
           'picture': this.result.mainPictures[0]
         }
@@ -336,7 +325,7 @@ export default {
           sku.list.push({
             //... 其他属性   
             id: skus.id,
-            price: skus.price*100,
+            price: skus.price * 100,
             stock_num: skus.inventory,
             // ... 使用reduce赋值规格
             ...skus.specs.reduce((obj, spec) => {
@@ -356,14 +345,14 @@ export default {
         // 填充完成 存至 data.sku
         this.sku = sku
 
-        if(result.userAddresses.length){
+        if (result.userAddresses.length) {
           // 保存一份地址列表至data
           this.addressList = result.userAddresses
-          const { id,receiver, contact, fullLocation, address } = this.chosenAddressId 
-          // 提取选择的地址
-          ? result.userAddresses.find(address => address.id === this.chosenAddressId) 
-          // 否则 未选择地址（默认为0）则使用默认地址
-          : result.userAddresses.find(address => address.isDefault !== 0);
+          const { id, receiver, contact, fullLocation, address } = this.chosenAddressId
+            // 提取选择的地址
+            ? result.userAddresses.find(address => address.id === this.chosenAddressId)
+            // 否则 未选择地址（默认为0）则使用默认地址
+            : result.userAddresses.find(address => address.isDefault !== 0);
           // 保存至data用于展示
           this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
           console.log("this.showAddressList", this.showAddressList)
@@ -382,35 +371,17 @@ export default {
 
     // 商品id -> 商品评价数据
     getProductEvaluateById(id) {
-      getProductEvaluateApi(id).then(res => {
-        let evaluate = res.result
-        this.evaluate = evaluate
 
-        const keywords = [];
-
-        if (evaluate.hasPictureCount) {
-          keywords.push({
-            title: "有图",
-            count: evaluate.hasPictureCount
-          });
-        }
-
-        for (let i = 0; i < evaluate.tags.length; i++) {
-          keywords.push({
-            title: evaluate.tags[i].title,
-            count: evaluate.tags[i].tagCount
-          });
-        }
-
-        this.keywords = keywords
-
+      this.$store.dispatch('cart/getEvaluateKeywords', id).then(res => {
+        this.evaluate = res
       })
+
     },
 
     // 商品id -> 商品评价具体内容
     getEvaluatePageById(id) {
 
-      getEvaluatePageApi({id, page:1, pageSize:3}).then(res => {
+      getEvaluatePageApi({ id, page: 1, pageSize: 3 }).then(res => {
         const result = res.result
         const data = [];
 
@@ -476,13 +447,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// 页面容器
-.product-div {
-  background: url(@/assets/images/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
-  position: absolute;
-  width: 100vw;
-  overflow: hidden;
-}
+
 
 // 固定盒子大小
 .cell-group {
@@ -597,23 +562,7 @@ export default {
   }
 }
 
-// <!--———— 1. 顶栏 ——————-->
-// <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
-.top-nav-bar {
-  background: transparent;
-  z-index: 10;
 
-  .top-bar-opt {
-    text-shadow: 1px 1px 5px #000;
-  }
-
-  .right-top-cart>div {
-    border: none;
-    height: 16px;
-    line-height: 16px;
-    padding-right: 1px;
-  }
-}
 
 // <!--———— 2.1 主体 ——————-->
 // <!-- 轮播图 商品图片 -->
@@ -629,12 +578,12 @@ export default {
     box-shadow: 0px 4px 10px #122e7447;
     background-color: white;
     border-radius: 5px;
-    margin-top: 70px;
+    margin-top: 20px;
   }
 
   .swiper-slide-active {
     transform: scale(1);
-    margin: 50px 0 20px;
+    margin: 0 0 20px;
   }
 
   img {
@@ -704,9 +653,10 @@ export default {
 
     &:nth-child(3) .item-ico {
       background-position-x: -67px;
-      &.collect{
-      background-position-x: -86px;
-    }
+
+      &.collect {
+        background-position-x: -86px;
+      }
     }
 
   }
@@ -830,7 +780,4 @@ export default {
     }
   }
 }
-
-
-
 </style>
