@@ -32,7 +32,11 @@ import { RadioGroup, Radio } from 'vant';
 import { AddressEdit } from 'vant';
 import { Rate } from 'vant';
 import { Lazyload } from 'vant';
+import { Calendar } from 'vant';
+import { Uploader } from 'vant';
 
+Vue.use(Uploader);
+Vue.use(Calendar);
 Vue.use(Lazyload);
 Vue.use(Rate);
 Vue.use(AddressEdit);

@@ -3,7 +3,7 @@
 
     <!-- 个人信息 头像ID 会员信息 浏览 收藏 购物券 -->
     <van-cell-group class="cell-group" inset>
-      <van-cell class="my-info" :border="false">
+      <van-cell @click="$router.push('/user/edit')" class="my-info" :border="false">
         <template #title>
           <div class="my-info-left">
             <van-image round width="48px" height="48px" :src="img" />

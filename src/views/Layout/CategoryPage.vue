@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="分类" @click-right="onClickRight">
+    <van-nav-bar title="分类" @click-right="$router.push('/search')">
       <template #right>
         <van-icon name="search" size="18" color="white" />
       </template>
@@ -16,7 +16,7 @@
           >
             <div
               class="category-button"
-              :class="{ active: isThis(value.route) }"
+              :class="{ active: $route.params.type == value.route }"
               @click="goTo(value.route)"
             >
               {{ value.name }}
@@ -38,7 +38,6 @@
             <div class="right-top">
               <div class="text-title num" :class="item.img">{{ index+1 }}</div>
               <div class="text-title">{{ item.title }}</div>
-              <!-- 图片大小已统一。若不统一需要再包div用于定位？ -->
               <img :src="require('@/assets/images/' + item.img + '.png')" class="right-top-image" />
             </div>
           </van-grid-item>
@@ -78,17 +77,9 @@ export default {
     };
   },
   methods: {
-    onClickRight() {
-      console.log("right");
-    },
     goTo(page) {
-      const currentPath = this.$route.name;
-      if (currentPath == page) return;
-      this.$router.push({ name: page });
-    },
-    isThis(page) {
-      const currentPath = this.$route.name;
-      return currentPath == page;
+      if(page == this.$route.params.type) return
+      this.$router.push({ name: 'category', params: { type: page } });
     },
   },
   computed: {
