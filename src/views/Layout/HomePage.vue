@@ -128,8 +128,6 @@ export default {
   mounted() {
     this.getProductList()
 
-    const SECOND = 1000 // milliseconds
-
     new this.$swiper(this.$refs.swiper, {
 
       // 已全局注册
@@ -137,24 +135,14 @@ export default {
 
       loop: true,
       autoplay: {
-        delay: 1 * SECOND,
+        delay: 1 * 1000,
         disableOnInteraction: false,
       },
-      speed: 2 * SECOND,
+      speed: 2 * 1000,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
       },
-      // navigation: {
-      //   nextEl: '.swiper-button-next',
-      //   prevEl: '.swiper-button-prev',
-      // },
-
-      // on: {
-      //   slideChange: (swiper) => {
-      //     this.activeIndex = swiper.realIndex
-      //   },
-      // },
     })
   },
 

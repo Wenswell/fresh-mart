@@ -1,57 +1,76 @@
 <template>
   <div :class="$route.name" class="background">
     <!--———— 1. 顶部↑ ——————-->
-    
-    <!--———— 2. 中间 ——————-->
 
-    <!-- 注册/登录选项容器 -->
+
+    <!--———— 2.1 注册/登录 ——————-->
     <van-grid class="container" :border="false" :column-num="2" :gutter="0">
-      
       <!-- 注册/登录选项 -->
-      <van-grid-item 
-        v-for="([key, value]) in Object.entries(options)" :key="key" 
-        :class="{ active: $route.name == key }"
-        @click="goTo(key)"
-      >
+      <van-grid-item v-for="([key, value]) in Object.entries(options)" :key="key" :class="{ active: $route.name == key }"
+        @click="goTo(key)">
         <p class="auth-title">{{ value }}</p>
         <div class="triangle-border"></div>
       </van-grid-item>
-    <!-- 
-      <van-grid-item @click="goTo('register')" :class="{ active: $route.name == 'register' }">
-        <p class="auth-title">注册</p>
-        <div class="triangle-border"></div>
-      </van-grid-item>
-      <van-grid-item @click="goTo('login')" :class="{ active: $route.name == 'login' }">
-        <p class="auth-title">登录</p>
-        <div class="triangle-border"></div>
-      </van-grid-item>
-    -->
-    
-  </van-grid>
-    
-      <!-- 注册/登录 验证表单 -->
-      <router-view></router-view>
-    
-    <!--———— 3. 底部 ——————-->
+    </van-grid>
 
+    <!--———— 2.2 验证表单 ——————-->
+    <!-- 手机号输入框 -->
+    <van-field autofocus v-model="phoneNum" type="number" maxlength="11" name="手机" label="手机" placeholder="请输入手机号"
+      class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+      <template slot="label">
+        <span class="phone-ico ico"></span>
+      </template>
+    </van-field>
+
+    <!-- 密码输入框 -->
+    <van-field v-show="$route.name == 'login'" v-model="passWd" :type="fieldType" maxlength="16" name="密码" label="密码"
+      placeholder="请输入密码" class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+      <template slot="label">
+        <span class="lock-ico ico"></span>
+      </template>
+      <template #right-icon>
+        <span class="eye-ico ico" @click="changeType"></span>
+      </template>
+    </van-field>
+
+    <!-- 验证码输入框 -->
+    <van-field v-show="$route.name == 'register'" v-model="verifyNum" type="text" maxlength="6" name="验证码" label="验证码"
+      placeholder="请输入验证码" class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+      <template slot="label">
+        <span class="safe-ico ico"></span>
+      </template>
+      <template #button>
+        <van-button round class="get-verify" type="primary" size="mini" color="#5AD4EA" plain @click="getVerifyCode"
+          :text="btnText" :disabled="btnDisable"></van-button>
+      </template>
+    </van-field>
+
+    <!--———— 3. 底部 ——————-->
     <!-- 底部登录按钮 -->
-    <!-- <div style="text-align: center">
-      <van-button class="submit-btn" round color="#46E1FF" to="/layout">{{ $route.name == "register" ? "注册" : "登录"
-      }}</van-button>
-    </div> -->
+    <div style="text-align: center">
+      <van-button @click="sendLoginMsg" class="submit-btn" round color="#46E1FF">
+        <!-- {{ $route.name == "register" ? "注册" : "登录" }} -->
+        登录
+      </van-button>
+    </div>
+
 
   </div>
 </template>
 
 <script>
+import { getVerifyCodeApi, } from "@/api/user";
+
 export default {
   // name: "AuthForm",
   data() {
     return {
-      phoneNum: "",
+      phoneNum: "13951611560",
       verifyNum: "",
+      passWd: "123456",
       btnText: "获取验证码",
       btnDisable: false,
+      fieldType: 'password',
       options: {
         "register": "注册",
         "login": "登录",
@@ -59,21 +78,52 @@ export default {
     };
   },
   methods: {
-    getVerifyCode() {
-      this.btnDisable = true;
-      this.verifyNum = 26433;
+    // 显示/隐藏密码
+    changeType() {
+      this.fieldType = this.fieldType === 'password' ? 'text' : 'password'
     },
+    //获取验证码
+    async getVerifyCode() {
+      console.log("getVerifyCode")
+      const type = 1
+      const res = await getVerifyCodeApi(this.phoneNum, type)
+      this.btnDisable = true;
+      console.log(res)
+      // this.$toast(res.msg)
+      this.verifyNum = 123456;
+    },
+
     goTo(page) {
       const currentPath = this.$route.name;
       if (currentPath == page) return;
       this.$router.push({ name: page });
+    },
+    async sendLoginMsg() {
+
+      // 验证登录信息完整
+      if (!this.phoneNum) return this.$toast('请输入手机号')
+      if (this.$route.name == 'login' && !this.passWd) return this.$toast('未输入密码')
+      if (this.$route.name == 'register' && !this.btnDisable) return this.$toast('未获取验证码')
+
+      // 获取登录信息
+      const res = await this.$store.dispatch('user/registerByPasswdVerify', {
+        type: this.$route.name,
+        phoneNum: this.phoneNum,
+        verifyNum: this.verifyNum,
+        passWd: this.passWd,
+      })
+      
+      // 进入主页
+      if (res.code == 1) {
+        this.$toast(res.result.account+"，欢迎回来！")
+        this.$router.push('/layout/home')
+      }
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-
 /***** 1. 顶部 *****/
 
 // 顶部图片 注册页面
@@ -84,7 +134,6 @@ export default {
 // 顶部图片 登录页面
 .login {
   background-image: url(@/assets/images/banner-login.jpg);
-  
 }
 
 /***** 2. 中间 *****/
@@ -99,7 +148,7 @@ export default {
     color: @grey;
     font-size: 18px;
   }
-  
+
   // 注册/登录 默认下框线
   .triangle-border {
     width: 100%;
@@ -109,7 +158,7 @@ export default {
     // 与 注册/登录 文字的间距
     margin-top: 10px;
   }
-  
+
   // 注册/登录 激活后的样式
   .active {
 
@@ -118,11 +167,11 @@ export default {
       color: @blue;
       font-weight: bold;
     }
-    
+
     // 注册/登录 激活后的下框线
     .triangle-border {
       background-color: @blue;
-      
+
       // 注册/登录 激活后的下框线正中添加三角形
       &::after {
         content: "";
@@ -139,13 +188,32 @@ export default {
   }
 }
 
+// 输入框
+.verify-field {
+  font-size: 14px;
+  margin: 0 auto;
+  width: 280px;
+  padding: 0;
+  height: 47px;
+  border-bottom: 1px solid @light-grey;
+}
+
+// 获取验证码按钮
+.get-verify {
+  vertical-align: middle;
+  padding: 6px;
+  margin: 0;
+  border-radius: 5px;
+  background-color: @light-blue;
+}
+
 /***** 3. 底部 *****/
 
-// // 登录按钮调整大小、阴影
-// .submit-btn {
-//   box-shadow: 0px 7px 12px 0px #5ad4eaaa;
-//   width: 222px;
-//   height: 40px;
-//   margin-top: 50px;
-// }
+// 登录按钮调整大小、阴影
+.submit-btn {
+  box-shadow: 0px 7px 12px 0px #5ad4eaaa;
+  width: 222px;
+  height: 40px;
+  margin-top: 50px;
+}
 </style>

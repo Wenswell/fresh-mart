@@ -23,6 +23,19 @@ export const loginByPasswordApi = (account, password) => {
 }
 
 
+//修改个人信息
+export const updateProfileApi = ({
+nickname,
+gender,
+birthday,
+cityCode,
+provinceCode,
+countyCode,
+profession,
+}) => {
+  return request('/member/profile', 'PUT', {nickname,gender,birthday,cityCode,provinceCode,countyCode,profession,
+  })
+}
 
 // 地址 添加新地址 -> 得到id
 export const addNewAddressApi = (newObj) => {

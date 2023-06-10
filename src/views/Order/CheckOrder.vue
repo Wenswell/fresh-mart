@@ -101,6 +101,7 @@ export default {
     // console.log("订单提交所需：skuId",toBuyOrderInfo.goods[0].skuId)
     // console.log("订单提交所需：count",toBuyOrderInfo.goods[0].count)
     // console.log("订单提交所需：id",toBuyOrderInfo.userAddresses[0].id)
+    // if(!this.$store.getters['user/getToBuyOrderInfo'].userAddresses){location.reload()}
     this.$bus.$on('chosen-address-id', newId => {
       console.log("+++this.$bus.$on【chosen-address-id】", newId)
       // this.chosenAddress = newId
