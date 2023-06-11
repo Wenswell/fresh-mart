@@ -3,7 +3,9 @@ import {
   getAddressListApi,changeAddressApi,addNewAddressApi,
   createOrderApi,submitOrderApi,
   getHistoryApi, 
-  getOrderListApi,getOrderDetailApi,rePurchaseApi
+  getOrderListApi,getOrderDetailApi,rePurchaseApi,
+  loginByPasswordApi,loginByVerifyNumberApi,
+  updateProfileApi,
 } from "@/api/user"
 
 
@@ -11,14 +13,15 @@ import {
 const state = {
   // 用户信息
   profile: {
-    // 传登录后入的JSON格式
-    id: '',
-    avatar: '',
-    nickname: '',
-    account: '',
-    mobile: '',
-    token: ''
-  },
+    "avatar": "http://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com/picture/2021-04-06/db628d42-88a7-46e7-abb8-659448c33081.png",
+    "nickname": "技通武林玉面君子",
+    "account": "慕容复",
+    "gender": "男",
+    "birthday": "1357-02-04",
+    "cityCode": "320500",
+    "provinceCode": "320000",
+    "profession": "南・慕・容"
+},
 
   collect: {},
 
@@ -33,6 +36,13 @@ const state = {
 }
 
 const getters = {
+
+  // 获取部分用户信息用于修改
+  getUserInfo(state){
+    // eslint-disable-next-line no-unused-vars
+    const { token,mobile,id, ...other } = state.profile
+    return other
+  },
 
   // 获取用户名、头像
   getUserNameImg(state){
@@ -97,6 +107,28 @@ const getters = {
 
 const actions = {
 
+  //修改个人信息
+  async updateProfile(context, newObj){
+    const allProfile = {...context.state.profile,...newObj}
+    const { nickname, gender, birthday, cityCode, provinceCode, countyCode, profession } = allProfile;
+    const profile = {nickname,gender,birthday,cityCode,provinceCode,countyCode,profession};
+    const res = await updateProfileApi(profile)
+    context.commit('setUser', res.result)
+    return res.code
+  },
+
+  // 登录
+  async registerByPasswdVerify(context, {type,phoneNum,verifyNum,passWd}){
+    const res = type =='login' 
+    ? await loginByPasswordApi(phoneNum, passWd)
+    : await loginByVerifyNumberApi(phoneNum, verifyNum)
+    
+    // 将返回的user数据（包括token）存放到 Vuex 的 Store 中
+    context.commit('setUser', res.result)
+    context.dispatch('updateAddressList')
+    return res
+  },
+
   //获取订单列表
   async getOrder(context, {page, orderState}){
     console.log("orderState", orderState)
@@ -159,6 +191,7 @@ const actions = {
   async createOrder(context) {
     const res = await createOrderApi()
     context.commit('setOrder', res.result)
+    return 'done'
   },
 
   //更改多件商品的地址

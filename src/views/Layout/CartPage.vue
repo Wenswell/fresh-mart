@@ -145,9 +145,8 @@ onDelete(){
     },
     onSubmit() {
       console.log("点击'结算'")
-      this.$store.dispatch('user/createOrder')
-      // 提交后转到订单页面
-      this.$router.push('/order/check')
+      // 提交后、订单创建成功后转到订单页面
+      this.$store.dispatch('user/createOrder').then(()=>this.$router.push('/order/check'))
     },
 
     beforeClose({ name, position, instance }) {

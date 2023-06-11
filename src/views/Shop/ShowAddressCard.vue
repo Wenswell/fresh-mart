@@ -24,11 +24,6 @@ export default {
     return {
     }
   },
-// beforeCreate(){console.log('%c ShowAddressCard - beforeCreate','color:#f3f;')},
-// beforeMount(){console.log('%c ShowAddressCard - beforeMount','color:#f3f;')},
-// mounted(){console.log('%c ShowAddressCard - mounted','color:#f3f;')},
-// beforeUpdate(){console.log('%c ShowAddressCard - beforeUpdate','color:#f3f;')},
-// updated(){console.log('%c ShowAddressCard - updated','color:#f3f;')},
 created(){
   console.log('%c ShowAddressCard - created','color:#f3f;')
   // 禁用点击

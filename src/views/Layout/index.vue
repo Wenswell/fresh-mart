@@ -24,6 +24,7 @@
 
 <script>
 export default {
+  name: 'LayoutIndex',
   data() {
     return {
       // 定位二级路由名称

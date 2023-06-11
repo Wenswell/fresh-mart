@@ -94,9 +94,9 @@ export default {
   padding-bottom: 10px;
   // border-bottom: 1px solid #CCC;
 
-  &:first-child {
+  // &:first-child {
     // margin-top: 50px;
-  }
+  // }
 }
 
 .product-top-card {

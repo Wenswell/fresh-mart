@@ -56,7 +56,7 @@ const routes = [
       {
         path: 'products/:id',
         redirect: '/shop/products/:id/product',
-        name:'products',
+        name: 'products',
         component: () => import('@/views/Shop/ProductDetail'),
         children: [
           {
@@ -75,17 +75,7 @@ const routes = [
             component: () => import('@/views/Shop/ProductDetail/AllSpecifics'),
           },
         ],
-    
       },
-      // {
-      //   path: 'evaluate',
-      //   redirect: 'evaluate/3995846',
-      // },
-      // {
-      //   path: 'evaluate/:id',
-      //   name: 'evaluate',
-      //   component: () => import('@/views/Shop/AllEvaluate'),
-      // },
       {
         path: 'collect',
         name: 'collect',
@@ -108,25 +98,25 @@ const routes = [
     ],
   },
   {
+    path: '/test/test/:type',
+    name: 'test',
+    component: () => import('@/views/test/TEST'),
+  },
+  {
     path: '/auth',
     redirect: '/auth/register',
-    // name: 'Auth',
-    component: () => import('@/views/Auth/AuthPage'),
+  },
+  {
+    path: '/auth',
+    component: () => import('@/views/auth'),
     children: [
       {
         path: 'register',
         name: 'register',
-        component: () => import('@/views/Auth/RegisterForm'),
       },
       {
         path: 'login',
         name: 'login',
-        component: () => import('@/views/Auth/LoginForm'),
-      },
-      {
-        path: 'test',
-        name: 'test',
-        component: () => import('@/views/Auth/TestPage'),
       },
     ],
   },
@@ -140,92 +130,47 @@ const routes = [
         name: 'address',
         component: () => import('@/views/user/UserAddress'),
       },
+      {
+        path: 'edit',
+        name: 'edit',
+        component: () => import('@/views/layout/EditProfile'),
+      }
     ],
   },
-  {
+  { //layout 首页+分类+购物车+我的
     path: '/layout',
     redirect: '/layout/home',
-    component: () => import('@/views/Layout/LayoutIndex'),
+    component: () => import('@/views/layout'),
     children: [
       {
         path: 'home',
         name: 'home',
-        component: () => import('@/views/Layout/HomePage'),
+        component: () => import('@/views/layout/home'),
       },
       {
         path: 'category',
+        redirect: 'category/featured',
+      },
+      {
+        path: 'category/:type',
         name: 'category',
-        redirect: '/layout/category/featured',
-        component: () => import('@/views/Layout/CategoryPage'),
-        children: [
-          {
-            path: 'featured',
-            name: 'featured',
-            // component: () => import('@/views/category/Featured'),
-          },
-          {
-            path: 'fruits',
-            name: 'fruits',
-            // component: () => import('@/views/category/Fruits'),
-          },
-          {
-            path: 'vegetables',
-            name: 'vegetables',
-            // component: () => import('@/views/category/Vegetables'),
-          },
-          {
-            path: 'meat',
-            name: 'meat',
-            // component: () => import('@/views/category/Meat'),
-          },
-          {
-            path: 'seafood',
-            name: 'seafood',
-            // component: () => import('@/views/category/Seafood'),
-          },
-          {
-            path: 'snacks',
-            name: 'snacks',
-            // component: () => import('@/views/category/Snacks'),
-          },
-          {
-            path: 'beverages',
-            name: 'beverages',
-            // component: () => import('@/views/category/Beverages'),
-          },
-          {
-            path: 'groceries',
-            name: 'groceries',
-            // component: () => import('@/views/category/Groceries'),
-          },
-          {
-            path: 'catering',
-            name: 'catering',
-            // component: () => import('@/views/category/Catering'),
-          },
-          {
-            path: 'delicacies',
-            name: 'delicacies',
-            // component: () => import('@/views/category/Delicacies'),
-          },
-          {
-            path: 'skincare',
-            name: 'skincare',
-            // component: () => import('@/views/category/Skincare'),
-          },
-        ],
+        component: () => import('@/views/layout/CategoryPage'),
       },
       {
         path: 'cart',
         name: 'cart',
-        component: () => import('@/views/Layout/CartPage'),
+        component: () => import('@/views/layout/CartPage'),
       },
       {
         path: 'my',
         name: 'my',
-        component: () => import('@/views/Layout/MyPage'),
+        component: () => import('@/views/layout/my'),
       },
     ],
+  },
+  { //无对应页面 先跳转至测试页面
+    path: '*',
+    redirect: '/test/test/aaa',
   },
 ]
 
@@ -233,4 +178,11 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.path === from.path) {
+    next(false);
+  } else {
+    next();
+  }
+})
 export default router

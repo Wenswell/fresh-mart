@@ -29,13 +29,10 @@ export default (url, method, submitData, changeURL) => {
   // 请求拦截器
   instance.interceptors.request.use(config => {
     // 发送请求前执行
-    console.log("发送请求前执行")
     
     // 从store中读取token,并添加到请求头
     const token = store?.state?.user?.profile?.token ?? 'Real-token-is-unreachable-This-is-a-test-token';
-    // console.log(store)
-    // console.log(store.state)
-    console.log("token: "+token)
+    console.log(`token: ${token.slice(0, 20)}...`);
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
