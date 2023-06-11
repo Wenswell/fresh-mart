@@ -11,6 +11,9 @@ import "@/assets/styles/custome.less"
 import "@/utils/import-vant"
 import "@/utils/swiper"
 
+// 导入自定义组件
+import RoundBox from '@/components/round-box';
+Vue.component('RoundBox', RoundBox);
 // 导入swiper
 // import { Swiper, SwiperSlide } from "@/utils/swiper"
 // eslint-disable-next-line vue/multi-word-component-names
