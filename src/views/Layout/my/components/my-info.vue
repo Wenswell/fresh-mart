@@ -2,22 +2,22 @@
   <div>
     <!-- 个人信息 头像ID 会员信息 浏览 收藏 购物券 -->
     <RoundBox class="info">
-      <div class="info-up">
+      <div @click="$router.push('/user/edit')" class="info-up">
         <van-image class="info-up-avatar" round width="48px" height="48px" :src="img" />
         <span class="info-up-name">{{ name }}</span>
         <span class="info-up-vip"><van-icon name="diamond" size="13" color="#4e3b20" /> 黄金会员 <van-icon
             name="arrow" /></span>
       </div>
       <div class="info-down">
-        <div class="info-down-item">
+        <div @click="$router.push('/shop/history')" class="info-down-item">
           <span class="info-down-num">{{ historyCount }}</span>
           浏览
         </div>
-        <div class="info-down-item">
+        <div @click="$router.push('/shop/collect')" class="info-down-item">
           <span class="info-down-num">{{ collectCount }}</span>
           收藏
         </div>
-        <div class="info-down-item">
+        <div @click="$toast('暂无购物券')" class="info-down-item">
           <span class="info-down-num">{{ 0 }}</span>
           购物券
         </div>

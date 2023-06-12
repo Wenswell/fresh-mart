@@ -1,26 +1,25 @@
 <template>
   <div class="product-div">
-        <!--———— 1. 顶栏 ——————-->
+    <!--———— 1. 顶栏 ——————-->
     <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
     <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="$router.back()"
-      @click-right="$router.push('/layout/cart').catch(err => {err})">
+      @click-right="$router.push('/layout/cart').catch(err => { err })">
       <template #left>
         <van-icon size="20" name="arrow-left" />
       </template>
       <template #right>
-        <van-icon class="right-top-cart" size="20" name="shopping-cart-o" :badge="cartCount" />
+        <van-icon @click="$router.push('/layout/cart')" class="right-top-cart" size="20" name="shopping-cart-o" :badge="cartCount" />
       </template>
       <template #title>
         <van-row type="flex" justify="center" gutter="45">
-          <van-col @click="$router.replace('product').catch(err => {})" class="top-bar-opt" span="6">商品</van-col>
-          <van-col @click="$router.replace('evaluate').catch(err => {})" class="top-bar-opt" span="6">评价</van-col>
-          <van-col @click="$router.replace('specifics').catch(err => {})" class="top-bar-opt" span="6">详情</van-col>
+          <van-col @click="$router.replace('main').catch(err => { })" class="top-bar-opt" span="6">商品</van-col>
+          <van-col @click="$router.replace('evaluate').catch(err => { })" class="top-bar-opt" span="6">评价</van-col>
+          <van-col @click="$router.replace('specifics').catch(err => { })" class="top-bar-opt" span="6">详情</van-col>
         </van-row>
       </template>
     </van-nav-bar>
 
     <router-view />
-
 
   </div>
 </template>
