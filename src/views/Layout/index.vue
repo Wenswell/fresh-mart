@@ -4,9 +4,8 @@
     <!-- 二级路由 -->
     <router-view />
 
-    
     <!-- 底栏 -->
-    <van-tabbar v-model="active">
+    <van-tabbar style="z-index: 10;" v-model="active">
       <van-tabbar-item v-for="(item, index) in navs" :key="index" :name="item.name" :replace="true"
       :to="'/layout/' + item.name">
       

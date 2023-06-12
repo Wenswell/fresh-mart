@@ -21,17 +21,6 @@
     </van-nav-bar> -->
 
     <!--———— 2.1 主体 ——————-->
-    <!-- 轮播图 商品图片 -->
-    <div ref="swiper" class="swiper">
-      <div class="swiper-wrapper">
-        <!-- Slides -->
-        <!-- <div class="swiper-slide" v-for="(item,index) in product.item.images" :key="index"><img :src="item" class="swiper-img" /> -->
-        <div class="swiper-slide" v-for="(item, index) in result.mainPictures" :key="index"><img :src="item"
-            class="swiper-img" />
-        </div>
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
 
     <!--———— 2.2 主体 ——————-->
     <!-- 商品详情 商品标题 价格 包邮 已购 好评 -->
@@ -282,6 +271,11 @@ export default {
     getProductById(id) {
 
       this.$store.dispatch('cart/getProductDetail', id).then(res => {
+        if(!res) {
+          this.$toast('商品不存在')
+          this.$router.push('/layout/home')
+          return
+        }
         // result即结果
         let result = res
         // result 存至 data
