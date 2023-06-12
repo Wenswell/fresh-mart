@@ -14,8 +14,7 @@
     <HomeCategory />
 
     <!--———— 2.3. 主体 新用户广告 ——————-->
-    <!-- 中部胶囊广告 -->
-    <van-image width="100%" :src="require('@/assets/images/capsuleAd.png')" @click="toThisPage('新用户注册')" />
+    <van-image width="100%" :src="require('@/assets/images/capsuleAd.png')" @click="$toast('新用户注册')" />
 
     <!--———— 2.4 主体 限时折扣 ——————-->
     <HomeDiscount />

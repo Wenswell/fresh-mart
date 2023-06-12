@@ -66,11 +66,9 @@ const getters = {
 const actions = {
 
   async getProductDetail(context, id) {
-    let resObj={}
-    await getProductDetailApi({id}).then(res => {
-      resObj = res.result
-    })
-    return resObj
+    const res = await getProductDetailApi({id})
+    if(!res) return false
+    return res.result
   },
 
   // 商品评价关键词
@@ -127,7 +125,8 @@ const actions = {
   //添加收藏 - 单件商品
   async addToCollect(context, ids) {
     // console.log("addToCollect ids", ids)
-    await collectProductApi({collectObjectIds:ids})
+    // 传值必须是数组
+    await collectProductApi({collectObjectIds:[ids]})
     console.log(`商品ID=${ids}收藏成功`)
     // console.log("addToCollect res", res)
   },
@@ -136,7 +135,7 @@ const actions = {
   async cancelCollect(context, ids) {
     // console.log("addToCollect ids", ids)
     await cancelCollectApi({collectObjectIds:ids})
-    console.log(`商品ID=${ids}取消收藏成功`)
+    console.log(`商品ID=${ids}已取消收藏`)
     // console.log("addToCollect res", res)
   },
 

@@ -2,15 +2,19 @@
   <!-- 
 1. 不添加left-title直接添加内容，没有布局
 2. 添加left-title，<template slot="flex">中添加内容为flex布局
+3. 添加:unflex=true，使用unflex插槽
    -->
-  <div class="box">
+  <div @click="$emit('click')" class="box">
     <slot></slot>
     <div v-if="leftTitle" class="header">
       <span class="left-title">{{ leftTitle }}</span>
       <span @click="$emit('click-right')" class="right-all">查看全部<van-icon name="arrow" /></span>
     </div>
-    <div v-if="leftTitle" class="flex">
+    <div v-if="leftTitle&&!unflex" class="flex">
       <slot name="flex"></slot>
+    </div>
+    <div v-if="leftTitle&&unflex">
+      <slot name="unflex"></slot>
     </div>
   </div>
 </template>
@@ -23,7 +27,11 @@ export default {
       type: String,
       default: null
     },
-    clickRight: String
+    clickRight: String,
+    unflex: {
+      type: Boolean,
+      default: false
+    },
   },
 }
 </script>

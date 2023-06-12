@@ -55,14 +55,14 @@ const routes = [
       },
       {
         path: 'products/:id',
-        redirect: '/shop/products/:id/product',
+        redirect: '/shop/products/:id/main',
         name: 'products',
         component: () => import('@/views/Shop/ProductDetail'),
         children: [
           {
-            path: 'product',
-            name: 'product',
-            component: () => import('@/views/Shop/ProductDetail/ProductDetail'),
+            path: 'main',
+            name: 'main',
+            component: () => import('@/views/Shop/ProductDetail/main'),
           },
           {
             path: 'evaluate',
@@ -154,7 +154,7 @@ const routes = [
       {
         path: 'category/:type',
         name: 'category',
-        component: () => import('@/views/layout/CategoryPage'),
+        component: () => import('@/views/layout/category'),
       },
       {
         path: 'cart',
