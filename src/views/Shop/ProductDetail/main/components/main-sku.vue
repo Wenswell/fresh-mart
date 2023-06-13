@@ -1,32 +1,48 @@
 <template>
+  <div>
+
   <van-sku class="sku-div" v-model="skuShow" :sku="sku" :goods="goods" :goods-id="sku.collection_id" :quota="0"
     :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku" @sku-selected="changeSelectedSku"
     @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
     <template #sku-body-top>
-      <ShowAddressCard :showAddressList="showAddressList" :chosenAddressId="chosenAddressId"></ShowAddressCard>
+      <van-button @click="show=true" size="large">123</van-button>
+      <!-- <ShowAddressCard :showAddressList="showAddressList" :chosenAddressId="chosenAddressId"></ShowAddressCard> -->
     </template>
   </van-sku>
+
+  <van-popup v-model="show" position="buttom">123123
+  <UserAddress></UserAddress>
+</van-popup>
+  </div>
 </template>
 
 <script>
-import ShowAddressCard from '../../../ShowAddressCard.vue'
+// import ShowAddressCard from '../../../ShowAddressCard.vue'
+import UserAddress from '@/views/user/UserAddress'
 export default {
   name: 'MainSku',
   components: {
-    ShowAddressCard,
+    // ShowAddressCard,
+    UserAddress,
   },
   props: {
     sku: Object, // 【主要】 result过滤后的 商品sku及数量 
     goods: Object, // 默认商品 sku 缩略图
-    showAddressList: Array, // 收货信息地址，只用于展示
-    chosenAddressId: String,// 接收选择的地址id
-
+    // showAddressList: Array, // 收货信息地址，只用于展示
+    // chosenAddressId: String,// 接收选择的地址id
+    userAddresses: Array,
   },
   data() {
     return {
+      show: false,
       skuShow: false,  //打开sku弹窗
       selectSku: '',   // 选中的sku
+      showAddressList: Array, // 收货信息地址，只用于展示
+      chosenAddressId: String,// 接收选择的地址id
     }
+  },
+  created() {
+
   },
   methods: {
 
@@ -69,11 +85,26 @@ export default {
       this.$router.push('/order/check')
     },
   },
+  watch: {
+    userAddresses(n) {
+      if (n.length) {
+        const { id, receiver, contact, fullLocation, address } = +this.chosenAddressId
+          // 提取选择的地址
+          ? this.userAddresses.find(address => address.id === this.chosenAddressId)
+          // 否则 未选择地址（默认为0）则使用默认地址
+          : this.userAddresses.find(address => address.isDefault !== 0);
+        // 保存至data用于展示
+        this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
+        console.log("this.showAddressList", this.showAddressList)
+        // 保存至data用于发送订单请求
+        this.chosenAddressId = id
+      }
+    },
+  },
 }
 </script>
 
 <style lang="less">
-
 // <!--———— 4. 弹窗 ——————-->
 // <!-- 商品详情 sku -->
 .sku-div {

@@ -55,26 +55,8 @@ const routes = [
       },
       {
         path: 'products/:id',
-        redirect: '/shop/products/:id/main',
         name: 'products',
         component: () => import('@/views/Shop/ProductDetail'),
-        children: [
-          {
-            path: 'main',
-            name: 'main',
-            component: () => import('@/views/Shop/ProductDetail/main'),
-          },
-          {
-            path: 'evaluate',
-            name: 'evaluate',
-            component: () => import('@/views/Shop/ProductDetail/evaluate'),
-          },
-          {
-            path: 'specifics',
-            name: 'specifics',
-            component: () => import('@/views/Shop/ProductDetail/specifics'),
-          },
-        ],
       },
       {
         path: 'collect',
