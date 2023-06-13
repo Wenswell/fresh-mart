@@ -1,49 +1,40 @@
 <template>
-  <div class="main-page">
 
-    <!--———— 2.1 主体 ——————-->
-    <!-- 轮播图 商品图片 -->
-    <MainSwiper ref="swiper" :imgList="result.mainPictures" />
+    <div class="main-page">
 
-    <!--———— 2.2 主体 ——————-->
-    <!-- 商品详情 商品标题 价格 包邮 已购 好评 -->
-    <MainTitle :result="result" :evaluate="evaluate" />
+      <!--———— 2.1 主体 ——————-->
+      <!-- 轮播图 商品图片 -->
+      <MainSwiper ref="swiper" :imgList="result.mainPictures" />
 
-    <!--———— 2.3 主体 ——————-->
-    <!-- 商品SKU 已选 -->
-    <MainSelect @open="skuShow = true" ref="selecteded" :selectSku="selectSku" />
+      <!--———— 2.2 主体 ——————-->
+      <!-- 商品详情 商品标题 价格 包邮 已购 好评 -->
+      <MainTitle :result="result" :evaluate="evaluate" />
 
-    <!--———— 2.4 主体 ——————-->
-    <!-- 更多选项 客服 分享 收藏 -->
-    <MainOption @collect="onCollect" :collect=result.isCollect />
+      <!--———— 2.3 主体 ——————-->
+      <!-- 商品SKU 已选 -->
+      <MainSelect @open="$refs.sku.skuShow = true" ref="selecteded" :selectSku="selectSku" />
 
-    <!--———— 2.5 主体 ——————-->
-    <!-- 商品评价 评价数量 查看全部 预览评价 -->
-    <MainEvaluate :evaluate="evaluate" :evaluateContent="evaluateContent" />
+      <!--———— 2.4 主体 ——————-->
+      <!-- 更多选项 客服 分享 收藏 -->
+      <MainOption @collect="onCollect" :collect=result.isCollect />
 
-    <!--———— 3. 底部 ——————-->
-    <!-- 按钮 加入购物车 购买 -->
-    <MainPurchase @open="skuShow = true" />
+      <!--———— 2.5 主体 ——————-->
+      <!-- 商品评价 评价数量 查看全部 预览评价 -->
+      <MainEvaluate :changeTab="changeTab" :evaluate="evaluate" :evaluateContent="evaluateContent" />
 
-    <!--———— 4. 弹窗 ——————-->
-    <!-- 商品详情 sku -->
-    <MainSku />
+      <!--———— 3. 底部 ——————-->
+      <!-- 按钮 加入购物车 购买 -->
+      <MainPurchase @open="$refs.sku.skuShow = true" />
 
+      <!--———— 4. 弹窗 ——————-->
+      <!-- 商品详情 sku -->
+      <MainSku ref="sku" :sku="sku" :goods="goods" :userAddresses="result.userAddresses" />
 
-    <van-sku class="sku-div" v-model="skuShow" :sku="sku" :goods="goods" :goods-id="sku.collection_id" :quota="0"
-      :quota-used="0" :hide-stock="sku.hide_stock" @sku-prop-selected="changeSelectedSku"
-      @sku-selected="changeSelectedSku" @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked">
-      <template #sku-body-top>
-        <ShowAddressCard :showAddressList="showAddressList" :chosenAddressId="chosenAddressId"></ShowAddressCard>
-      </template>
-    </van-sku>
-
-  </div>
+    </div>
 </template>
 
 <script>
 import { getEvaluatePageApi } from '@/api/product'
-import ShowAddressCard from '../../ShowAddressCard.vue'
 import MainSwiper from './components/main-swiper';
 import MainTitle from './components/main-title';
 import MainSelect from './components/main-select';
@@ -53,9 +44,8 @@ import MainPurchase from './components/main-purchase';
 import MainSku from './components/main-sku';
 
 export default {
-  name: 'MainContent',
+  name: 'AllMain',
   components: {
-    ShowAddressCard,
     MainSwiper,
     MainTitle,
     MainSelect,
@@ -64,33 +54,29 @@ export default {
     MainPurchase,
     MainSku,
   },
+  props: {
+    changeTab: Function,
+  },
 
   data() {
     return {
-      productId: "",  // 当前商品id / 动态路由地址
-      mySwiper: '',   //轮播图
 
       //以下是商品详情sku弹窗信息
-      skuShow: false,   // 弹窗开关 Sku 商品规格
       result: {},           // 原始商品信息
 
       evaluate: {},          //评价数据
       evaluateContent: [],  // 评价具体内容
 
-      props: ['productId'], // 点击购买/加购返回信息
       sku: {},        // 【主要】 result过滤后的 商品sku及数量
       selectSku: '',   // 选中的sku
       // cartCount: '',  // 购物车数量
       goods: {},      // 默认商品 sku 缩略图
 
-      addressList: [],  // 收货地址列表
-      showAddressList: [],  // 收货信息地址，只用于展示
-      chosenAddressId: 0,  // 接收选择的地址id
+      // showAddressList: [],  // 收货信息地址，只用于展示
+      // chosenAddressId: '0',  // 接收选择的地址id
 
-      path: ''    //当前路由路径
     }
   },
-
   methods: {
 
     // 收藏、取消收藏
@@ -102,43 +88,6 @@ export default {
         //收藏
         : (this.$store.dispatch('cart/addToCollect', this.result.id),
           this.result.isCollect = !this.result.isCollect)
-    },
-
-    // 获取选择的sku用于展示
-    changeSelectedSku(res) {
-      let result = ''
-      for (let key in res.selectedSku) {
-        let value = res.selectedSku[key] || "未选择"
-        result += `${key}：${value}；`
-      }
-      result = result.slice(0, -1) // 去除最后一个";"号
-      this.selectSku = result
-    },
-
-    // 加入购物车 - 已选sku
-    onAddCartClicked(data) {
-      // console.log("onAddCartClicked", data)
-      this.$toast('skuid:' + data.selectedSkuComb.id + '\n添加成功');
-      // 加入购物车
-      this.$store.dispatch('cart/addProductToCart', { 'skuId': data.selectedSkuComb.id, 'count': data.selectedNum })
-      // 关闭sku展示
-      this.skuShow = false
-      // 更新购物车数量
-      // this.getCartCount()
-    },
-
-    // 直接购买 - 已选sku
-    onBuyClicked(data) {
-      // console.log("onBuyClicked", JSON.stringify(data))
-      this.$toast('skuid:' + data.selectedSkuComb.id + '\n地址id:' + this.chosenAddressIndex + '\n直接前往购买');
-      // 直接提交订单 - 在vuex中完成
-      this.$store.dispatch('user/toBuyNow', {
-        skuId: data.selectedSkuComb.id,
-        count: data.selectedNum,
-        addressId: this.chosenAddressId,
-      })
-      // 提交后转到订单页面
-      this.$router.push('/order/check')
     },
 
     // 商品id -> API -> 商品详细内容
@@ -158,7 +107,7 @@ export default {
         this.goods = { // 默认商品 sku 缩略图
           'picture': this.result.mainPictures[0]
         }
-        console.log("this.goods", this.goods)
+        // console.log("this.goods", this.goods)
 
         // result -> 过滤成 sku (van-sku 数据格式)
         // 大概框架
@@ -213,26 +162,9 @@ export default {
 
         // 填充完成 存至 data.sku
         this.sku = sku
-        console.log("this.sku", this.sku)
+        // console.log("this.sku", this.sku)
 
-        if (result.userAddresses.length) {
-          // 保存一份地址列表至data
-          this.addressList = result.userAddresses
-          const { id, receiver, contact, fullLocation, address } = this.chosenAddressId
-            // 提取选择的地址
-            ? result.userAddresses.find(address => address.id === this.chosenAddressId)
-            // 否则 未选择地址（默认为0）则使用默认地址
-            : result.userAddresses.find(address => address.isDefault !== 0);
-          // 保存至data用于展示
-          this.showAddressList = [`${receiver}, ${contact}, ${fullLocation}`, address];
-          console.log("this.showAddressList", this.showAddressList)
-          // 保存至data用于发送订单请求
-          this.chosenAddressId = id
-        } else {
-          this.$toast('没有添加地址！')
-        }
 
-        console.log("this.$refs", this.$refs.selecteded.showSku)
       }).then(() => {
         // 有数据后创建轮播图
         this.$refs.swiper.creatNewSwiper()
@@ -274,40 +206,43 @@ export default {
     },
   },
 
+  beforeCreate(){console.log('%c index Main - beforeCreate','color:redkeep;')},
+  beforeMount(){console.log('%c index Main - beforeMount','color:redkeep;')},
+  beforeUpdate(){console.log('%c index Main - beforeUpdate','color:redkeep;')},
+  updated(){console.log('%c index Main - updated','color:redkeep;')},
+  destroyed(){console.log('%c index Main - destroyed','color:redkeep;')},
+
   created() {
+    // 获取动态路由参数 -- 商品id
+    const productId = this.$route.params.id
+
+    // 商品id -> 商品详情
+    this.getProductById(productId)
+
+    // 商品id -> 商品评价信息
+    this.getProductEvaluateById(productId)
+
+    // 商品id -> 商品评价详细内容
+    this.getEvaluatePageById(productId)
+
+    // 获取购物车数量
+    // this.getCartCount()
+
+
     this.$bus.$on('chosen-address-id', (params) => {
-      console.log("=======chosen-address-id", params)
+      console.log("=++++++++++chosen-address-id", params)
       // 接收选择的地址序号
       this.chosenAddressId = params
     })
     // 打开SKU选择弹窗
     this.$bus.$on('open-sku', params => this.skuShow = Boolean(params))
 
-    // 获取动态路由参数 -- 商品id
-    this.productId = this.$route.params.id
-
-    this.path = this.$route.fullPath
-
-    // 商品id -> 商品详情
-    this.getProductById(this.productId)
-
-    // 商品id -> 商品评价信息
-    this.getProductEvaluateById(this.productId)
-
-    // 商品id -> 商品评价详细内容
-    this.getEvaluatePageById(this.productId)
-
-    // 获取购物车数量
-    // this.getCartCount()
-
-
   },
   watch: {
     // 监视路由变动/不同商品
     '$route.params.id'(newId, oldId) {
-      this.productId = newId
       // 当路由参数改变时,重新获取商品详情数据
-      this.getProductById(this.productId)
+      this.getProductById(newId)
       console.log(`id changed from ${oldId} to 【 ${newId} 】`);
     }
   },
@@ -320,42 +255,5 @@ export default {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
-}
-
-// <!--———— 4. 弹窗 ——————-->
-// <!-- 商品详情 sku -->
-/deep/ .sku-div {
-  max-height: 75%;
-
-  &>div:first-child {
-    &>div:last-child {
-      margin-left: 130px;
-    }
-
-    &>div:first-child {
-      width: 125px;
-      height: 125px;
-      border: 5px solid #5AD4EA;
-      margin: 12px 12px 12px 0;
-      overflow: hidden;
-      border-radius: 15px;
-      position: absolute;
-      bottom: 5px;
-      background-color: #fff;
-    }
-  }
-
-  &>div:nth-child(2) {
-    *[class*=active] {
-      background: #5AD4EA;
-      color: white;
-    }
-  }
-
-  &>div:nth-child(3) {
-    button:first-child {
-      background: #5AD4EA;
-    }
-  }
 }
 </style>

@@ -12,7 +12,7 @@
     <van-radio-group class="address-div-group" v-model="selectDefault">
       <!-- 判断是否进入选择模式：是否来自商品详情页面 -->
       <div class="address-div" :class="{ 'chosen': fromPath !== '/layout/my' && index == chosen }"
-        v-for="(item,index) in userAddresses" :key="item.id">
+        v-for="(item, index) in userAddresses" :key="item.id">
         <div class="address-div-content">
           <div class="address-div-text" @click="chosenThis(item.id)">
             <div>
@@ -45,6 +45,7 @@ import { areaList } from '@vant/area-data';
 import { mapGetters } from 'vuex';
 
 export default {
+  name: 'UserAddress',
   data() {
     return {
 
@@ -163,18 +164,19 @@ export default {
   beforeDestroy() {
     this.$bus.$emit('chosen-address-id', this.chosen)
     this.$bus.$emit('open-sku', true)
-    this.$bus.$off('from-path')
-    this.$bus.$off('chosen-address-id')
+    // this.$bus.$off('from-path')
+    // this.$bus.$off('chosen-address-id')
   },
-  // beforeCreate(){console.log('%c UserAddress - beforeCreate','color:#34f;')},
-  // beforeMount(){console.log('%c UserAddress - beforeMount','color:#34f;')},
-  // beforeUpdate(){console.log('%c UserAddress - beforeUpdate','color:#34f;')},
-  // updated(){console.log('%c UserAddress - updated','color:#34f;')},
-  // destroyed(){console.log('%c UserAddress - destroyed','color:#34f;')},
+  beforeCreate() { console.log('%c UserAddress - beforeCreate', 'color:#34f;') },
+  beforeMount() { console.log('%c UserAddress - beforeMount', 'color:#34f;') },
+  beforeUpdate() { console.log('%c UserAddress - beforeUpdate', 'color:#34f;') },
+  updated() { console.log('%c UserAddress - updated', 'color:#34f;') },
+  destroyed() { console.log('%c UserAddress - destroyed', 'color:#34f;') },
 
   created() {
     console.log('%c UserAddress - created', 'color:#34f;')
     this.userAddresses = this.getAddressList;
+    console.log("this.userAddresses", this.userAddresses)
     console.log("this.getAddressList", this.getAddressList)
     // 事件总线获取上个页面、
     // 目前只有商品sku和我的 2个页面能到达此页
@@ -198,7 +200,7 @@ export default {
     if (this.fromPath === '/layout/my') this.chosenThis = () => { }
   },
   computed: {
-    ...mapGetters('user', ['getAddressList','getDefaultAddress']),
+    ...mapGetters('user', ['getAddressList', 'getDefaultAddress']),
     selectDefault: {
       get() {
         console.log("selectDefault-get")
@@ -206,17 +208,17 @@ export default {
       },
       set(newId) {
         console.log("【【set-value】】", newId)
-        this.$store.dispatch('user/changeDefault',newId)
+        this.$store.dispatch('user/changeDefault', newId)
       }
     }
 
-    
+
   },
   watch: {
     // 监视本地vuex中的地址列表
     getAddressList(newValue) {
       this.userAddresses = newValue
-      
+
       // 简化⬇️
       // this.userAddresses = [...newValue].sort((a, b) => b.isDefault - a.isDefault);
 
@@ -249,15 +251,15 @@ export default {
     //       // 关闭弹窗
     //       this.onCloseEdit()
     //     })
-        
-      // changeAddressApi(this.userAddresses[newVal].id, this.userAddresses[newVal]).then(res => {
-      //   if (res.code == 1) {
-      //     this.userAddresses.forEach((item, index) => {
-      //       item.isDefault = index === newVal ? 1 : 0;
-      //     })
-      //     this.$toast('更新成功')
-      //   }
-      // })
+
+    // changeAddressApi(this.userAddresses[newVal].id, this.userAddresses[newVal]).then(res => {
+    //   if (res.code == 1) {
+    //     this.userAddresses.forEach((item, index) => {
+    //       item.isDefault = index === newVal ? 1 : 0;
+    //     })
+    //     this.$toast('更新成功')
+    //   }
+    // })
     // }
 
   },
@@ -273,7 +275,14 @@ export default {
 }
 
 // 地址盒子群
-.address-div-group{
+.address-div-group {
+
+  top: 0;
+  margin-top: 5px;
+  position: fixed;
+  height: 100vh;
+  overflow: scroll;
+  background: aliceblue;
   // 防止 顶栏、添加地址按钮 遮挡
   padding-bottom: 60px;
   padding-top: 45px;
@@ -404,4 +413,5 @@ export default {
   bottom: 10px;
   margin: 0 5%;
   width: 90%;
-}</style>
+}
+</style>

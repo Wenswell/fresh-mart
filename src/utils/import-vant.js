@@ -34,7 +34,9 @@ import { Rate } from 'vant';
 import { Lazyload } from 'vant';
 import { Calendar } from 'vant';
 import { Uploader } from 'vant';
+import { Popup } from 'vant';
 
+Vue.use(Popup);
 Vue.use(Uploader);
 Vue.use(Calendar);
 Vue.use(Lazyload);
