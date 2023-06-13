@@ -67,12 +67,12 @@ const routes = [
           {
             path: 'evaluate',
             name: 'evaluate',
-            component: () => import('@/views/Shop/ProductDetail/AllEvaluate'),
+            component: () => import('@/views/Shop/ProductDetail/evaluate'),
           },
           {
             path: 'specifics',
             name: 'specifics',
-            component: () => import('@/views/Shop/ProductDetail/AllSpecifics'),
+            component: () => import('@/views/Shop/ProductDetail/specifics'),
           },
         ],
       },
