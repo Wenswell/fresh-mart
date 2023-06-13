@@ -1,41 +1,100 @@
 <template>
   <div class="product-div">
     <!--———— 1. 顶栏 ——————-->
-    <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
+    <!-- 顶部导航栏 返回icon 购物车icon -->
     <van-nav-bar class="top-nav-bar" :border="false" :fixed="true" @click-left="$router.back()"
       @click-right="$router.push('/layout/cart').catch(err => { err })">
       <template #left>
         <van-icon size="20" name="arrow-left" />
       </template>
       <template #right>
-        <van-icon @click="$router.push('/layout/cart')" class="right-top-cart" size="20" name="shopping-cart-o" :badge="cartCount" />
-      </template>
-      <template #title>
-        <van-row type="flex" justify="center" gutter="45">
-          <van-col @click="$router.replace('main').catch(err => { })" class="top-bar-opt" span="6">商品</van-col>
-          <van-col @click="$router.replace('evaluate').catch(err => { })" class="top-bar-opt" span="6">评价</van-col>
-          <van-col @click="$router.replace('specifics').catch(err => { })" class="top-bar-opt" span="6">详情</van-col>
-        </van-row>
+        <van-icon @click="$router.push('/layout/cart')" class="right-top-cart" size="20" name="shopping-cart-o"
+          :badge="cartCount" />
       </template>
     </van-nav-bar>
 
-    <router-view />
+    <!-- 顶部导航栏  商品 评价 详情  -->
+    <van-tabs class="top-tab" v-model="activeName" type="card">
+      <van-tab class="tab-content" title="商品" name="main">
+        <AllMain :changeTab="changeTab" />
+      </van-tab>
+      <van-tab class="tab-content" title="评价" name="evaluate">
+        <AllEvaluate />
+      </van-tab>
+      <van-tab class="tab-content" title="详情" name="specifics">
+        <AllSpecifics />
+      </van-tab>
+    </van-tabs>
 
   </div>
 </template>
 
 <script>
+import AllMain from './main';
+import AllEvaluate from './evaluate';
+import AllSpecifics from './specifics';
 export default {
   name: "ProductDetail",
+  methods: {
+    changeTab(newTab) {
+      this.activeName = newTab
+    },
+  },
   computed: {
     cartCount() {
       return this.$store.getters['cart/getCartCount']
+    }
+  },
+  components: {
+    AllMain,
+    AllEvaluate,
+    AllSpecifics,
+  },
+  data() {
+    return {
+      activeName: 'main',
     }
   },
 }
 </script>
 
 <style lang="less" scoped>
+.top-tab {
+  > :first-child {
+    height: 0;
+    display: flex;
+    justify-content: center;
+
+    > :first-child {
+      position: fixed;
+      z-index: 2;
+      height: 50px;
+      top: 0;
+      border: none;
+      background: transparent;
+
+      /deep/ &>div {
+        font-size: 17px;
+        width: 60px;
+        background: transparent;
+        border: none;
+        color: white;
+
+        &[class*=active] {
+          font-weight: bold;
+        }
+
+      }
+    }
+
+  }
+
+}
+
+
+
+
+
 // 页面容器
 .product-div {
   background: url(@/assets/images/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
@@ -49,7 +108,7 @@ export default {
 // <!-- 顶部导航栏 返回 商品icon 评价 详情 购物车icon -->
 .top-nav-bar {
   // background: transparent;
-  z-index: 10;
+  z-index: 2;
 
   .top-bar-opt {
     text-shadow: 1px 1px 5px #000;

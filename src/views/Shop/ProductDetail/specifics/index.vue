@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all-specifics">
     <div class="product-sum">
       <span v-for="item in detail" :key="item.name" class="sum-left">{{ item.name }}<span class="sum-right">{{ item.value
       }}</span></span>
@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  name:'AllSpecifics',
   data() {
     return {
       img: [],
@@ -21,7 +22,6 @@ export default {
   },
   created() {
     this.$store.dispatch('cart/getProductDetail', this.$route.params.id).then(res => {
-      console.log('+_+_+_res', res.details)
       this.img = res.details.pictures
       this.detail = res.details.properties
     })

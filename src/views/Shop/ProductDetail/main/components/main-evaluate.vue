@@ -1,5 +1,5 @@
 <template>
-  <RoundBox class="evaluate-box" :unflex=true :left-title="title" @click-right="$router.replace('evaluate')">
+  <RoundBox class="evaluate-box" :unflex=true :left-title="title" @click-right="changeTab('evaluate')">
     <template slot="unflex">
 
       <!-- 评价标签 -->
@@ -35,7 +35,7 @@ export default {
   props: {
     evaluate: Object,
     evaluateContent: Array,
-
+    changeTab: Function,
   },
   computed: {
     title() {
@@ -63,12 +63,12 @@ export default {
       }
     }
   },
-  watch: {
-    evaluateContent(n, o) {
-      console.log('evaluateContent new', n)
-      console.log('evaluateContent old', o)
-    },
-  },
+  // watch: {
+  //   evaluateContent(n, o) {
+  //     console.log('evaluateContent new', n)
+  //     console.log('evaluateContent old', o)
+  //   },
+  // },
 
 }
 </script>

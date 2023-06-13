@@ -92,7 +92,6 @@ const actions = {
 
   // 商品评价
   async getEvaluate(context, payload) {
-    console.log("payload", payload)
     let resObj={}
     await getEvaluatePageApi(payload).then(res => {
       resObj = res.result
