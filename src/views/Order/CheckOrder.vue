@@ -1,8 +1,13 @@
 <template>
   <div class="check-order">
 
-    <ShowAddressCard :showAddressList="processedOrderInfo.getShowAddressList[0]"
-      :chosenAddressId="processedOrderInfo.chosenAddressId"></ShowAddressCard>
+    <AddressCard @click="addressShow = true" :showAddressList="processedOrderInfo.getShowAddressList[0]"
+      :chosenAddressId="processedOrderInfo.chosenAddressId"></AddressCard>
+
+    <van-popup v-model="addressShow" position="right" :style="{ width: '100%' }">
+      <UserAddress @change-address="changeAddress" :chosenAddressId="processedOrderInfo.chosenAddressId"
+        :chosenMode="true" />
+    </van-popup>
 
     <div class="product">
       <van-cell title="【API中无店铺名称】" />
@@ -13,18 +18,21 @@
           <span class="product-desc">{{ item.attrsText }}</span>
           <span class="product-price">{{ item.payPrice }}</span>
         </div>
-        <div v-if="getToBuyOrderInfo.goods.length!==1" class="product-card-num"><van-icon name="cross" size="12" />{{ item.count }}</div>
+        <div v-if="getToBuyOrderInfo.goods.length !== 1" class="product-card-num"><van-icon name="cross" size="12" />{{
+          item.count }}</div>
       </div>
-      <div v-if="getToBuyOrderInfo.goods.length===1" class="product-bottom-count">
+      <div v-if="getToBuyOrderInfo.goods.length === 1" class="product-bottom-count">
         <span>购买数量</span>
         <van-stepper v-model="stepperValue" />
       </div>
     </div>
 
     <div class="product-sum">
-      <span class="sum-left">商品总价<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPrice.toFixed(2) }}</span></span>
+      <span class="sum-left">商品总价<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPrice.toFixed(2)
+      }}</span></span>
       <span class="sum-left">邮费<span class="sum-right">{{ getToBuyOrderInfo.summary.postFee.toFixed(2) }}</span></span>
-      <span class="sum-left">折扣<span class="sum-right">{{ getToBuyOrderInfo.summary.discountPrice.toFixed(2) }}</span></span>
+      <span class="sum-left">折扣<span class="sum-right">{{ getToBuyOrderInfo.summary.discountPrice.toFixed(2)
+      }}</span></span>
       <span class="sum-left">合计<span class="sum-right">{{ getToBuyOrderInfo.summary.totalPayPrice.toFixed(2) }}</span>
       </span>
     </div>
@@ -34,7 +42,7 @@
         <van-icon name="alipay" size="16" color="#0273FD" />
         支付宝
       </div>
-      <div class="pay-method" :class="{ chosen: payChosen == 'wechat-pay' }" @click="clickWechatPay">
+      <div class="pay-method" :class="{ chosen: payChosen == 'wechat-pay' }" @click="payChosen = 'wechat-pay'">
         <van-icon name="wechat-pay" size="16" color="#24B510" />
         微信支付
       </div>
@@ -48,14 +56,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ShowAddressCard from '@/views/Shop/ShowAddressCard.vue'
+import AddressCard from '@/components/address-card'
+import UserAddress from '@/views/user/UserAddress'
 
 export default {
   components: {
-    ShowAddressCard,
+    AddressCard,
+    UserAddress,
   },
   data() {
     return {
+      addressShow: false, // 地址列表弹窗
       toBuyOrderInfo: {},
       radio: '1',
       payChosen: 'alipay',
@@ -63,60 +74,48 @@ export default {
     }
   },
   methods: {
-    clickWechatPay() {
-      this.payChosen = 'wechat-pay'
-      // this.$toast("只支持支付宝")
-      // setTimeout(() => {
-      //   this.payChosen = 'alipay'
-      // }, 300);
-    },
-    onSubmit(){
-      console.group('提交订单 -> 结算')
-      // console.log("chosenAddress", this.chosenAddress)
-      // console.log("getToBuyOrderInfo", this.getToBuyOrderInfo)
-      let newData = {
-        deliveryTimeType:1,
-        payType:1,
-        payChannel:this.payChosen=='alipay'?1:2,
-        buyerMessage:'',
-        addressId:this.getToBuyOrderInfo.userAddresses[0].id,
-        goods: this.getToBuyOrderInfo.goods.map(good => ({
-          skuId: good.skuId,
-          count: good.count   
-        }))
-      }
-      
-      console.log("!!newData", newData)
-      
-      this.$store.dispatch('user/submitOrderApi', newData)
-      
-      console.groupEnd()
 
-      this.$router.replace('/order/pay')
-    }
-  },
-  beforeCreate() {
-    // let toBuyOrderInfo = this.$store.getters['user/getToBuyOrderInfo']
-    // console.group("toBuyOrderInfo", toBuyOrderInfo)
-    // console.log("订单提交所需：skuId",toBuyOrderInfo.goods[0].skuId)
-    // console.log("订单提交所需：count",toBuyOrderInfo.goods[0].count)
-    // console.log("订单提交所需：id",toBuyOrderInfo.userAddresses[0].id)
-    // if(!this.$store.getters['user/getToBuyOrderInfo'].userAddresses){location.reload()}
-    this.$bus.$on('chosen-address-id', newId => {
-      console.log("+++this.$bus.$on【chosen-address-id】", newId)
-      // this.chosenAddress = newId
+    // changeAddress(){
+    changeAddress(newId) {
+      // this.chosenAddressId = id
       // 需要根据修改的地址更新订单
       let toBuyOrderInfo = this.$store.getters['user/getToBuyOrderInfo']
-      if(toBuyOrderInfo.goods.length===1){
+      if (toBuyOrderInfo.goods.length === 1) {
         // 直接购买时可以直接用API更新订单
         this.$store.dispatch('user/toBuyNowUpdateOrder', { addressId: newId })
       } else {
         // 否则更新本地信息
         this.$store.dispatch('user/editCreatedOrder', newId)
       }
+      this.addressShow = false
+    },
 
-    })
+    onSubmit() {
+      console.group('提交订单 -> 结算')
+      // console.log("chosenAddress", this.chosenAddress)
+      // console.log("getToBuyOrderInfo", this.getToBuyOrderInfo)
+      let newData = {
+        deliveryTimeType: 1,
+        payType: 1,
+        payChannel: this.payChosen == 'alipay' ? 1 : 2,
+        buyerMessage: '',
+        addressId: this.getToBuyOrderInfo.userAddresses[0].id,
+        goods: this.getToBuyOrderInfo.goods.map(good => ({
+          skuId: good.skuId,
+          count: good.count
+        }))
+      }
+
+      console.log("!!newData", newData)
+
+      this.$store.dispatch('user/submitOrderApi', newData)
+
+      console.groupEnd()
+
+      this.$router.replace('/order/pay')
+    }
   },
+
   computed: {
     ...mapGetters('user', ['getToBuyOrderInfo']),
     processedOrderInfo() {
@@ -202,7 +201,7 @@ export default {
     }
   }
 
-  .product-card-num{
+  .product-card-num {
     margin-top: 10px;
   }
 }

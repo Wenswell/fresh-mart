@@ -206,11 +206,11 @@ export default {
     },
   },
 
-  beforeCreate(){console.log('%c index Main - beforeCreate','color:redkeep;')},
-  beforeMount(){console.log('%c index Main - beforeMount','color:redkeep;')},
-  beforeUpdate(){console.log('%c index Main - beforeUpdate','color:redkeep;')},
-  updated(){console.log('%c index Main - updated','color:redkeep;')},
-  destroyed(){console.log('%c index Main - destroyed','color:redkeep;')},
+  // beforeCreate(){console.log('%c index Main - beforeCreate','color:redkeep;')},
+  // beforeMount(){console.log('%c index Main - beforeMount','color:redkeep;')},
+  // beforeUpdate(){console.log('%c index Main - beforeUpdate','color:redkeep;')},
+  // updated(){console.log('%c index Main - updated','color:redkeep;')},
+  // destroyed(){console.log('%c index Main - destroyed','color:redkeep;')},
 
   created() {
     // 获取动态路由参数 -- 商品id
