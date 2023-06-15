@@ -1,7 +1,9 @@
 <template>
   <div class="address-page">
-    <van-nav-bar class="top-bar" fixed title="收货地址" left-arrow @click-left="$router.back()" />
+
+    <van-nav-bar class="top-bar" fixed title="收货地址" left-arrow @click-left="onBack" />
     <!-- <van-nav-bar class="top-bar" title="收货地址" left-arrow @click-left="$router.push(fromPath)" /> -->
+
     <van-dialog class="address-edit-div" v-model="show"
       :title="Object.keys(defalutAddress).length === 0 ? '新增收货地址' : '修改收货地址'" :showConfirmButton="false">
       <van-address-edit :is-saving="btnDisable" class="address-edit" :area-list="areaList" show-set-default
@@ -11,15 +13,17 @@
 
     <van-radio-group class="address-div-group" v-model="selectDefault">
       <!-- 判断是否进入选择模式：是否来自商品详情页面 -->
-      <div class="address-div" :class="{ 'chosen': fromPath !== '/layout/my' && index == chosen }"
-        v-for="(item, index) in userAddresses" :key="item.id">
+      <!-- <div class="address-div" :class="{ 'chosen': fromPath !== '/layout/my' && index == chosen }" -->
+      <div class="address-div" :class="{ 'chosen': chosenMode && item.id == chosen }" v-for="item in userAddresses"
+        :key="item.id">
         <div class="address-div-content">
           <div class="address-div-text" @click="chosenThis(item.id)">
             <div>
               <span class="">{{ item.receiver }}, {{ item.contact }}</span>
               <span class="">{{ item.fullLocation }} {{ item.address }}</span>
             </div>
-            <template v-if="fromPath !== '/layout/my'">
+            <!-- <template v-if="fromPath !== '/layout/my'"> -->
+            <template v-if="chosenMode">
               <van-button v-show="item.id !== chosen" class="chosen-btn" type="primary" plain size="mini">使用</van-button>
               <div v-show="item.id == chosen" class="chosen-hook">✔</div>
             </template>
@@ -46,6 +50,11 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'UserAddress',
+  props: {
+    chosenMode: Boolean,
+    chosenAddressId: String,
+    // switchAddress: Function,
+  },
   data() {
     return {
 
@@ -56,9 +65,7 @@ export default {
       btnDisable: false,
 
 
-      fromPath: '/layout/my',   // 目前只有商品sku和我的 2个页面能到达此页
-      chosen: 0,  // 选择模式使用
-      // selectDefault: 0,
+      chosen: 0,  // 选中的地址id 选择模式使用
       userAddresses: [],  // 本地地址列表
     }
   },
@@ -149,65 +156,53 @@ export default {
       }
     },
 
-    // 从商品详情页面来选择地址
+    // 直接返回
+    onBack(){
+      this.$emit('change-address', this.chosen)
+    },
+
+
     // [only]选择模式使用
     chosenThis(id) {
       this.chosen = id
       setTimeout(() => {
-        // 防止 product->address->product->address
-        this.$router.replace(this.fromPath)
+        this.$emit('change-address', id)
       }, 50)
       console.log("chosenThis id", id)
     },
   },
 
-  beforeDestroy() {
-    this.$bus.$emit('chosen-address-id', this.chosen)
-    this.$bus.$emit('open-sku', true)
-    // this.$bus.$off('from-path')
-    // this.$bus.$off('chosen-address-id')
-  },
-  beforeCreate() { console.log('%c UserAddress - beforeCreate', 'color:#34f;') },
-  beforeMount() { console.log('%c UserAddress - beforeMount', 'color:#34f;') },
-  beforeUpdate() { console.log('%c UserAddress - beforeUpdate', 'color:#34f;') },
-  updated() { console.log('%c UserAddress - updated', 'color:#34f;') },
-  destroyed() { console.log('%c UserAddress - destroyed', 'color:#34f;') },
+  // beforeCreate() { console.log('%c UserAddress - beforeCreate', 'color:#34f;') },
+  // beforeMount() { console.log('%c UserAddress - beforeMount', 'color:#34f;') },
+  // beforeUpdate() { console.log('%c UserAddress - beforeUpdate', 'color:#34f;') },
+  // updated() { console.log('%c UserAddress - updated', 'color:#34f;') },
+  // destroyed() { console.log('%c UserAddress - destroyed', 'color:#34f;') },
 
   created() {
-    console.log('%c UserAddress - created', 'color:#34f;')
-    this.userAddresses = this.getAddressList;
-    console.log("this.userAddresses", this.userAddresses)
-    console.log("this.getAddressList", this.getAddressList)
-    // 事件总线获取上个页面、
-    // 目前只有商品sku和我的 2个页面能到达此页
-    this.$bus.$on('from-path', (params) => {
-      console.log(" this.$bus.$on【from-path】", params)
-      // console.log("this.$bus.$on from-path params", params)
-      this.fromPath = params ?? '/layout/my';
-      // console.log("this.fromPath", this.fromPath)
-      // console.log("+params ?? '/layout/my'", params ?? '/layout/my')
-    })
-    this.$bus.$on('chosen-address-id', params => {
-      console.log(" this.$bus.$on【chosen-address-id】", params)
-      this.chosen = params
-    })
-    console.groupEnd();
+    // console.log('%c UserAddress - created', 'color:#34f;')
 
-    // 获取地址列表
-  },
-  mounted() {
-    // 从 我的 页面进入时不需要选择并返回地址
-    if (this.fromPath === '/layout/my') this.chosenThis = () => { }
+    // 从props获取初始值存在本地data
+    this.userAddresses = this.getAddressList;
+    this.chosen = this.chosenAddressId
+
+    // 非选择模式
+    // 1. 禁用点击
+    // 2. 返回路由
+    if (!this.chosenMode) {
+      this.chosenThis = () => {}
+      this.onBack = () => this.$router.back()
+    }
   },
   computed: {
     ...mapGetters('user', ['getAddressList', 'getDefaultAddress']),
     selectDefault: {
       get() {
-        console.log("selectDefault-get")
+        // this.$toast('默认地址更新成功')
+        console.log("获取新默认地址")
         return this.getDefaultAddress
       },
       set(newId) {
-        console.log("【【set-value】】", newId)
+        console.log("设置默认地址，id: ", newId)
         this.$store.dispatch('user/changeDefault', newId)
       }
     }
@@ -215,53 +210,10 @@ export default {
 
   },
   watch: {
-    // 监视本地vuex中的地址列表
+    // 同步本地vuex中的地址列表
     getAddressList(newValue) {
       this.userAddresses = newValue
-
-      // 简化⬇️
-      // this.userAddresses = [...newValue].sort((a, b) => b.isDefault - a.isDefault);
-
-      // 简化⬇️
-      // this.userAddresses = [...newValue].sort((a, b) => {
-      //   return a.isDefault === 0 ? -1 : b.isDefault === 0 ? 1 : 0;
-      // });
-
-      // 稳定方法⬇️
-      // this.userAddresses = [...newValue].sort((a, b) => {
-      //   if (a.isDefault === 0) {
-      //     return -1;
-      //   }
-      //   if (b.isDefault === 0) {
-      //     return 1;
-      //   }
-      //   return 0;
-      // })
-
-
-
     },
-
-    // 监视默认地址选择并更新默认地址
-    // selectDefault(newVal) {
-    //   this.$store.dispatch('user/changeDefault', [this.userAddresses[newVal].id, this.userAddresses[newVal],newVal]).then(res => {
-    //     console.log("[this.userAddresses[newVal].id, this.userAddresses[newVal],newVal]", [this.userAddresses[newVal].id, this.userAddresses[newVal],newVal])
-    //     console.log("更改默认地址结果 res", res)
-    //       this.$toast('修改成功')
-    //       // 关闭弹窗
-    //       this.onCloseEdit()
-    //     })
-
-    // changeAddressApi(this.userAddresses[newVal].id, this.userAddresses[newVal]).then(res => {
-    //   if (res.code == 1) {
-    //     this.userAddresses.forEach((item, index) => {
-    //       item.isDefault = index === newVal ? 1 : 0;
-    //     })
-    //     this.$toast('更新成功')
-    //   }
-    // })
-    // }
-
   },
 
 }
@@ -272,6 +224,7 @@ export default {
 .address-page {
   background: #F4F4F4;
   height: 100vh;
+  z-index: 1000;
 }
 
 // 地址盒子群
