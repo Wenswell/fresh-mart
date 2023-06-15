@@ -34,19 +34,22 @@
       <span class="sum-left">订单编号<span class="sum-right">{{ getToPayOrderInfo.id }}</span></span>
       <span class="sum-left">下单时间<span class="sum-right">{{ getToPayOrderInfo.createTime }}</span></span>
     </div>
-    
+
     <div class="pay-channel">
-      <div class="pay-method" v-if="getToPayOrderInfo.payChannel == 1" :class="{ chosen: getToPayOrderInfo.payChannel == 1 }" >
+      <div class="pay-method" v-if="getToPayOrderInfo.payChannel == 1"
+        :class="{ chosen: getToPayOrderInfo.payChannel == 1 }">
         <van-icon name="alipay" size="16" color="#0273FD" />
         支付宝
       </div>
-      <div class="pay-method" v-if="getToPayOrderInfo.payChannel == 2" :class="{ chosen: getToPayOrderInfo.payChannel == 2 }" >
+      <div class="pay-method" v-if="getToPayOrderInfo.payChannel == 2"
+        :class="{ chosen: getToPayOrderInfo.payChannel == 2 }">
         <van-icon name="wechat-pay" size="16" color="#24B510" />
         微信支付
       </div>
     </div>
 
-    <van-button @click="onToPay" class="pay-btn" type="primary" :color="toBuyOrderInfo.payChannel == 1 ? '#0273FD': '#24B510' " size="large">付款（模拟）</van-button>
+    <van-button @click="onToPay" class="pay-btn" type="primary"
+      :color="toBuyOrderInfo.payChannel == 1 ? '#0273FD' : '#24B510'" size="large">付款（模拟）</van-button>
 
 
   </div>
@@ -65,46 +68,51 @@ export default {
   data() {
     return {
       // getToPayOrderInfo: {
-        // "id": "1666021170513711106",
-        // "createTime": "2023-06-06 17:56:14",
-        // "payType": 1,
-        // "orderState": 1,
-        // "payLatestTime": "2023-06-06 18:26:15",
-        // "postFee": 9,
-        // "payMoney": 3930.7,
-        // "totalMoney": 3921.7,
-        // "totalNum": 7,
-        // "skus": null,
-        // "payChannel": 1,
-        // "countdown": null
+      // "id": "1666021170513711106",
+      // "createTime": "2023-06-06 17:56:14",
+      // "payType": 1,
+      // "orderState": 1,
+      // "payLatestTime": "2023-06-06 18:26:15",
+      // "postFee": 9,
+      // "payMoney": 3930.7,
+      // "totalMoney": 3921.7,
+      // "totalNum": 7,
+      // "skus": null,
+      // "payChannel": 1,
+      // "countdown": null
       // },
     }
   },
-  methods:{
-    onToPay(){
-      mockPayApi(this.getToPayOrderInfo.id).then(res=>{
-        console.log('mockPayApi ||||res:',res)
-        if(res.code == 1){
+  methods: {
+    onToPay() {
+      mockPayApi(this.getToPayOrderInfo.id).then(res => {
+        console.log('mockPayApi ||||res:', res)
+        if (res.code == 1) {
           this.$toast('支付成功')
           this.$router.back()
         }
       })
     }
   },
-  created() {
-    this.toBuyOrderInfo = this.$store.getters['user/getToPayOrderInfo']
-    // console.log("getToPayOrderInfo", this.toBuyOrderInfo)
-  },
-  mounted(){
+  mounted() {
     // console.log("toBuyOrderInfo",this.toBuyOrderInfo)
     console.log("new Date(this.toBuyOrderInfo.payLatestTime).getTime() - new Date().getTime()", new Date(this.toBuyOrderInfo.payLatestTime).getTime() - new Date().getTime())
-    if(new Date(this.toBuyOrderInfo.payLatestTime).getTime() - new Date().getTime()<=0){
+    if (new Date(this.toBuyOrderInfo.payLatestTime).getTime() - new Date().getTime() <= 0) {
       this.$toast('订单超时，已取消！')
       this.$router.back()
     }
   },
   computed: {
-    ...mapGetters('user', ['getToBuyOrderInfo','getToPayOrderInfo']),
+    // 获取最新的订单信息
+    toBuyOrderInfo: {
+      get() {
+        return this.$store.getters['user/getToPayOrderInfo']
+      },
+      set(value) {
+        console.log("set toBuyOrderInfo value: ", value)
+      }
+    },
+    ...mapGetters('user', ['getToBuyOrderInfo', 'getToPayOrderInfo']),
     processedOrderInfo() {
       // 提取展示地址
       const orderInfo = this.getToBuyOrderInfo;
@@ -118,7 +126,7 @@ export default {
 
       return { getShowAddressList, chosenAddressId }
     },
-    countDown(){
+    countDown() {
       return new Date(this.toBuyOrderInfo.payLatestTime).getTime() - new Date().getTime()
     }
   },
@@ -223,6 +231,7 @@ export default {
       margin-right: 2px;
       font-size: 80%;
     }
+
     .sum-right {
       font-weight: bold;
 
@@ -249,12 +258,11 @@ export default {
 }
 
 //付款 按钮
-.pay-btn{
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10px;
-    width: 300px;
-    border-radius: 5px;
-}
-</style>
+.pay-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  width: 300px;
+  border-radius: 5px;
+}</style>

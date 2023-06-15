@@ -32,7 +32,8 @@
       <span class="sum-left">合计<span class="sum-right">{{ orderDetail.payMoney.toFixed(2) }}</span></span>
       <span class="sum-left">订单编号<span class="sum-right">{{ orderDetail.id }}</span></span>
       <span class="sum-left">下单时间<span class="sum-right">{{ orderDetail.createTime }}</span></span>
-      <span v-if="orderDetail.payTime" class="sum-left">支付时间<span class="sum-right">{{ orderDetail.payTime }}</span></span>
+      <span v-if="orderDetail.payTime" class="sum-left">支付时间<span class="sum-right">{{ orderDetail.payTime
+      }}</span></span>
     </div>
 
   </div>
@@ -47,7 +48,7 @@ export default {
   },
   data() {
     return {
-      orderDetail:{},
+      orderDetail: {},
     }
   },
   methods: {
@@ -95,7 +96,7 @@ export default {
   // border-bottom: 1px solid #CCC;
 
   // &:first-child {
-    // margin-top: 50px;
+  // margin-top: 50px;
   // }
 }
 
@@ -200,4 +201,5 @@ export default {
 
     }
   }
-}</style>
+}
+</style>

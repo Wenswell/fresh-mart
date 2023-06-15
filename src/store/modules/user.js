@@ -221,8 +221,8 @@ const actions = {
 
   // 改变默认地址
   async changeDefault(context, id) {
-    console.group('changeDefault')
-    console.log("context", context)
+  //   console.group('changeDefault')
+  //   console.log("context", context)
     const selectObj = context.getters['getAddressById'](id)
     const newRes = {
       ...selectObj,
@@ -234,8 +234,8 @@ const actions = {
       // 之后更新本地
       context.commit('setDefaultAddress', id)
     }
-    console.log('更新默认地址成功')
-    console.groupEnd()
+    // console.log('更新默认地址成功')
+    // console.groupEnd()
   },
 
   // 编辑现有地址
