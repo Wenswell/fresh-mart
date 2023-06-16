@@ -65,6 +65,7 @@
 <script>
 
 export default {
+  name:'EditProfile',
   data() {
     return {
       uploader: [{ url: 'https://img01.yzcdn.cn/vant/leaf.jpg' }],
