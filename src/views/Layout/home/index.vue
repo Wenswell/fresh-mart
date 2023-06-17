@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import tdata from '@/assets/test-data.json'
 import HomeSearch from './components/home-search';
 import HomeSwiper from './components/home-swiper';
 import HomeCategory from './components/home-category';
@@ -45,7 +44,18 @@ export default {
   data() {
     return {
       locationStr: '天河区',
-      bannerImgList: tdata.bannerImgList,
+      bannerImgList: [
+        "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+        "//gdp.alicdn.com/imgextra/i4/2064892827/O1CN01EREOu21WkoWTDOIV2_!!2064892827.png",
+        "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+        "//gdp.alicdn.com/imgextra/i2/2064892827/O1CN01J0aq2R1WkoWNPyh3C_!!2064892827.png",
+        "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+        "//gdp.alicdn.com/imgextra/i3/2064892827/O1CN01lO08yJ1WkoWQ6mkuS_!!2064892827.png",
+        "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+        "//gdp.alicdn.com/imgextra/i1/2064892827/O1CN01d0dPjT1WkoWPnzIiz_!!2064892827.png",
+        "//192.168.1.5:8080/img/topAd0.bdfbf9a4.png",
+        "//gdp.alicdn.com/imgextra/i3/2064892827/O1CN01RCAwHB1WkoWM1XD7C_!!2064892827.png"
+      ],
       guesslikeproduct: [],
     };
   },
@@ -53,7 +63,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.home-page{
+.home-page {
   margin-bottom: 70px;
 }
 </style>
