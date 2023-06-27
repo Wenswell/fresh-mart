@@ -8,10 +8,14 @@ const routes = [
   {
     path: '/',
     name: 'main',
+    redirect:'/home',
     component: () => import('@/views/main'),
     children: [
       { path: 'home', name: 'home', component: () => import('@/views/main/home'), },
-      { path: 'user', name: 'user', component: () => import('@/views/main/user'), }
+      { path: 'user', name: 'user', component: () => import('@/views/main/user'), },
+      { path: 'mall', name: 'mall', component: () => import('@/views/main/mall'), },
+      { path: 'page-one', name: 'page-one', component: () => import('@/views/main/page-one'), },
+      { path: 'page-two', name: 'page-two', component: () => import('@/views/main/page-two'), },
     ],
   },
   {
