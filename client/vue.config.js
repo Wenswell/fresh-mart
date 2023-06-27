@@ -5,6 +5,7 @@ const myTheme = path.resolve(__dirname, "./src/assets/styles/vantconfig.less");
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  // vant 专用
   css: {
     loaderOptions: {
       less: {

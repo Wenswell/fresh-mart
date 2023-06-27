@@ -115,7 +115,7 @@ const routes = [
       {
         path: 'edit',
         name: 'edit',
-        component: () => import('@/views/layout/EditProfile'),
+        component: () => import('@/views/layout/edit'),
       }
     ],
   },
@@ -141,7 +141,7 @@ const routes = [
       {
         path: 'cart',
         name: 'cart',
-        component: () => import('@/views/layout/CartPage'),
+        component: () => import('@/views/layout/cart'),
       },
       {
         path: 'my',
