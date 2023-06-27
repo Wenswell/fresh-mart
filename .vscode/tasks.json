@@ -1,0 +1,32 @@
+// 自动开启 客户端 和 管理端
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "client-start",
+      "type": "shell",
+      // "command": "cd client ; yarn serve",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "serve-start",
+      "type": "shell",
+      // "command": "cd manager ; yarn serve",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
