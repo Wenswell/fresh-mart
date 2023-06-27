@@ -1,56 +1,49 @@
 <template>
-  <div>
+  <el-container>
+    <el-aside>
+      <common-aside />
+    </el-aside>
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
-      <el-container>
-        <el-header>Header</el-header>
-        <el-main>
-          Main
-          <router-view></router-view>
-        </el-main>
-      </el-container>
+      <el-header class="header">
+        <common-header />
+      </el-header>
+
+        <common-tag />
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
-  </div>
+  </el-container>
 </template>
 
 <script>
+import CommonAside from "@/components/aside.vue";
+import CommonHeader from "@/components/header.vue";
+import CommonTag from "@/components/tag.vue";
 export default {
   name: "main-page",
+  components: {
+    CommonAside,
+    CommonHeader,
+    CommonTag,
+  },
 };
 </script>
 
 <style scoped>
-  .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-  
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-  
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
-  
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-  
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-  
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
+.el-container {
+  height: 100vh;
+}
+
+.el-header {
+  padding: 0;
+}
+
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+  width: auto !important;
+}
 </style>
