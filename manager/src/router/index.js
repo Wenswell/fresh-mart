@@ -1,14 +1,28 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
 
-Vue.use(VueRouter)
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject)
+    return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch((err) => {
+    if (Router.isNavigationFailure(err)) {
+      // resolve err
+      return err
+    }
+    // rethrow error
+    return Promise.reject(err)
+  })
+}
+
+Vue.use(Router)
 
 
 const routes = [
   {
     path: '/',
     name: 'main',
-    redirect:'/home',
+    redirect: '/home',
     component: () => import('@/views/main'),
     children: [
       { path: 'home', name: 'home', component: () => import('@/views/main/home'), },
@@ -19,16 +33,25 @@ const routes = [
     ],
   },
   {
+    path: '/login',
+    component: () => import('@/views/login'),
+  },
+  {
     path: '/test',
     component: () => import('@/views/test'),
   },
 ]
 
-const router = new VueRouter({
+const router = new Router({
   routes
 })
 
+// the NavigationDuplicated is generated prior to the $router.beforeEach is called
+// github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
 // router.beforeEach((to, from, next) => {
+//   console.log("to", to)
+//   console.log("from", from)
+//   console.log("next", next)
 //   if (to.path === from.path) {
 //     next(false);
 //   } else {

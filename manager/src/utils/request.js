@@ -1,3 +1,4 @@
+// request.js
 import axios from "axios";
 
 const baseURL = '/api';
@@ -8,6 +9,11 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
+  if (config.method === 'get') {
+    config.params = config.data;
+    delete config.data;
+  }
+  console.log("requset -- config", config)
   return config
 }, error => {
   return Promise.reject(error)
@@ -21,4 +27,6 @@ instance.interceptors.response.use(
   }
 )
 
-export default instance
+export default (url, method, data) => {
+  return instance({ url, method, data })
+}
