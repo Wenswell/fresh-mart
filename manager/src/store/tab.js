@@ -29,6 +29,13 @@ export default {
       // }
       state.tabList
     },
+    closeTab(state, { tag, index }) {
+      tag
+      // console.log("tag", tag)
+      // console.log("index", index)
+      state.tabList.splice(index, 1)
+
+    },
   }
 
 }
