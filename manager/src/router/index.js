@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -23,21 +24,23 @@ const routes = [
     path: '/',
     name: 'main',
     redirect: '/home',
-    component: () => import('@/views/main'),
+    component: () => import('@/views/main/index'),
     children: [
-      { path: 'home', name: 'home', component: () => import('@/views/main/home'), },
-      { path: 'user', name: 'user', component: () => import('@/views/main/user'), },
-      { path: 'mall', name: 'mall', component: () => import('@/views/main/mall'), },
-      { path: 'page-one', name: 'page-one', component: () => import('@/views/main/page-one'), },
-      { path: 'page-two', name: 'page-two', component: () => import('@/views/main/page-two'), },
+      // { path: 'home', name: 'home', component: () => import('@/views/main/home'), },
+      // { path: 'user', name: 'user', component: () => import('@/views/main/user'), },
+      // { path: 'mall', name: 'mall', component: () => import('@/views/main/mall'), },
+      // { path: 'page-one', name: 'page-one', component: () => import('@/views/main/page-one'), },
+      // { path: 'page-two', name: 'page-two', component: () => import('@/views/main/page-two'), },
     ],
   },
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/login'),
   },
   {
     path: '/test',
+    name: 'test',
     component: () => import('@/views/test'),
   },
 ]
@@ -48,14 +51,13 @@ const router = new Router({
 
 // the NavigationDuplicated is generated prior to the $router.beforeEach is called
 // github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
-// router.beforeEach((to, from, next) => {
-//   console.log("to", to)
-//   console.log("from", from)
-//   console.log("next", next)
-//   if (to.path === from.path) {
-//     next(false);
-//   } else {
-//     next();
-//   }
-// })
+// if (to.path === from.path) next(false)
+router.beforeEach((to, from, next) => {
+  const token = Cookies.get('token')
+  if (!token && to.name !== 'login') {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
+})
 export default router
