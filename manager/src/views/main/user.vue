@@ -1,7 +1,12 @@
 <template>
   <div class="user">
     <div class="user-header">
-      <el-button style="height:40px" @click="dialogVisible = true" size="small" type="primary">
+      <el-button
+        style="height: 40px"
+        @click="dialogVisible = true"
+        size="small"
+        type="primary"
+      >
         <i class="el-icon-plus"></i>
         新增
       </el-button>
@@ -71,6 +76,9 @@
         :model="form"
         label-width="80px"
       >
+        <el-form-item v-show="false" prop="id" label="姓名">
+          <el-input placeholder="请输入姓名" v-model="form.id"></el-input>
+        </el-form-item>
         <el-form-item prop="name" label="姓名">
           <el-input placeholder="请输入姓名" v-model="form.name"></el-input>
         </el-form-item>
@@ -126,6 +134,14 @@ export default {
         birth: "",
         address: "",
       },
+      initialForm: {
+        id: undefined,
+        name: "",
+        age: "",
+        gender: "",
+        birth: "",
+        address: "",
+      },
       rules: {
         name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
         age: [
@@ -155,17 +171,17 @@ export default {
       //提交表单
       this.$refs.form.validate((isValid) => {
         if (!isValid) return;
-        this.form;
-        console.log("this.form", this.form);
+        // this.form;
+        // console.log("this.form", this.form);
         const { id, ...res } = this.form;
-        console.log("this.form", this.form);
+        // console.log("this.form", this.form);
         id;
         if (id) {
           api.updateUser(this.form).then((res) => {
             if (res.code === 200) {
               this.loadUser();
-              this.dialogVisible = false;
               this.$refs.form.resetFields();
+              this.dialogVisible = false;
               console.log(res.data.message);
             }
           });
@@ -184,8 +200,8 @@ export default {
     handleClose() {
       this.$confirm("确认关闭？")
         .then(() => {
-          this.dialogVisible = false;
           this.$refs.form.resetFields();
+          this.dialogVisible = false;
         })
         .catch(() => {});
     },
@@ -193,14 +209,16 @@ export default {
       this.loadUser(null, this.searchKey);
     },
     handleEdit(row) {
-      this.form.id = row.id;
-      this.form.name = row.name;
-      this.form.age = row.age;
-      this.form.gender = 1;
-      this.form.birth = row.birth;
-      this.form.address = row.address;
       this.dialogVisible = true;
-      console.log("row", row);
+      this.$nextTick(() => {
+        //防止绑定非空值
+        this.form.id = row.id;
+        this.form.name = row.name;
+        this.form.age = row.age;
+        this.form.gender = 1;
+        this.form.birth = row.birth;
+        this.form.address = row.address;
+      });
     },
     handleDelete(id) {
       this.$confirm("确认删除？", "提示", {
@@ -224,7 +242,7 @@ export default {
           pageCount: 20,
         })
         .then((res) => {
-          console.log("res", res);
+          // console.log("res", res);
           this.tableData = res.result.pageList;
           this.totalPage = res.result.totalLength
             ? res.result.totalLength / res.result.count
@@ -245,7 +263,7 @@ export default {
 .user {
   height: 100%;
 }
-.user-header{
+.user-header {
   display: flex;
   justify-content: space-between;
   align-items: center;

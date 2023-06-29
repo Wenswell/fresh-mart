@@ -18,25 +18,35 @@
         </el-breadcrumb>
       </span>
     </div>
-    <el-dropdown>
+    <el-dropdown @command="handleClick">
       <span class="dropdown">
         <img class="user" src="@/assets/image/avatar.png" alt="" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>个人中心</el-dropdown-item>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item command="my">个人中心</el-dropdown-item>
+        <el-dropdown-item command="logout">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 
 <script>
+import jsCookie from "js-cookie";
 import { mapState } from "vuex";
 export default {
   name: "CommonHeader",
   methods: {
     handleMenu() {
       this.$store.commit("collapseMenu");
+    },
+    handleClick(item) {
+      if (item === "logout") {
+        this.$router.push("/login");
+        jsCookie.remove("token");
+      }
+      if(item==="my"){
+        console.log('个人中心')
+      }
     },
     // toPath(path) {
     //   if (this.$route.path !== path) {
