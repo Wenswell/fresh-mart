@@ -3,11 +3,11 @@
     <el-card class="box-card">
       <el-form ref="form" :inline="true" :model="form" :rules="rules">
         <h3 class="login-title">后台登录</h3>
-        <el-form-item prop="user" label="用户名">
+        <el-form-item prop="username" label="用户名">
           <el-input
             clearable
             placeholder="请输入用户名"
-            v-model="form.user"
+            v-model="form.username"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
@@ -27,16 +27,21 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import Mock from "mockjs";
+import api from "@/api";
 export default {
   name: "login-page",
   data() {
     return {
       form: {
-        user: "",
+        username: "",
         password: "",
       },
       rules: {
-        user: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
+        username: [
+          { required: true, message: "用户名不能为空", trigger: "blur" },
+        ],
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
         ],
@@ -45,9 +50,23 @@ export default {
   },
   methods: {
     onLogin() {
+      Cookies.set("test", Mock.Random.guid());
       this.$refs.form.validate((isValid) => {
         if (!isValid) return;
-        console.log("登录信息", this.form);
+        api.getMenu(this.form).then((res) => {
+          if (res.code === 401) {
+            this.$refs.form.resetFields();
+            this.$message.error("账号或密码错误");
+            return;
+          }
+          console.log(res);
+          if (res.code === 200) {
+            Cookies.set("token", res.token);
+            this.$store.commit("setMenu", res.data.menu);
+            this.$store.commit("addMenu", this.$router);
+            this.$router.push("/home");
+          }
+        });
       });
     },
   },
@@ -57,13 +76,13 @@ export default {
 <style lang="less" scoped>
 .login-page {
   width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-block: 60px 20px;
 }
 .box-card {
+  margin-inline: auto;
+  border-radius: 10px;
   width: 400px;
+  padding-bottom: 10px;
 }
 .el-form {
   display: flex;
@@ -76,7 +95,7 @@ export default {
   .el-form-item {
     margin-right: 13%;
   }
-  .login-title,
+  .login-title:first-child,
   .login-btn {
     margin-inline: auto;
   }

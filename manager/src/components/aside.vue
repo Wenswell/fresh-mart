@@ -39,54 +39,12 @@
 </template>
 
 <script>
+import jsCookie from "js-cookie";
 export default {
   name: "CommonAside",
   data() {
     return {
-      menuData: [
-        {
-          path: "/home",
-          name: "home",
-          label: "首页",
-          icon: "s-home",
-          url: "Home/Home",
-        },
-        {
-          path: "/mall",
-          name: "mall",
-          label: "商品管理",
-          icon: "video-play",
-          url: "MallManage/MallManage",
-        },
-        {
-          path: "/user",
-          name: "user",
-          label: "用户管理",
-          icon: "user",
-          url: "UserManage/UserManage",
-        },
-        {
-          label: "其他",
-          icon: "location",
-          children: [
-            {
-              path: "/page-one",
-              name: "page-one",
-              label: "首页11",
-              icon: "setting",
-              url: "Other/PageOne",
-            },
-            {
-              path: "/page-two",
-              name: "page-two",
-              label: "首页22",
-              icon: "setting",
-              url: "Other/PageTwo",
-            },
-          ],
-        },
-      ],
-
+      // menuData: [],
       // isCollapse: false,
     };
   },
@@ -114,6 +72,9 @@ export default {
     },
     isCollapse() {
       return this.$store.state.tab.isCollapse;
+    },
+    menuData() {
+      return JSON.parse(jsCookie.get("menu")) || this.$store.state.tab.menu;
     },
   },
 };

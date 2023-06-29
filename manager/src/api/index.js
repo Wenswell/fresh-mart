@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 const getData = () => {
-  return request.get('/home/getData')
+  return request('/home/getData', 'get',)
 }
 
 const getUser = (params) => {
@@ -17,6 +17,9 @@ const deleteUser = (params) => {
   return request('/user/delete', 'delete', params)
 }
 
+const getMenu = (data) => {
+  return request('/permission/getMenu', 'post', data)
+}
 
 export default {
   getData,
@@ -25,4 +28,8 @@ export default {
   createUser,
   updateUser,
   deleteUser,
+
+  getMenu,
+
+  
 }
