@@ -6,6 +6,9 @@ import store from '@/store'
 
 // 请求工具函数
 export default (url, method, submitData, changeURL) => {
+  console.log("url", url)
+  console.log("method", method)
+  console.log("submitData", submitData)
   // 负责发请求：请求地址，请求方式，提交的数据
   // const baseURL = changeURL ? 'https://mock.boxuegu.com/mock/1175/' : 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
   function getBaseURL(param) {
@@ -33,9 +36,9 @@ export default (url, method, submitData, changeURL) => {
     // 从store中读取token,并添加到请求头
     const token = store?.state?.user?.profile?.token
     // const token = store?.state?.user?.profile?.token ?? 'Real-token-is-unreachable-This-is-a-test-token';
-    console.log(`token: ${token.slice(0, 20)}...`);
     
     if (token) {
+      console.log(`token: ${token.slice(0, 20)}...`);
       config.headers.Authorization = `Bearer ${token}`
       // console.log("config.headers.Authorization: "+config.headers.Authorization)
     }
