@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@db": ["./db"],
+      "@utils": ["./utils"],
+      "@config": ["./utils/config"],
+      "@router": ["./router"],
+      "@public": ["./public"],
+      "@db/*": ["./db/*"],
+      "@utils/*": ["./utils/*"],
+      "@config/*": ["./utils/config/*"],
+      "@router/*": ["./router/*"],
+      "@public/*": ["./public/*"]
+    }, 
+    "experimentalDecorators": true 
+  }, 
+  "resolveExtensions": [".js", ".vue", ".ts"], 
+  "exclude": [ 
+    "node_modules", 
+    "**/node_modules/*" 
+  ] 
+}
