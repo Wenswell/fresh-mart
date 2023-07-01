@@ -2,44 +2,64 @@
   <div ref="swiper" class="swiper">
     <div class="swiper-wrapper">
       <!-- Slides -->
-      <div class="swiper-slide" v-for="(item, index) in imgList" :key="index"><img :src="item" class="swiper-img" /></div>
+      <div class="swiper-slide" v-for="(item, index) in bannerImg" :key="index">
+        <img :src="item" class="swiper-img" />
+      </div>
     </div>
     <div class="swiper-pagination"></div>
   </div>
 </template>
 
 <script>
+import api from "@/api";
 export default {
-  name: 'HomeSwiper',
-  props: {
-    imgList: Array,
-  },
+  name: "HomeSwiper",
+  // props: {
+  //   imgList: Array,
+  // },
+  
   data() {
     return {
-      swiper: null
-    }
+      swiper: null,
+      bannerImg: [],
+    };
+  },
+
+  beforeCreate() {
+    api.images.getHomeBanner().then((res) => {
+      const srcs = res.result.images
+        .filter((item) => item.position === "homeBanner")
+        .map((item) => item.src)
+        .concat();
+      this.bannerImg = [
+        "http://192.168.1.5:8333/images/homeTopBanner01.png",
+        ...srcs,
+      ];
+    });
   },
 
   mounted() {
-    this.swiper = new this.$swiper(this.$refs.swiper, {
-      loop: true,
-      autoplay: {
-        delay: 1000,
-        disableOnInteraction: false
-      },
-      speed: 2000,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-      }
-    })
+    setTimeout(() => {
+      this.swiper = new this.$swiper(this.$refs.swiper, {
+        loop: true,
+        autoplay: {
+          delay: 1000,
+          disableOnInteraction: false,
+        },
+        speed: 2000,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+    }, 250); // quick fix 
   },
 
   beforeDestroy() {
-    this.swiper.destroy()
-    this.swiper = null
+    this.swiper.destroy();
+    this.swiper = null;
   },
-}
+};
 </script>
 
 <style lang="less" scoped>

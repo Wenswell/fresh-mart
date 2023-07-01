@@ -71,7 +71,38 @@ export const getInVogueApi = () => {
 
 
 // 搜索商品
-export const searchProductApi = ({  
+// export const searchProductApi = ({  
+//   keyword,
+//   page = 1,
+//   pageSize = 10,
+//   onlyDiscount= false,
+//   sortField = "",
+//   sortMethod = "" 
+// }) => {
+//   return request(
+//     '/search/all', 
+//     'post', 
+//     {
+//       page, 
+//       pageSize,
+//       keyword,
+//       onlyDiscount,
+//       sortField,
+//       sortMethod  
+//     }
+//   )
+// }
+
+export const get80discountApi = ()=>{
+  return request(
+    '/products/percent80',
+    'get', 
+    {},
+    'local',
+  )
+}
+
+export const LOCALsearchProductApi = ({  
   keyword,
   page = 1,
   pageSize = 10,
@@ -80,8 +111,8 @@ export const searchProductApi = ({
   sortMethod = "" 
 }) => {
   return request(
-    '/search/all', 
-    'post', 
+    '/products', 
+    'get', 
     {
       page, 
       pageSize,
@@ -89,7 +120,8 @@ export const searchProductApi = ({
       onlyDiscount,
       sortField,
       sortMethod  
-    }
+    },
+    'local',
   )
 }
 

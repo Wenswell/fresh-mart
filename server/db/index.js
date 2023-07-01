@@ -10,16 +10,18 @@ const pool = mysql.createPool({
 });
 
 // 封装查询操作的函数
-function query(sql, callback) {
-  pool.getConnection((err, connection) => {
-    if (err) return callback(err);
+function query(sql) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) return reject(err);
 
-    connection.query(sql, (error, results, fields) => {
-      connection.release();
+      connection.query(sql, (error, results, fields) => {
+        connection.release();
 
-      if (error) return callback(error);
+        if (error) return reject(error);
 
-      callback(null, results);
+        resolve(results);
+      });
     });
   });
 }

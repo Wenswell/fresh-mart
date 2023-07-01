@@ -22,8 +22,8 @@
         <van-grid-item v-for="(item, index) in guesslikeproduct" :key="index"
           @click="$router.push(`/shop/products/${item.id}`)">
           <van-image class="discount-img-div" :src="item.picture" />
-          <div class="nowPrice bigTxt">{{ item.price }}</div>
-          <div class="oldPrice smallTxt">{{ (item.price / 0.8).toFixed(2) }}</div>
+          <div class="nowPrice bigTxt">{{ item.nowPrice.toFixed(2) }}</div>
+          <div class="oldPrice smallTxt">{{ item.oldPrice.toFixed(2) }}</div>
         </van-grid-item>
       </van-grid>
     </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getGuessLikeProductApi } from '@/api/product'
+import { get80discountApi } from '@/api/product'
 
 export default {
   name:'HomeDiscount',
@@ -41,7 +41,8 @@ export default {
     time: 2 * 60 * 60 * 1000,
   }},
   created(){
-    getGuessLikeProductApi().then(res => {
+    // getGuessLikeProductApi().then(res => {
+    get80discountApi().then(res => {
         this.guesslikeproduct = res.result.items
       })
   },
