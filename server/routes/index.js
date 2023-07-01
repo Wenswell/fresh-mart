@@ -6,8 +6,9 @@ var router = express.Router();
 //   res.render('index', { title: 'Express' });
 // });
 
-router.use('/user', require('./user'));
-router.use('/product', require('./product'));
+router.use('/users', require('./users'));
+router.use('/products', require('./products'));
+router.use('/images', require('./images'));
 
 router.use(require('@/routes/wildcard'));
 

@@ -13,6 +13,8 @@ export default (url, method, submitData, changeURL) => {
   // const baseURL = changeURL ? 'https://mock.boxuegu.com/mock/1175/' : 'https://pcapi-xiaotuxian-front-devtest.itheima.net/'
   function getBaseURL(param) {
     switch(param){
+      case 'local':
+        return 'http://192.168.1.5:8333/';
       case 'change':
         return 'https://mock.boxuegu.com/mock/1175/';
       case 'apipc':
