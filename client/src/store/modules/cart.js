@@ -1,12 +1,12 @@
 import { getCartListApi, updateItemApi, selectAllItemApi, deleteCartListApi } from "@/api/cart";
-import { 
+import {
   addProductToCartApi,
   getCollectObjApi,
   collectProductApi,
   cancelCollectApi,
-  getProductEvaluateApi,getEvaluatePageApi,
-  getProductDetailApi,
+  getProductEvaluateApi, getEvaluatePageApi,
 } from "@/api/product";
+import api from "@/api";
 
 
 // 购物车模块
@@ -18,7 +18,7 @@ const state = {
 
 const getters = {
 
-  getCartCount(state){
+  getCartCount(state) {
     return state.list.length
   },
 
@@ -66,14 +66,15 @@ const getters = {
 const actions = {
 
   async getProductDetail(context, id) {
-    const res = await getProductDetailApi({id})
-    if(!res) return false
+    // const res = await getProductDetailApi({id})
+    const res = await api.product.LOCALgetProductDetailApi({ id })
+    if (!res) return false
     return res.result
   },
 
   // 商品评价关键词
-  async getEvaluateKeywords(context,id) {
-    let evaluate = {} 
+  async getEvaluateKeywords(context, id) {
+    let evaluate = {}
     await getProductEvaluateApi(id).then(res => {
       evaluate = res.result
       if (evaluate.hasPictureCount) {
@@ -92,7 +93,7 @@ const actions = {
 
   // 商品评价
   async getEvaluate(context, payload) {
-    let resObj={}
+    let resObj = {}
     await getEvaluatePageApi(payload).then(res => {
       resObj = res.result
     })
@@ -103,18 +104,18 @@ const actions = {
   // 获取收藏列表
   async updateCollect(context, page) {
     console.log("updateCollect")
-    const res = await getCollectObjApi({page:page})
+    const res = await getCollectObjApi({ page: page })
     console.log("updateCollectApi res", res)
-    context.commit('user/setCollect', res.result,{ root: true })
+    context.commit('user/setCollect', res.result, { root: true })
     return 'done'
   },
 
   //添加收藏 - 购物车用
   async addSelectedToCollect(context) {
     // 1. 添加收藏
-    const selectedIdList = context.getters['validSelectedList'].map(item=>item.id)
+    const selectedIdList = context.getters['validSelectedList'].map(item => item.id)
     // console.log("addToCollect ids", selectedIdList)
-    const res = await collectProductApi({collectObjectIds:selectedIdList})
+    const res = await collectProductApi({ collectObjectIds: selectedIdList })
     // console.log("addToCollect res", res)
     // 2. 删除商品
     context.dispatch('removeSomeItem')
@@ -125,7 +126,7 @@ const actions = {
   async addToCollect(context, ids) {
     // console.log("addToCollect ids", ids)
     // 传值必须是数组
-    await collectProductApi({collectObjectIds:[ids]})
+    await collectProductApi({ collectObjectIds: [ids] })
     console.log(`商品ID=${ids}收藏成功`)
     // console.log("addToCollect res", res)
   },
@@ -133,7 +134,7 @@ const actions = {
   //取消收藏 - 单件商品
   async cancelCollect(context, ids) {
     // console.log("addToCollect ids", ids)
-    await cancelCollectApi({collectObjectIds:ids})
+    await cancelCollectApi({ collectObjectIds: ids })
     console.log(`商品ID=${ids}已取消收藏`)
     // console.log("addToCollect res", res)
   },
@@ -145,33 +146,33 @@ const actions = {
 
 
   // 移除部分商品
-  async removeSomeItem(context, skuId){
+  async removeSomeItem(context, skuId) {
     // 获取选中的商品
-    const selectedSkuIdList = skuId ? skuId : context.getters['validSelectedList'].map(item=>item.skuId)
+    const selectedSkuIdList = skuId ? skuId : context.getters['validSelectedList'].map(item => item.skuId)
     // console.log("removeSomeItem selectedItemList", selectedSkuIdList)
-    const res = await deleteCartListApi({  
+    const res = await deleteCartListApi({
       // ids:[],
-      ids:selectedSkuIdList,
-      clearAll:false,
-      clearInvalid:false,
+      ids: selectedSkuIdList,
+      clearAll: false,
+      clearInvalid: false,
     })
     // 删除本地商品
     context.commit('removeSomeItemLocal', selectedSkuIdList)
     // console.log("删除部分商品", res.msg)
     return res.code
-    
+
   },
-  
+
   // 清除无效商品
-  async removeInvalidItem(context){
+  async removeInvalidItem(context) {
     // 获取无效商品
-    const inValidList = context.getters['inValidList'].map(item=>item.skuId)
-    
-    const res = await deleteCartListApi({  
+    const inValidList = context.getters['inValidList'].map(item => item.skuId)
+
+    const res = await deleteCartListApi({
       // ids:[],
-      ids:inValidList,
-      clearAll:false,
-      clearInvalid:false,
+      ids: inValidList,
+      clearAll: false,
+      clearInvalid: false,
     })
     // 删除本地商品
     // context.commit('removeInvalidItemLocal')
@@ -181,12 +182,12 @@ const actions = {
   },
 
   // 清空购物车
-  async emptyCartItem(context){
-    
-    const res = await deleteCartListApi({  
-      ids:[],
-      clearAll:true,
-      clearInvalid:true,
+  async emptyCartItem(context) {
+
+    const res = await deleteCartListApi({
+      ids: [],
+      clearAll: true,
+      clearInvalid: true,
     })
     // 删除本地商品
     context.commit('setCart', [])
@@ -200,7 +201,7 @@ const actions = {
     // 更新服务器数据
     selectAllItemApi({ selected, ids })
     // 更新本地数据
-    context.commit('selectAllItemLocal', { selected, list:context.getters.validList })
+    context.commit('selectAllItemLocal', { selected, list: context.getters.validList })
   },
   updateCart(context, { skuId, payload }) {
     console.log("------updateCart start-------")
@@ -220,9 +221,9 @@ const actions = {
   },
 
   //加入购物车
-  async addProductToCart(context, obj){
+  async addProductToCart(context, obj) {
     const res = await addProductToCartApi(obj)
-    if(res.code == 1 ) console.log('addProductToCart成功')
+    if (res.code == 1) console.log('addProductToCart成功')
     context.dispatch('mergeCart')
   },
 
@@ -255,20 +256,20 @@ const mutations = {
 
 
   // 移除本地购物车列表的 部分 商品
-  removeSomeItemLocal(state,list){
+  removeSomeItemLocal(state, list) {
     // console.log("state.list", state.list)
     state.list = state.list.filter(item => {
       return !list.includes(item.skuId)
     })
   },
-  
+
   // // 移除本地购物车列表的 无效 商品
   // removeInvalidItemLocal(state){
   //   state.list = state.list.filter(item => {
   //     return item.isEffective
   //   })
   // },
-  
+
 
   // 修改本地的有效物品全选状态
   selectAllItemLocal(state, payload) {

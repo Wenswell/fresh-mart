@@ -3,9 +3,14 @@
 import request from '@/utils/require'
 
 // 根据ID获取 商品详情
-export const getProductDetailApi = ({id}) => {
-  return request('/goods', 'get', {id})
+export const getProductDetailApi = ({ id }) => {
+  return request('/goods', 'get', { id })
 }
+
+export const LOCALgetProductDetailApi = ({ id }) => {
+  return request('/products/details', 'get', { id }, 'local')
+}
+
 
 // 根据ID获取 商品评价信息
 export const getProductEvaluateApi = (id) => {
@@ -14,24 +19,24 @@ export const getProductEvaluateApi = (id) => {
 
 // 根据ID获取 商品评价分页内容
 export const getEvaluatePageApi = ({
-  id, 
-  page=1, 
-  pageSize=10,
+  id,
+  page = 1,
+  pageSize = 10,
   hasPicture,
   tag,
   sortField,
   sortMethod,
 }) => {
   const params = {
-    page, 
+    page,
     pageSize
   }
-  
+
   if (hasPicture) params.hasPicture = hasPicture;
   if (tag) params.tag = tag;
-  if (sortField) params.sortField = sortField;  
+  if (sortField) params.sortField = sortField;
   if (sortMethod) params.sortMethod = sortMethod;
-  
+
   return request(`/goods/${id}/evaluate/page`, 'get', params, 'change')
 }
 
@@ -93,33 +98,33 @@ export const getInVogueApi = () => {
 //   )
 // }
 
-export const get80discountApi = ()=>{
+export const get80discountApi = () => {
   return request(
     '/products/percent80',
-    'get', 
+    'get',
     {},
     'local',
   )
 }
 
-export const LOCALsearchProductApi = ({  
+export const LOCALsearchProductApi = ({
   keyword,
   page = 1,
   pageSize = 10,
-  onlyDiscount= false,
+  onlyDiscount = false,
   sortField = "",
-  sortMethod = "" 
+  sortMethod = ""
 }) => {
   return request(
-    '/products', 
-    'get', 
+    '/products',
+    'get',
     {
-      page, 
+      page,
       pageSize,
       keyword,
       onlyDiscount,
       sortField,
-      sortMethod  
+      sortMethod
     },
     'local',
   )
@@ -130,13 +135,13 @@ export const LOCALsearchProductApi = ({
 // 收藏商品
 export const collectProductApi = ({
   collectObjectIds = [],
-  collectType=1,
+  collectType = 1,
 }) => {
   return request(
-    '/member/collect', 
-    'post', 
+    '/member/collect',
+    'post',
     {
-      collectType, 
+      collectType,
       collectObjectIds,
     }
   )
@@ -145,13 +150,13 @@ export const collectProductApi = ({
 
 // 获取收藏
 export const getCollectObjApi = ({
-  page=1,
-  pageSize=10,
+  page = 1,
+  pageSize = 10,
   collectType = 1,
 }) => {
   return request(
-    '/member/collect', 
-    'GET', 
+    '/member/collect',
+    'GET',
     {
       page,
       pageSize,
@@ -163,12 +168,12 @@ export const getCollectObjApi = ({
 
 // 取消收藏
 export const cancelCollectApi = ({
-  ids=[],
+  ids = [],
   type = 1,
 }) => {
   return request(
-    '/member/collect/batch', 
-    'DELETE', 
+    '/member/collect/batch',
+    'DELETE',
     {
       ids,
       type,
