@@ -9,20 +9,21 @@ const pool = mysql.createPool({
   port: 3306
 });
 
-// 封装查询操作的函数
-function query(sql, callback) {
-  pool.getConnection((err, connection) => {
-    if (err) return callback(err);
+function insert(sql, values) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) return reject(err);
 
-    connection.query(sql, (error, results, fields) => {
-      connection.release();
+      connection.query(sql, values, (error, results, fields) => {
+        connection.release();
 
-      if (error) return callback(error);
+        if (error) return reject(error);
 
-      callback(null, results);
+        resolve(results);
+      });
     });
   });
 }
 
 // 导出查询函数
-module.exports = query;
+module.exports = insert;

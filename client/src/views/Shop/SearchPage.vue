@@ -22,8 +22,8 @@
           <van-image class="product-div-img" :src="item.picture" />
           <div class="product-div-text">
             <div class="product-div-text-name">{{ item.name }}</div>
-            <div class="product-div-text-price">{{ item.price }}</div>
-            <div v-if="item.desc" class="product-div-text-desc">{{ item.desc }}</div>
+            <div class="product-div-text-price">{{ item.nowPrice }}</div>
+            <div v-if="item.description" class="product-div-text-desc">{{ item.description }}</div>
           </div>
         </van-grid-item>
       </van-grid>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { searchProductApi } from "@/api/product";
+import { LOCALsearchProductApi } from "@/api/product";
 export default {
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
       params2: 'pageSize:10',
       option1: [
         { text: '全部商品', value: "pageSize:10" },
-        // 基本没有结果 { text: '特惠商品', value: "onlyDiscount:true" },
+        { text: '特惠商品', value: "onlyDiscount:true" },
         { text: '正序', value: "sortMethod:asc" },
         { text: '倒序', value: "sortMethod:desc" },
       ],
@@ -66,7 +66,7 @@ export default {
     // 触底加载更多
     onLoad() {
       this.loading = true;
-      searchProductApi({ 'keyword': this.searchStr, 'page': ++this.currentPage }).then(res => {
+      LOCALsearchProductApi({ 'keyword': this.searchStr, 'page': ++this.currentPage }).then(res => {
         this.searchResult = this.searchResult.concat(res.result.pageData.items)
         this.loading = false
         // 加载完成
@@ -82,8 +82,14 @@ export default {
       const [key2, value2] = this.params2.match(/(\w+):(\w+)/).slice(1)
       const jsonStr = `{ "${key1}": "${value1}", "${key2}": "${value2}" }`
       let paramsObj = JSON.parse(jsonStr);
-      console.log({ 'keyword': this.searchStr, 'page': this.currentPage, ...paramsObj })
-      searchProductApi({ 'keyword': this.searchStr, 'page': this.currentPage, ...paramsObj }).then(res => {
+      // console.log({ 'keyword': this.searchStr, 'page': this.currentPage, ...paramsObj })
+      
+
+      LOCALsearchProductApi({ 'keyword': this.searchStr, 'page': this.currentPage, ...paramsObj }).then(res => {
+        console.log("res", res)
+        console.log("res", res)
+        console.log("res", res)
+        console.log("res", res)
         if (res.result.pageData.counts === 0) {
           this.$toast('没有结果，请更换关键词')
           return
