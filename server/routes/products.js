@@ -18,6 +18,20 @@ router.get('/percent80', async (req, res, next) => {
     }
   });
 })
+router.get('/details', async (req, res, next) => {
+
+  const {id} = req.query
+  console.log("id", id)
+
+  const dbRes = await query(`SELECT data FROM details WHERE id = ${id}`)
+
+  res.send({
+    code: '1',
+    msg: '操作成功',
+    result: JSON.parse(dbRes[0].data)
+  });
+})
+
 /* GET users listing. */
 router.get('/', async (req, res, next) => {
 

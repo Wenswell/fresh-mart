@@ -7,7 +7,8 @@
     <div style="height: 40px"></div>
 
     <!--———— 2.1. 主体 轮播图 ——————-->
-    <HomeSwiper :imgList="bannerImgList" />
+    <!-- <HomeSwiper :imgList="bannerImgList" /> -->
+    <HomeSwiper />
 
     <!--———— 2.2. 主体 分类导航 ——————-->
     <HomeCategory />
