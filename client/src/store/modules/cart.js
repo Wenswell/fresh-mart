@@ -4,7 +4,7 @@ import {
   getCollectObjApi,
   collectProductApi,
   cancelCollectApi,
-  getProductEvaluateApi, getEvaluatePageApi,
+  getEvaluatePageApi,
 } from "@/api/product";
 import api from "@/api";
 
@@ -72,31 +72,11 @@ const actions = {
     return res.result
   },
 
-  // 商品评价关键词
-  async getEvaluateKeywords(context, id) {
-    let evaluate = {}
-    await getProductEvaluateApi(id).then(res => {
-      evaluate = res.result
-      if (evaluate.hasPictureCount) {
-        evaluate.tags.unshift({
-          title: "有图",
-          tagCount: evaluate.hasPictureCount
-        });
-      }
-      evaluate.tags.unshift({
-        title: "全部",
-        tagCount: evaluate.evaluateCount
-      });
-    })
-    return evaluate
-  },
-
   // 商品评价
   async getEvaluate(context, payload) {
     let resObj = {}
-    await getEvaluatePageApi(payload).then(res => {
-      resObj = res.result
-    })
+    const res = await getEvaluatePageApi(payload)
+    resObj = res.result
     return resObj
   },
 

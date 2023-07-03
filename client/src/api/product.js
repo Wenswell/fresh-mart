@@ -12,6 +12,14 @@ export const LOCALgetProductDetailApi = ({ id }) => {
 }
 
 
+export const LOCALgetPreRateApi = (id) => {
+  return request(`/products/prerate`, 'get', { id }, 'local',)
+}
+
+export const LOCALgetRateApi = (params) => {
+  return request('/products/rate', 'get', params, 'local',)
+}
+
 // 根据ID获取 商品评价信息
 export const getProductEvaluateApi = (id) => {
   return request(`/goods/${id}/evaluate`, 'get', {}, 'change')
@@ -21,7 +29,7 @@ export const getProductEvaluateApi = (id) => {
 export const getEvaluatePageApi = ({
   id,
   page = 1,
-  pageSize = 10,
+  pageSize = 5,
   hasPicture,
   tag,
   sortField,
@@ -31,13 +39,14 @@ export const getEvaluatePageApi = ({
     page,
     pageSize
   }
-
+  id
   if (hasPicture) params.hasPicture = hasPicture;
   if (tag) params.tag = tag;
   if (sortField) params.sortField = sortField;
   if (sortMethod) params.sortMethod = sortMethod;
-
-  return request(`/goods/${id}/evaluate/page`, 'get', params, 'change')
+  return request('/products/rate', 'get', params, 'local',)
+  // return request(`/goods/${id}/evaluate/page`, 'get', params, 'change')
+  // return request(`/goods/${id}/evaluate/page`, 'get', params, 'change')
 }
 
 

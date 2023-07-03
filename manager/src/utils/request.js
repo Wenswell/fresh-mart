@@ -1,32 +1,35 @@
 // request.js
 import axios from "axios";
 
-const baseURL = '/api';
 
-const instance = axios.create({
-  baseURL,
-  timeout: 15000,
-});
 
-instance.interceptors.request.use(config => {
-  if (config.method === 'get') {
-    config.params = config.data;
-    delete config.data;
-  }
-  console.log("requset -- config", config)
-  return config
-}, error => {
-  return Promise.reject(error)
-})
+export default (url, method, data, isServe) => {
 
-instance.interceptors.response.use(
-  response => response.data,
-  err => {
-    console.log(err.response.status, err)
-    return Promise.reject(err)
-  }
-)
+  let baseURL = '/api';
+  if (isServe) baseURL = 'http://192.168.1.5:8333/';
 
-export default (url, method, data) => {
-  return instance({ url, method, data })
+  const instance = axios.create({
+    baseURL,
+    timeout: 15000,
+  });
+
+  instance.interceptors.request.use(config => {
+    if (config.method === 'get') {
+      config.params = config.data;
+      delete config.data;
+    }
+    console.log("requset -- config", config)
+    return config
+  }, error => {
+    return Promise.reject(error)
+  })
+
+  instance.interceptors.response.use(
+    response => response.data,
+    err => {
+      console.log(err.response.status, err)
+      return Promise.reject(err)
+    }
+  )
+  return instance({ url, method, data, isServe })
 }

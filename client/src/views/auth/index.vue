@@ -22,6 +22,7 @@ export default {
     AuthSwitch,
     AuthForm,
   },
+
 };
 </script>
 

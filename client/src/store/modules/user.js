@@ -37,6 +37,10 @@ const state = {
 
 const getters = {
 
+  getToken(state){
+    return state.profile.token
+  },
+
   // 获取部分用户信息用于修改
   getUserInfo(state){
     // eslint-disable-next-line no-unused-vars
