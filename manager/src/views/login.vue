@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       form: {
-        username: "",
-        password: "",
+        username: "admin",
+        password: "admin",
       },
       rules: {
         username: [
@@ -53,7 +53,7 @@ export default {
       Cookies.set("test", Mock.Random.guid());
       this.$refs.form.validate((isValid) => {
         if (!isValid) return;
-        api.getMenu(this.form).then((res) => {
+        api.authGetMenu(this.form).then((res) => {
           if (res.code === 401) {
             this.$refs.form.resetFields();
             this.$message.error("账号或密码错误");
@@ -61,7 +61,7 @@ export default {
           }
           console.log(res);
           if (res.code === 200) {
-            Cookies.set("token", res.token);
+            Cookies.set("token", res.data.token);
             this.$store.commit("setMenu", res.data.menu);
             this.$store.commit("addMenu", this.$router);
             this.$router.push("/home");

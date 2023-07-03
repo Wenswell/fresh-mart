@@ -6,7 +6,7 @@
 
 <script>
 export default {
-name:'404NotFound'
+name:'NotFound'
 }
 </script>
 

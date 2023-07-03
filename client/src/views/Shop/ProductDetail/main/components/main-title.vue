@@ -10,22 +10,19 @@
     </div>
     <div class="other">
       <span class="post">包邮</span>
-      <span class="sold">{{ evaluate.salesCount }}</span>
-      <span class="rate">{{ evaluate.praisePercent }}</span>
+      <span class="sold">{{ Math.floor(Math.random() * 100) + 5 }}00+</span>
+      <span class="rate">9{{ Math.floor(Math.random() * 9) + 1 }}%</span>
     </div>
   </RoundBox>
 </template>
 
 <script>
-
 export default {
-  name: 'MainTitle',
+  name: "MainTitle",
   props: {
     result: Object,
-    evaluate: Object,
   },
-
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -54,7 +51,7 @@ export default {
   .old-price {
     font-size: 12px;
     color: grey;
-    text-decoration: line-through
+    text-decoration: line-through;
   }
 }
 
@@ -80,6 +77,5 @@ export default {
   .rate::after {
     content: "好评";
   }
-
 }
 </style>

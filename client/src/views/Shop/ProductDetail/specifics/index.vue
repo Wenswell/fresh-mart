@@ -1,32 +1,34 @@
 <template>
   <div class="all-specifics">
     <div class="product-sum">
-      <span v-for="item in detail" :key="item.name" class="sum-left">{{ item.name }}<span class="sum-right">{{ item.value
-      }}</span></span>
+      <span v-for="item in detail" :key="item.name" class="sum-left"
+        >{{ item.name }}<span class="sum-right">{{ item.value }}</span></span
+      >
     </div>
     <div class="product-img">
       <img v-for="img in img" :key="img" v-lazy="img" />
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
-  name:'AllSpecifics',
+  name: "AllSpecifics",
   data() {
     return {
       img: [],
       detail: [],
-    }
+    };
   },
   created() {
-    this.$store.dispatch('cart/getProductDetail', this.$route.params.id).then(res => {
-      this.img = res.details.pictures
-      this.detail = res.details.properties
-    })
+    this.$store
+      .dispatch("cart/getProductDetail", this.$route.params.id)
+      .then((res) => {
+        this.img = res.details.pictures;
+        this.detail = res.details.properties;
+      });
   },
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -45,12 +47,11 @@ export default {
     justify-content: space-between;
     padding-bottom: 5px;
 
-    border-bottom: 1px solid #F4F4F4;
+    border-bottom: 1px solid #f4f4f4;
 
     .sum-right {
       font-weight: bold;
       max-width: 75%;
-
     }
   }
 }

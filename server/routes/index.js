@@ -9,6 +9,7 @@ var router = express.Router();
 router.use('/users', require('./users'));
 router.use('/products', require('./products'));
 router.use('/images', require('./images'));
+router.use('/manager', require('./manager'));
 
 router.use(require('@/routes/wildcard'));
 
