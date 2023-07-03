@@ -2,7 +2,7 @@
     <van-grid class="switcher" :border="false" :column-num="2" :gutter="0">
       <!-- 注册/登录选项 -->
       <van-grid-item 
-        v-for="(value,key) in {register: '注册', login: '登录'}" 
+        v-for="(value,key) in {register: '验证码登录', login: '密码登录'}" 
         :key="key" 
         :class="{ active: $route.name == key }"
         @click="$router.push(key).catch(err => {})">

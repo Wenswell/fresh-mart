@@ -4,18 +4,18 @@
 
       <!-- 评价标签 -->
       <div class="labels" :border="false">
-        <span class="label-item" v-for="item in evaluate.tags" :key="item.title" v-show="item.title != '全部'">{{ item.title
-        }}({{ item.tagCount }})</span>
+        <span class="label-item" v-for="item in prerate.keywords" :key="item.attribute" v-show="item.title != '全部'">{{ item.word
+        }}({{ item.count }})</span>
       </div>
 
       <!-- 评价内容 -->
       <div class="evaluate">
-        <div class="evaluate-item" v-for="item in evaluateContent" :key="item.id">
+        <div class="evaluate-item" v-for="item in prerate.rateList" :key="item.feedId">
           <div class="evaluate-item-title">
-            <img class="avatar" :src="item.avatar" />
+            <img class="avatar" :src="item.headPic" />
             <div class="info">
-              <span class="name">{{ item.nickname }}</span>
-              <span class="time">{{ getTimeDiff(item.createTime) }}</span>
+              <span class="name">{{ item.userName }} <img v-show="item.isVip" style="width:25px" :src="item.blackCardUserUrl" /></span>
+              <span class="time">{{ item.createTimeInterval }}</span>
             </div>
           </div>
 
@@ -33,35 +33,14 @@
 export default {
   name: 'MainContent',
   props: {
-    evaluate: Object,
-    evaluateContent: Array,
+    prerate: Object,
     changeTab: Function,
   },
   computed: {
     title() {
-      return `商品评价(${this.evaluate.evaluateCount})`
+      return `商品评价(${this.prerate.totalCount})`
     },
-    getTimeDiff() {
-      return (createTime) => {
-        let days = Math.floor((new Date() - new Date(createTime)) / (1000 * 60 * 60 * 24));
-        if (days > 7) {
-          let weeks = Math.floor(days / 7);
-          if (weeks > 4) {
-            let months = Math.floor(weeks / 4);
-            if (months > 12) {
-              let years = Math.floor(months / 12);
-              return `${years}年前`
-            } else {
-              return `${months}月前`
-            }
-          } else {
-            return `${weeks}周前`
-          }
-        } else {
-          return `${days}天前`
-        }
-      }
-    }
+
   },
   // watch: {
   //   evaluateContent(n, o) {

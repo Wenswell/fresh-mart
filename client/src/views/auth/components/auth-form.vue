@@ -1,17 +1,40 @@
 <template>
   <div>
-
     <!-- 手机号输入框 -->
-    <van-field autofocus v-model="phoneNum" type="number" maxlength="11" name="手机" label="手机" placeholder="请输入手机号"
-      class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+    <van-field
+      autofocus
+      v-model="phoneNum"
+      type="number"
+      maxlength="11"
+      name="手机"
+      label="手机"
+      placeholder="请输入手机号"
+      class="verify-field"
+      :center="true"
+      :border="false"
+      label-align="right"
+      label-width="20px"
+    >
       <template slot="label">
         <span class="phone-ico ico"></span>
       </template>
     </van-field>
 
     <!-- 密码输入框 -->
-    <van-field v-show="$route.name == 'login'" v-model="passWd" :type="fieldType" maxlength="16" name="密码" label="密码"
-      placeholder="请输入密码" class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+    <van-field
+      v-show="$route.name == 'login'"
+      v-model="passWd"
+      :type="fieldType"
+      maxlength="16"
+      name="密码"
+      label="密码"
+      placeholder="请输入密码"
+      class="verify-field"
+      :center="true"
+      :border="false"
+      label-align="right"
+      label-width="20px"
+    >
       <template slot="label">
         <span class="lock-ico ico"></span>
       </template>
@@ -21,14 +44,35 @@
     </van-field>
 
     <!-- 验证码输入框 -->
-    <van-field v-show="$route.name == 'register'" v-model="verifyNum" type="text" maxlength="6" name="验证码" label="验证码"
-      placeholder="请输入验证码" class="verify-field" :center="true" :border="false" label-align="right" label-width="20px">
+    <van-field
+      v-show="$route.name == 'register'"
+      v-model="verifyNum"
+      type="text"
+      maxlength="6"
+      name="验证码"
+      label="验证码"
+      placeholder="请输入验证码"
+      class="verify-field"
+      :center="true"
+      :border="false"
+      label-align="right"
+      label-width="20px"
+    >
       <template slot="label">
         <span class="safe-ico ico"></span>
       </template>
       <template #button>
-        <van-button round class="get-verify" type="primary" size="mini" color="#5AD4EA" plain @click="getVerifyCode"
-          :text="btnText" :disabled="btnDisable"></van-button>
+        <van-button
+          round
+          class="get-verify"
+          type="primary"
+          size="mini"
+          color="#5AD4EA"
+          plain
+          @click="getVerifyCode"
+          :text="btnText"
+          :disabled="btnDisable"
+        ></van-button>
       </template>
     </van-field>
 
@@ -38,15 +82,14 @@
       <!-- 因API限制，暂未添加注册功能 -->
       登录
     </van-button>
-
   </div>
 </template>
 
 <script>
-import { getVerifyCodeApi, } from "@/api/user";
+import { getVerifyCodeApi } from "@/api/user";
 
 export default {
-  name: 'AuthForm',
+  name: "AuthForm",
   data() {
     return {
       phoneNum: "13951611560",
@@ -54,22 +97,31 @@ export default {
       passWd: "123456",
       btnText: "获取验证码",
       btnDisable: false,
-      fieldType: 'password',
+      fieldType: "password",
     };
   },
+  created() {
+    const token = this.$store.getters["user/getToken"];
+    if (token.length > 100) {
+      this.$router.push("/layout/home");
+    }
+    console.log(
+      "this.$store.getters['user/getToken']",
+      this.$store.getters["user/getToken"].length
+    );
+  },
   methods: {
-
     // 显示/隐藏密码
     changeType() {
-      this.fieldType = this.fieldType === 'password' ? 'text' : 'password'
+      this.fieldType = this.fieldType === "password" ? "text" : "password";
     },
     //获取验证码
     async getVerifyCode() {
-      console.log("getVerifyCode")
-      const type = 1
-      const res = await getVerifyCodeApi(this.phoneNum, type)
+      console.log("getVerifyCode");
+      const type = 1;
+      const res = await getVerifyCodeApi(this.phoneNum, type);
       this.btnDisable = true;
-      console.log(res)
+      console.log(res);
       // this.$toast(res.msg)
       this.verifyNum = 123456;
     },
@@ -80,29 +132,29 @@ export default {
       this.$router.push({ name: page });
     },
     async sendLoginMsg() {
-
       // 验证登录信息完整
-      if (!this.phoneNum) return this.$toast('请输入手机号')
-      if (this.$route.name == 'login' && !this.passWd) return this.$toast('未输入密码')
-      if (this.$route.name == 'register' && !this.btnDisable) return this.$toast('未获取验证码')
+      if (!this.phoneNum) return this.$toast("请输入手机号");
+      if (this.$route.name == "login" && !this.passWd)
+        return this.$toast("未输入密码");
+      if (this.$route.name == "register" && !this.btnDisable)
+        return this.$toast("未获取验证码");
 
       // 获取登录信息
-      const res = await this.$store.dispatch('user/registerByPasswdVerify', {
+      const res = await this.$store.dispatch("user/registerByPasswdVerify", {
         type: this.$route.name,
         phoneNum: this.phoneNum,
         verifyNum: this.verifyNum,
         passWd: this.passWd,
-      })
+      });
 
       // 进入主页
       if (res.code == 1) {
-        this.$toast(res.result.account + "，欢迎回来！")
-        this.$router.push('/layout/home')
+        this.$toast(res.result.account + "，欢迎回来！");
+        this.$router.push("/layout/home");
       }
     },
   },
-
-}
+};
 </script>
 
 <style lang="less" scoped>

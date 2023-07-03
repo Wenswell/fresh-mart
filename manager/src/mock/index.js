@@ -13,4 +13,4 @@ Mock.mock('/api/user/edit', 'put', userApi.updateUser)
 Mock.mock(/\/api\/user\/delete(\?.*)?/, 'delete', userApi.deleteUser)
 
 
-Mock.mock(/\/api\/permission\/getMenu(\?.*)?/, 'post', prermission.getMenu)
+// Mock.mock(/\/api\/permission\/getMenu(\?.*)?/, 'post', prermission.getMenu)

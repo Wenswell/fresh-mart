@@ -11,6 +11,8 @@ moduleAlias.addAlias('@db', __dirname + '/db')
 moduleAlias.addAlias('@router', __dirname + '/router')
 moduleAlias.addAlias('@public', __dirname + '/public')
 
+require('@/public/javascripts/test/test-22-02');
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');

@@ -25,15 +25,16 @@ export const loginByPasswordApi = (account, password) => {
 
 //修改个人信息
 export const updateProfileApi = ({
-nickname,
-gender,
-birthday,
-cityCode,
-provinceCode,
-countyCode,
-profession,
+  nickname,
+  gender,
+  birthday,
+  cityCode,
+  provinceCode,
+  countyCode,
+  profession,
 }) => {
-  return request('/member/profile', 'PUT', {nickname,gender,birthday,cityCode,provinceCode,countyCode,profession,
+  return request('/member/profile', 'PUT', {
+    nickname, gender, birthday, cityCode, provinceCode, countyCode, profession,
   })
 }
 
@@ -44,7 +45,8 @@ export const addNewAddressApi = (newObj) => {
 
 // 地址 获取所有地址列表
 export const getAddressListApi = () => {
-  return request('/member/address', 'get')
+  // return request('/member/address', 'get')
+  return request('/users/address', 'get', {}, 'local')
 }
 
 // 地址 修改原有地址
@@ -110,13 +112,13 @@ export const submitOrderApi = (obj) => {
 // 支付 - 支付宝 - APP用
 
 export const toPayViaAliPayApi = (id) => {
-  return request('/pay/aliPay/app', 'GET', {orderId:id})
+  return request('/pay/aliPay/app', 'GET', { orderId: id })
 }
 
 // 支付 模拟支付
 
 export const mockPayApi = (id) => {
-  return request('/pay/mock', 'GET', {orderId:id})
+  return request('/pay/mock', 'GET', { orderId: id })
 }
 
 
@@ -130,21 +132,21 @@ export const getOrderListApi = ({
   pagSize = 10,
 }) => {
   return request('/member/order', 'GET', {
-  page,
-  pagSize,
-  orderState,
+    page,
+    pagSize,
+    orderState,
   })
 }
 
 
 // 获取单个订单的详细信息
 export const getOrderDetailApi = (id) => {
-  return request(`/member/order/${id}`, 'GET', {id})
+  return request(`/member/order/${id}`, 'GET', { id })
 }
 
 
 // 订单id -> 再次购买
 export const rePurchaseApi = (id) => {
-  return request(`/member/order/repurchase/${id}`, 'GET', {id})
+  return request(`/member/order/repurchase/${id}`, 'GET', { id })
 }
 

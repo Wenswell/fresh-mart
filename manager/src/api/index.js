@@ -17,8 +17,8 @@ const deleteUser = (params) => {
   return request('/user/delete', 'delete', params)
 }
 
-const getMenu = (data) => {
-  return request('/permission/getMenu', 'post', data)
+const authGetMenu = (data) => {
+  return request('/manager/auth', 'post', data, 'isServe')
 }
 
 export default {
@@ -29,7 +29,7 @@ export default {
   updateUser,
   deleteUser,
 
-  getMenu,
+  authGetMenu,
 
   
 }
