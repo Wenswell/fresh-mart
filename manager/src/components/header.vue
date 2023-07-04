@@ -43,6 +43,7 @@ export default {
       if (item === "logout") {
         this.$router.push("/login");
         jsCookie.remove("token");
+        jsCookie.remove("menu");
       }
       if(item==="my"){
         console.log('个人中心')

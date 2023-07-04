@@ -6,6 +6,7 @@
         @click="dialogVisible = true"
         size="small"
         type="primary"
+        v-if="account === 'admin'"
       >
         <i class="el-icon-plus"></i>
         新增
@@ -41,7 +42,11 @@
         </el-table-column>
         <el-table-column prop="birth" label="出生日期"> </el-table-column>
         <el-table-column prop="address" label="地址"> </el-table-column>
-        <el-table-column prop="edit" label="修改信息">
+        <el-table-column
+          prop="edit"
+          v-if="account === 'admin'"
+          label="修改信息"
+        >
           <template slot-scope="scope">
             <el-button type="primary" @click="handleEdit(scope.row)"
               >编辑</el-button
@@ -120,6 +125,7 @@
 
 <script>
 import api from "@/api";
+import jsCookie from "js-cookie";
 
 export default {
   name: "main--user",
@@ -162,6 +168,11 @@ export default {
       totalPage: 0,
       searchKey: null,
     };
+  },
+  computed: {
+    account() {
+      return jsCookie.get("account");
+    },
   },
   methods: {
     onCencel() {
@@ -270,6 +281,9 @@ export default {
 }
 .user-table {
   height: calc(100% - 62px);
+}
+.el-form-item{
+  margin-block: 0;
 }
 .user-footer {
   position: relative;

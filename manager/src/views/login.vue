@@ -19,8 +19,16 @@
           ></el-input>
         </el-form-item>
         <el-button class="login-btn" type="primary" @click="onLogin"
-          >确 定</el-button
+          >登 录</el-button
         >
+        <div class="test">
+          <el-button @click="fillForm('admin')" type="primary" plain
+            >管理员（所有权限）</el-button
+          >
+          <el-button @click="fillForm('user')" type="success" plain
+            >用户（限制访问）</el-button
+          >
+        </div>
       </el-form>
     </el-card>
   </div>
@@ -28,15 +36,14 @@
 
 <script>
 import Cookies from "js-cookie";
-import Mock from "mockjs";
 import api from "@/api";
 export default {
   name: "login-page",
   data() {
     return {
       form: {
-        username: "admin",
-        password: "admin",
+        username: "",
+        password: "",
       },
       rules: {
         username: [
@@ -48,9 +55,29 @@ export default {
       },
     };
   },
+  created() {
+    const token = Cookies.get("token");
+    const account = Cookies.get("account");
+    if (token) {
+      api.verifyToken({ token, account }).then((res) => {
+        if (res.code === 200) this.$router.push("/home");
+      });
+    }
+  },
   methods: {
+    fillForm(account) {
+      const accounts = {
+        admin: { username: "admin", password: "549fu7PgsR22vUK" },
+        user: { username: "user", password: "658XYEn2VppACeB" },
+      };
+
+      if (account in accounts) {
+        const { username, password } = accounts[account];
+        this.form.username = username;
+        this.form.password = password;
+      }
+    },
     onLogin() {
-      Cookies.set("test", Mock.Random.guid());
       this.$refs.form.validate((isValid) => {
         if (!isValid) return;
         api.authGetMenu(this.form).then((res) => {
@@ -61,6 +88,7 @@ export default {
           }
           console.log(res);
           if (res.code === 200) {
+            Cookies.set("account", this.form.username);
             Cookies.set("token", res.data.token);
             this.$store.commit("setMenu", res.data.menu);
             this.$store.commit("addMenu", this.$router);
@@ -81,7 +109,7 @@ export default {
 .box-card {
   margin-inline: auto;
   border-radius: 10px;
-  width: 400px;
+  max-width: 400px;
   padding-bottom: 10px;
 }
 .el-form {
@@ -99,5 +127,10 @@ export default {
   .login-btn {
     margin-inline: auto;
   }
+}
+.test {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>
