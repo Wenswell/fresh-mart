@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const { getKey, getNewKey } = require('@config')
+const { getKey, getNewKey } = require('./keys')
 
 const ADMIN_KEY = getKey('ADMIN_SECRET_KEY') || getNewKey('ADMIN_SECRET_KEY')
 const USER_KEY = getKey('USER_SECRET_KEY') || getNewKey('USER_SECRET_KEY')

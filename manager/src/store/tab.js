@@ -51,7 +51,6 @@ export default {
       // 使用 $router.addRoutes 方法添加路由
       router.addRoute({
         path: '/',
-        name: 'main',
         redirect: '/home',
         component: () => import('@/views/main/index.vue'),
         children: children

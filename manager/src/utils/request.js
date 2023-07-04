@@ -27,7 +27,7 @@ export default (url, method, data, isServe) => {
   instance.interceptors.response.use(
     response => response.data,
     err => {
-      console.log(err.response.status, err)
+      // console.log(err.response.status, err)
       return Promise.reject(err)
     }
   )

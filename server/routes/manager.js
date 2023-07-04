@@ -5,14 +5,13 @@ var router = express.Router();
 /*  前缀为 [ /manager ]   */
 /* *********************  */
 
-const query = require('@/db');
-
-
+// const query = require('@/db');
+const tokenApi = require('@/utils/token')
 
 router.post('/auth', async (req, res, next) => {
   const { username, password } = req.body
-  const isAdmin = username === 'admin' && password === 'admin'
-  const isUser1 = username === 'user' && password === 'user'
+  const isAdmin = username === 'admin' && password === '549fu7PgsR22vUK'
+  const isUser1 = username === 'user' && password === '658XYEn2VppACeB'
   if (isAdmin) {
     res.send({
       code: 200,
@@ -60,7 +59,7 @@ router.post('/auth', async (req, res, next) => {
             ],
           },
         ],
-        token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        token: tokenApi.generateAdminToken({ username }),
         message: '获取成功'
       }
     })
@@ -98,7 +97,7 @@ router.post('/auth', async (req, res, next) => {
           },
         ],
       },
-      token: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      token: tokenApi.generateUserToken({ username }),
       message: '获取成功'
     })
   } else {
@@ -110,6 +109,22 @@ router.post('/auth', async (req, res, next) => {
     });
   }
 
+})
+
+router.post('/verifytoken', async (req, res, next) => {
+  const { token, account } = req.body
+  const isValidToken = account == 'admin' ? tokenApi.verifyAdminToken(token) : tokenApi.verifyUserToken(token)
+  if (isValidToken) {
+    res.send({
+      code: 200,
+      data: isValidToken
+    })
+  } else {
+    res.send({
+      code: 401,
+      data: 'token expired'
+    })
+  }
 })
 
 
