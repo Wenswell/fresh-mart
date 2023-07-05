@@ -5,7 +5,10 @@ const myTheme = path.resolve(__dirname, "./src/assets/styles/vantconfig.less");
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  // vant 专用
+// /usr/share/nginx/html/fresh-mart/client/vue.config.js
+  outputDir: 'dist',
+  publicPath: process.env.NODE_ENV === 'production' ? '/client/' : '/',
+	// vant 专用
   css: {
     loaderOptions: {
       less: {
