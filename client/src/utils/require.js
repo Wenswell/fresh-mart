@@ -14,7 +14,8 @@ export default (url, method, submitData, changeURL) => {
   function getBaseURL(param) {
     switch(param){
       case 'local':
-        return 'http://192.168.1.5:8333/';
+       // return 'http://192.168.1.5:8333/';
+        return 'http://124.221.124.116/server/';
       case 'change':
         return 'https://mock.boxuegu.com/mock/1175/';
       case 'apipc':
