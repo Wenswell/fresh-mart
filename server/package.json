@@ -11,8 +11,10 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.0",
     "module-alias": "^2.2.3",
     "morgan": "~1.9.1",
-    "mysql2": "^3.4.3"
+    "mysql2": "^3.4.3",
+    "uuid": "^9.0.0"
   }
 }

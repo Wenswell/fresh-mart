@@ -78,15 +78,20 @@ export default {
   },
   methods: {},
   mounted() {
+
+console.log(this.$route)
+console.log(this.$router)
+
+
     api.getData().then((res) => {
       console.log(res.code);
       console.log(res.data);
-      console.log("tableLabel", res.data.tableLabel);
-      console.log("tableData", res.data.tableData);
-      console.log("videoData", res.data.videoData);
-      console.log("userData", res.data.userData);
-      console.log("orderData", res.data.orderData);
-      console.log("orderData00", res.data.orderData.data[0]);
+      // console.log("tableLabel", res.data.tableLabel);
+      // console.log("tableData", res.data.tableData);
+      // console.log("videoData", res.data.videoData);
+      // console.log("userData", res.data.userData);
+      // console.log("orderData", res.data.orderData);
+      // console.log("orderData00", res.data.orderData.data[0]);
       this.tableLabel = res.data.tableLabel;
       this.tableData = res.data.tableData;
       this.countData = res.data.countData;

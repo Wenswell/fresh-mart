@@ -21,6 +21,16 @@ const authGetMenu = (data) => {
   return request('/manager/auth', 'post', data, 'isServe')
 }
 
+const verifyToken = (data) => {
+  return request('/manager/verifytoken', 'post', data, 'isServe')
+}
+
+const getProductList = (data) => {
+  return request('/products', 'get', data, 'isServe')
+}
+
+
+
 export default {
   getData,
 
@@ -30,6 +40,9 @@ export default {
   deleteUser,
 
   authGetMenu,
+  verifyToken,
+  getProductList,
+
 
   
 }

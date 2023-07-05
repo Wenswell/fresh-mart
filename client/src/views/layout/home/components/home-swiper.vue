@@ -32,7 +32,8 @@ export default {
         .map((item) => item.src)
         .concat();
       this.bannerImg = [
-        "http://192.168.1.5:8333/images/homeTopBanner01.png",
+//        "http://192.168.1.5:8333/images/homeTopBanner01.png",
+        "http://124.221.124.116/server/images/homeTopBanner01.png",
         ...srcs,
       ];
     });

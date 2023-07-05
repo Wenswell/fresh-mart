@@ -9,6 +9,7 @@ Router.prototype.push = function push(location, onResolve, onReject) {
   return originalPush.call(this, location).catch((err) => {
     if (Router.isNavigationFailure(err)) {
       // resolve err
+      console.log("err", err)
       return err
     }
     // rethrow error
@@ -43,14 +44,16 @@ const routes = [
     name: 'test',
     component: () => import('@/views/test'),
   },
-  {
-    path: '*',
-    name: 'NotFound',
-    component: () => import('@/views/test/404'),
-  },
+  // {
+  //   path: '/*',
+  //   name: 'NotFound',
+  //   component: () => import('@/views/test/404'),
+  // },
 ]
 
 const router = new Router({
+  mode: 'history',
+  base: '/manager/',
   routes
 })
 
