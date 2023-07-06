@@ -104,12 +104,13 @@ export default {
     white-space: nowrap;
     z-index: 2;
     position: absolute;
-    zoom: 0.45;
+    // zoom: 0.45;
     color: white;
-    width: 70px;
-    left: -15px;
-    top: 15px;
-    height: 37px;
+    font-size: 13px;
+    width: 40px;
+    left: -10px;
+    top: 10px;
+    height: 20px;
     padding: 2px 0 0 10px;
     background-color: #46E1FF;
     border-top-right-radius: 50px;
