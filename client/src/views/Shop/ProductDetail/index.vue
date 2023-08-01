@@ -97,7 +97,7 @@ export default {
 
 // 页面容器
 .product-div {
-  background: url(@/assets/images/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
+  background: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/itemdetailback.png) fixed no-repeat 0 0 / 100% auto;
   position: absolute;
   width: 100vw;
   overflow: hidden;

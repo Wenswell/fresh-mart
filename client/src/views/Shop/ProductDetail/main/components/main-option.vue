@@ -42,7 +42,7 @@ export default {
 
   .option-ico {
     display: inline-block;
-    background: url(@/assets/images/icoAll.png) no-repeat;
+    background: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/icoAll.png) no-repeat;
     background-position-y: -73px;
     background-size: 110px;
     width: 20.5px;

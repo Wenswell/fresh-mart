@@ -2,8 +2,8 @@
   <!-- 猜你喜欢 -->
   <RoundBox class="like" left-title="猜你喜欢" @click-right="$toast('全部')">
     <template slot="flex">
-      <img class="like-img" :src="require('@/assets/images/rank4.png')" height="200" width="200">
-      <span class="like-desc">百年陈酿 囯窖茅台 小黑瓶 11111111111111150ml</span>
+      <img class="like-img" :src="'https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/rank4.png'" height="200" width="200">
+      <span class="like-desc">百年陈酿 囯窖茅台 小黑瓶 150ml</span>
     </template>
   </RoundBox>
 </template>
