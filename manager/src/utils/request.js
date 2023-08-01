@@ -6,8 +6,9 @@ import axios from "axios";
 export default (url, method, data, isServe) => {
 
   let baseURL = '/api';
- // if (isServe) baseURL = 'http://192.168.1.5:8333/';
-  if (isServe) baseURL = 'http://124.221.124.116/server/';
+  // if (isServe) baseURL = 'http://192.168.1.5:8333/';
+  // if (isServe) baseURL = 'http://124.221.124.116/server/';
+  if (isServe) baseURL = 'https://wswensw.top/mapi/';
 
   const instance = axios.create({
     baseURL,

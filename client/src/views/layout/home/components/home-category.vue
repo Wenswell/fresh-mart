@@ -74,7 +74,7 @@ export default {
     @icoDia: 47px; // 图标直径47px
 
     .category-ico {
-      background: url(@/assets/images/homeCatalogIco.png) no-repeat;
+      background: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/homeCatalogIco.png) no-repeat;
       display: inline-block;
       width: @icoDia;
       height: @icoDia;

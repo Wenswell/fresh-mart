@@ -2,7 +2,9 @@
   <div :class="active" class="background">
 
     <!-- 二级路由 -->
+        <keep-alive>
     <router-view />
+        </keep-alive>
 
     <!-- 底栏 -->
     <van-tabbar style="z-index: 10;" v-model="active">
@@ -42,7 +44,7 @@ export default {
 <style scoped>
 /* 为 主页/我的 添加背景图 */
 .home, .my {
-  background-image: url(@/assets/images/homeBack.jpg);
+  background-image: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/homeBack.jpg);
 }
 
 </style>

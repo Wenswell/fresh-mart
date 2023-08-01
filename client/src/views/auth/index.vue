@@ -30,10 +30,10 @@ export default {
 /***** 1. 顶部 *****/
 // 顶部图片 注册页面
 .register {
-  background-image: url(@/assets/images/banner-register.jpg);
+  background-image: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/banner-register.jpg);
 }
 // 顶部图片 登录页面
 .login {
-  background-image: url(@/assets/images/banner-login.jpg);
+  background-image: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/banner-login.jpg);
 }
 </style>

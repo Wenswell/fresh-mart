@@ -94,7 +94,7 @@ export default {
 
 // 盒子 23 我的工具 我的订单 图标 + 文本
 .item-ico {
-  background: url(@/assets/images/icoAll.png) no-repeat;
+  background: url(https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/icoAll.png) no-repeat;
   display: inline-block;
 }
 

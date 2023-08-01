@@ -5,7 +5,7 @@
       <div v-for="(item, index) in rankListTopThree" :key="index" class="top-3">
         <div class="text-title num" :class="item.img">{{ index + 1 }}</div>
         <div class="text-title">{{ item.title }}</div>
-        <img :src="require('@/assets/images/' + item.img + '.png')" class="top-image" />
+        <img :src="'https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/' + item.img + '.png'" class="top-image" />
       </div>
     </div>
 
@@ -15,7 +15,7 @@
         <div class="middle-text">{{ item.detail }}</div>
       </div>
       <div class="right-middle-right">
-        <img :src="require('@/assets/images/' + item.img + '.png')" class="middle-image" />
+        <img :src="'https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/' + item.img + '.png'" class="middle-image" />
       </div>
     </div>
   </div>

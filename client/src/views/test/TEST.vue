@@ -4,6 +4,10 @@
     <p>$route.fullPath: {{$route.fullPath}}</p>
     <p>$route.name: {{$route.name}}</p>
     <p>$route.params.type: {{$route.params.type}}</p>
+    <button class="test-btn" type="submit" @click="$router.push('/layout/home')">/layout/home</button>
+    <button class="test-btn" type="submit" @click="$router.push('/user/edit')">/user/edit</button>
+    <button class="test-btn" type="submit" @click="$router.push('/shop/history')">/shop/history</button>
+    <button class="test-btn" type="submit" @click="$router.push('/shop/collect')">/shop/collect</button>
     <button class="test-btn" type="submit" @click="test1">test1</button>
     <button class="test-btn" type="submit" @click="test2">test2</button>
     <button class="test-btn" type="submit" @click="$destroy()">this.$destroy()</button>

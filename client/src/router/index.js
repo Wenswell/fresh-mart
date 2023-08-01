@@ -2,7 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push
 
+VueRouter.prototype.push = function push (location) {
+
+return originalPush.call(this, location).catch(err => err)
+
+}
 const routes = [
   {
     path: '/',
@@ -123,11 +129,17 @@ const routes = [
     path: '/layout',
     redirect: '/layout/home',
     component: () => import('@/views/layout'),
+    meta: {
+      keepAlive: true // 缓存该路由
+    },
     children: [
       {
         path: 'home',
         name: 'home',
         component: () => import('@/views/layout/home'),
+        meta: {
+          keepAlive: true // 缓存该路由
+        }
       },
       {
         path: 'category',
@@ -137,16 +149,25 @@ const routes = [
         path: 'category/:type',
         name: 'category',
         component: () => import('@/views/layout/category'),
+        meta: {
+          keepAlive: true // 缓存该路由
+        }
       },
       {
         path: 'cart',
         name: 'cart',
         component: () => import('@/views/layout/cart'),
+        meta: {
+          keepAlive: true // 缓存该路由
+        }
       },
       {
         path: 'my',
         name: 'my',
         component: () => import('@/views/layout/my'),
+        meta: {
+          keepAlive: true // 缓存该路由
+        }
       },
     ],
   },

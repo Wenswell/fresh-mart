@@ -5,14 +5,14 @@
       <div class="container">
         <div class="text-title bigTitle">拼团购</div>
         <div class="text-content smallTxt">先到先得数量有限</div>
-        <img src="@/assets/images/pingtuanAd.png" alt="" class="image" />
+        <img src="https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/pingtuanAd.png" alt="" class="image" />
       </div>
     </van-grid-item>
     <van-grid-item to="/shop/popular">
       <div class="container">
         <div class="text-title bigTitle">抢秒杀</div>
         <div class="text-content smallTxt">精选精选精选精</div>
-        <img src="@/assets/images/miaoshaAd.png" alt="" class="image" />
+        <img src="https://blog0801-1319032318.cos.ap-shanghai.myqcloud.com/miaoshaAd.png" alt="" class="image" />
       </div>
     </van-grid-item>
   </van-grid>
